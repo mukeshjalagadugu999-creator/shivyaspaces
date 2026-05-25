@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ prop.title }} — {{ owner.brand_name }}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <style>
+      .whatsapp-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        background: #25d366;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 14px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        text-decoration: none;
+        transition: all 0.18s;
+        margin-bottom: 10px;
+      }
+      .whatsapp-btn:hover {
+        background: #20bd5a;
+        transform: translateY(-2px);
+      }
+      .whatsapp-icon {
+        width: 22px;
+        height: 22px;
+        fill: white;
+        flex-shrink: 0;
+      }
+      .contact-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 14px 0;
+        color: var(--text3);
+        font-size: 12px;
+      }
+      .contact-divider::before,
+      .contact-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      .summary-row span {
+        font-size: 13px;
+        color: var(--text2);
+      }
+      .summary-row strong {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .no-phone-box {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--text3);
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body class="detail-page">
+    <nav class="navbar">
+      <a href="/" class="logo">Shivya<span class="logo-accent">Spaces</span></a>
+      <div class="nav-links">
+        <a href="javascript:history.back()">Back</a>
+      </div>
+    </nav>
+
+    <section class="property-hero">
+      <div class="property-hero-content">
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          {{ prop.status }}
+        </div>
+        <h1>{{ prop.title }}</h1>
+        <p>{{ prop.location }}</p>
+      </div>
+    </section>
+
+    <div class="property-wrapper">
+      <div class="property-header">
+        <div>
+          <p class="breadcrumb">
+            <a href="/{{ slug }}">Back to {{ owner.brand_name }}</a>
+          </p>
+          <h1>{{ prop.title }}</h1>
+          <p class="property-sub">{{ prop.location }}</p>
+        </div>
+        <div class="header-price">{{ prop.rent }} <span>/ month</span></div>
+      </div>
+
+      {% if prop.gallery_images %}
+      <div class="gallery-card">
+        <div class="main-image">
+          <img id="mainPropertyImage" src="{{ prop.gallery_images[0] }}" />
+        </div>
+        <div class="thumbnail-row">
+          {% for img in prop.gallery_images %}
+          <img
+            class="thumb {% if loop.first %}active-thumb{% endif %}"
+            src="{{ img }}"
+            onclick="changeImage(this)"
+          />
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="property-layout">
+        <div class="property-left">
+          <div class="info-grid">
+            {% if prop.is_complex %}
+            <div class="info-card">
+              <strong>{{ prop.sqft }}</strong><span>Max Sq Ft</span>
+            </div>
+            <div class="info-card">
+              <strong>24/7</strong><span>Security</span>
+            </div>
+            <div class="info-card">
+              <strong>{{ prop.built or 'N/A' }}</strong><span>Built</span>
+            </div>
+            <div class="info-card">
+              <strong>{{ sub_units|length }}</strong><span>Unit Types</span>
+            </div>
+            {% else %}
+            <div class="info-card">
+              <strong>{{ prop.beds }}</strong><span>Bedrooms</span>
+            </div>
+            <div class="info-card">
+              <strong>{{ prop.baths }}</strong><span>Bathrooms</span>
+            </div>
+            <div class="info-card">
+              <strong>{{ prop.sqft }}</strong><span>Sq Ft</span>
+            </div>
+            <div class="info-card">
+              <strong>{{ prop.floor or 'N/A' }}</strong><span>Floor</span>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="section">
+            <h2>About This Property</h2>
+            <p>{{ prop.description }}</p>
+          </div>
+
+          <div class="section">
+            <h2>Property Overview</h2>
+            <div class="overview-grid">
+              <div class="overview-item">
+                <span>Property Type</span
+                ><strong>{{ prop.property_type or 'N/A' }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Status</span><strong>{{ prop.status }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Facing</span><strong>{{ prop.facing or 'N/A' }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Maintenance</span
+                ><strong>{{ prop.maintenance or 'N/A' }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Security Deposit</span
+                ><strong>{{ prop.security_deposit or 'N/A' }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Location</span><strong>{{ prop.location }}</strong>
+              </div>
+            </div>
+          </div>
+
+          {% if prop.amenities %}
+          <div class="section">
+            <h2>Features & Amenities</h2>
+            <div class="features">
+              {% for a in prop.amenities %}
+              <div>{{ a }}</div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %} {% if sub_units %}
+          <div class="section">
+            <h2>Available Units</h2>
+            <div class="units-grid">
+              {% for unit in sub_units %}
+              <div class="unit-card">
+                <h3>{{ unit.title }}</h3>
+                <p class="unit-price">{{ unit.rent }} <span>/ month</span></p>
+                <div class="unit-meta">
+                  {% if unit.beds > 0 %}
+                  <div>{{ unit.beds }} Bed</div>
+                  {% endif %}
+                  <div>{{ unit.baths }} Bath</div>
+                  <div>{{ unit.sqft }} Sq Ft</div>
+                </div>
+                <a href="/{{ slug }}/property/{{ unit.id }}"
+                  ><button class="primary-btn">View Details</button></a
+                >
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="property-right">
+          <div class="contact-box">
+            <h3>Interested?</h3>
+            <p
+              style="
+                color: var(--text3);
+                font-size: 13px;
+                margin: 8px 0 20px;
+                line-height: 1.6;
+              "
+            >
+              Contact
+              <strong style="color: var(--text)">{{ owner.name }}</strong>
+              directly about this property.
+            </p>
+
+            {% if prop.status == 'Available' %} {% if whatsapp_phone %}
+            <a
+              class="whatsapp-btn"
+              href="https://wa.me/{{ whatsapp_phone }}?text={{ ('Hi, I am interested in ' + prop.title + ' (' + prop.rent + '/month) on ' + owner.brand_name + '. Could you please share more details?') | urlencode }}"
+              target="_blank"
+            >
+              <svg
+                class="whatsapp-icon"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+                />
+              </svg>
+              Chat on WhatsApp
+            </a>
+            <div class="contact-divider">or</div>
+            <a
+              href="tel:{{ owner.phone }}"
+              class="secondary-btn"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                text-decoration: none;
+              "
+            >
+              Call Owner
+            </a>
+            {% else %}
+            <div class="no-phone-box">
+              Contact details not available. Please search for other listings.
+            </div>
+            {% endif %} {% else %}
+            <div
+              style="
+                background: var(--red-bg);
+                border: 1px solid var(--red-fg);
+                border-radius: 14px;
+                padding: 20px;
+                text-align: center;
+                margin-bottom: 12px;
+              "
+            >
+              <p
+                style="
+                  font-size: 15px;
+                  font-weight: 700;
+                  color: var(--red-fg);
+                  margin-bottom: 6px;
+                "
+              >
+                {% if prop.status == 'Rented' %}Currently Rented{% else %}Not
+                Available{% endif %}
+              </p>
+              <p style="font-size: 13px; color: var(--red-fg); opacity: 0.8">
+                This property is not available right now.
+              </p>
+            </div>
+            <a
+              href="/search"
+              class="primary-btn"
+              style="display: block; text-align: center; text-decoration: none"
+            >
+              Browse Other Properties
+            </a>
+            {% endif %}
+
+            <div
+              style="
+                margin-top: 20px;
+                padding-top: 16px;
+                border-top: 1px solid var(--border);
+              "
+            >
+              <p
+                style="
+                  font-size: 11px;
+                  color: var(--text3);
+                  font-weight: 600;
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                  margin-bottom: 10px;
+                "
+              >
+                Summary
+              </p>
+              <div class="summary-row">
+                <span>Rent</span><strong>{{ prop.rent }}/mo</strong>
+              </div>
+              <div class="summary-row">
+                <span>Deposit</span
+                ><strong>{{ prop.security_deposit or 'N/A' }}</strong>
+              </div>
+              <div class="summary-row">
+                <span>Maintenance</span
+                ><strong>{{ prop.maintenance or 'N/A' }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function changeImage(el) {
+        document.getElementById("mainPropertyImage").src = el.src;
+        document
+          .querySelectorAll(".thumb")
+          .forEach((t) => t.classList.remove("active-thumb"));
+        el.classList.add("active-thumb");
+      }
+    </script>
+  </body>
+</html>

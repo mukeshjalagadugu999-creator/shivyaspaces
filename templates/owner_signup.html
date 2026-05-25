@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Owner Sign Up — ShivyaSpaces</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="/static/theme.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #f8fafc;
+        --bg2: #ffffff;
+        --bg3: #f1f5f9;
+        --border: #e5e7eb;
+        --text: #111827;
+        --text2: #4b5563;
+        --text3: #9ca3af;
+        --accent: #7c3aed;
+        --accent-hover: #6d28d9;
+        --input-bg: #ffffff;
+        --input-border: #e5e7eb;
+        --green-bg: #dcfce7;
+        --green-fg: #166534;
+        --red-bg: #fee2e2;
+        --red-fg: #991b1b;
+        --info-bg: #f3f0ff;
+        --info-border: #e9d5ff;
+        --info-fg: #6d28d9;
+      }
+      [data-theme="dark"] {
+        --bg: #0d1117;
+        --bg2: #161b22;
+        --bg3: #21262d;
+        --border: #30363d;
+        --text: #e6edf3;
+        --text2: #8b949e;
+        --text3: #484f58;
+        --accent: #a78bfa;
+        --accent-hover: #8b5cf6;
+        --input-bg: #0d1117;
+        --input-border: #30363d;
+        --green-bg: #0d2b1a;
+        --green-fg: #3fb950;
+        --red-bg: #2d1215;
+        --red-fg: #f85149;
+        --info-bg: #1a0d33;
+        --info-border: #4c1d95;
+        --info-fg: #c4b5fd;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        transition:
+          background 0.25s,
+          color 0.25s;
+      }
+      .topbar {
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 0 40px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 99;
+      }
+      .topbar-logo {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .topbar-logo span {
+        color: var(--accent);
+      }
+      .back-link {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text2);
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        transition: all 0.18s;
+      }
+      .back-link:hover {
+        background: var(--bg3);
+      }
+      .content {
+        max-width: 640px;
+        margin: 40px auto;
+        padding: 0 24px 60px;
+      }
+      .page-header {
+        margin-bottom: 28px;
+      }
+      .page-header h1 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+      .page-header p {
+        font-size: 14px;
+        color: var(--text3);
+        line-height: 1.6;
+      }
+      .flash {
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-bottom: 20px;
+        font-weight: 500;
+      }
+      .flash.success {
+        background: var(--green-bg);
+        color: var(--green-fg);
+      }
+      .flash.danger {
+        background: var(--red-bg);
+        color: var(--red-fg);
+      }
+      .info-box {
+        background: var(--info-bg);
+        border: 1px solid var(--info-border);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+        font-size: 13px;
+        color: var(--info-fg);
+        line-height: 1.7;
+      }
+      .form-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 28px;
+        margin-bottom: 20px;
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+      }
+      .form-card h2 {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .form-group.full {
+        grid-column: 1/-1;
+      }
+      label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .required {
+        color: #ef4444;
+      }
+      input,
+      select,
+      textarea {
+        padding: 11px 14px;
+        border: 1.5px solid var(--input-border);
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: "Inter", sans-serif;
+        color: var(--text);
+        background: var(--input-bg);
+        outline: none;
+        width: 100%;
+        transition:
+          border-color 0.18s,
+          background 0.25s,
+          color 0.25s;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--accent);
+      }
+      select {
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 36px;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .btn-submit {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: background 0.18s;
+        width: 100%;
+      }
+      .btn-submit:hover {
+        background: var(--accent-hover);
+      }
+
+      /* Success state */
+      .success-box {
+        text-align: center;
+        padding: 48px 24px;
+      }
+      .success-icon {
+        font-size: 56px;
+        margin-bottom: 20px;
+      }
+      .success-box h2 {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 10px;
+      }
+      .success-box p {
+        font-size: 14px;
+        color: var(--text3);
+        line-height: 1.7;
+        margin-bottom: 28px;
+      }
+      .wa-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #25d366;
+        color: white;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .back-home {
+        display: inline-block;
+        background: var(--bg3);
+        color: var(--text2);
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid var(--border);
+        margin-left: 8px;
+      }
+
+      @media (max-width: 600px) {
+        .topbar {
+          padding: 0 16px;
+        }
+        .content {
+          padding: 0 16px 40px;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .form-group.full {
+          grid-column: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <a href="/" class="topbar-logo">Shivya<span>Spaces</span></a>
+      <a href="/login" class="back-link">← Back to Login</a>
+    </div>
+
+    <div class="content">
+      {% if submitted %}
+      <!-- SUCCESS STATE -->
+      <div class="form-card">
+        <div class="success-box">
+          <div class="success-icon">🎉</div>
+          <h2>Request Submitted!</h2>
+          <p>
+            Thank you for your interest in listing on ShivyaSpaces.<br />
+            We've received your details and will contact you within 24 hours<br />
+            to set up your account.
+          </p>
+          {% if whatsapp_sent %}
+          <a href="{{ whatsapp_url }}" target="_blank" class="wa-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+              />
+            </svg>
+            Also send via WhatsApp
+          </a>
+          {% endif %}
+          <a href="/" class="back-home">Back to Home</a>
+        </div>
+      </div>
+
+      {% else %}
+      <!-- FORM STATE -->
+      <div class="page-header">
+        <h1>List Your Property</h1>
+        <p>
+          Fill in your details below and we'll get back to you within 24 hours
+          to set up your owner account.
+        </p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% for
+      category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %} {% endwith %}
+
+      <div class="info-box">
+        Once you submit this form, our team will review your details and create
+        your account. You'll receive your login credentials via email.
+      </div>
+
+      <form method="POST" action="/owner-signup">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="form-card">
+          <h2>Personal Details</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name <span class="required">*</span></label>
+              <input
+                type="text"
+                name="name"
+                placeholder="e.g. Rahul Sharma"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Phone Number <span class="required">*</span></label>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="e.g. +91 98765 43210"
+                required
+              />
+            </div>
+            <div class="form-group full">
+              <label>Email Address <span class="required">*</span></label>
+              <input
+                type="email"
+                name="email"
+                placeholder="e.g. rahul@email.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Profession</label>
+              <select name="profession">
+                <option value="">Select profession</option>
+                <option value="Property Owner">Property Owner</option>
+                <option value="Real Estate Agent">Real Estate Agent</option>
+                <option value="Property Manager">Property Manager</option>
+                <option value="Developer / Builder">Developer / Builder</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" name="city" placeholder="e.g. Bangalore" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h2>Property Details</h2>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>How many properties do you want to list?</label>
+              <select name="properties">
+                <option value="">Select</option>
+                <option value="1">1 property</option>
+                <option value="2-5">2–5 properties</option>
+                <option value="6-10">6–10 properties</option>
+                <option value="10+">More than 10</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Anything else you'd like us to know?</label>
+              <textarea
+                name="message"
+                placeholder="Tell us about your properties, any special requirements, etc."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Sign Up Request</button>
+      </form>
+      {% endif %}
+    </div>
+  </body>
+</html>

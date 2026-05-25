@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shivya Properties</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body class="home-page">
+    <nav class="navbar">
+      <a href="/" class="logo"
+        >Shivya <span class="logo-accent">Properties</span></a
+      >
+      <div class="nav-links">
+        <a href="/login">Login</a>
+        <a href="#">Contact Owner</a>
+      </div>
+    </nav>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-content">
+      <div class="listings-header">
+        <h2>Available Properties</h2>
+        <p>
+          Handpicked rentals across Bangalore — click any property to explore.
+        </p>
+      </div>
+
+      <!-- PROPERTY GRID -->
+      <div class="grid">
+        {% for property in properties %}
+        <a
+          href="/{{ property.title | lower | replace(' ', '-') }}"
+          class="tile"
+        >
+          <div class="image-wrapper">
+            <img src="{{ property.image }}" alt="{{ property.title }}" />
+            <div class="badge">{{ property.status }}</div>
+          </div>
+          <div class="tile-info">
+            <div class="card-price">
+              {{ property.rent }}<span> / month</span>
+            </div>
+            <h2>{{ property.title }}</h2>
+            <div class="location">{{ property.location }}</div>
+            <div class="meta">
+              <div>{{ property.beds }} Beds</div>
+              <div>{{ property.baths }} Baths</div>
+              <div>{{ property.sqft }} Sq Ft</div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <script>
+      // -----------------------------------------------
+      // Random background image on every page reload.
+      // To use a single fixed image in the future, just
+      // replace this whole <script> block with:
+      //   document.body.style.backgroundImage =
+      //     "linear-gradient(rgba(0,0,0,0.68),rgba(0,0,0,0.70)), url('YOUR_IMAGE_URL')";
+      // -----------------------------------------------
+      const BG_IMAGES = [
+        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600", // apartment exterior
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1600", // modern living room
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600", // luxury house
+        "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1600", // kitchen interior
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600", // apartment interior
+        "https://images.unsplash.com/photo-1494526585095-c41746248156?w=1600", // modern building
+      ];
+
+      const randomImage =
+        BG_IMAGES[Math.floor(Math.random() * BG_IMAGES.length)];
+
+      document.body.style.backgroundImage =
+        "linear-gradient(rgba(0,0,0,0.68), rgba(0,0,0,0.70)), url('" +
+        randomImage +
+        "')";
+    </script>
+  </body>
+</html>

@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Property</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #f8fafc;
+        --bg2: #ffffff;
+        --bg3: #f1f5f9;
+        --border: #e5e7eb;
+        --text: #111827;
+        --text2: #4b5563;
+        --text3: #9ca3af;
+        --accent: #2563eb;
+        --accent-hover: #1d4ed8;
+        --input-bg: #ffffff;
+        --input-border: #e5e7eb;
+        --green-bg: #dcfce7;
+        --green-fg: #166534;
+        --red-bg: #fee2e2;
+        --red-fg: #991b1b;
+      }
+      [data-theme="dark"] {
+        --bg: #0d1117;
+        --bg2: #161b22;
+        --bg3: #21262d;
+        --border: #30363d;
+        --text: #e6edf3;
+        --text2: #8b949e;
+        --text3: #484f58;
+        --accent: #58a6ff;
+        --accent-hover: #79b8ff;
+        --input-bg: #0d1117;
+        --input-border: #30363d;
+        --green-bg: #0d2b1a;
+        --green-fg: #3fb950;
+        --red-bg: #2d1215;
+        --red-fg: #f85149;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        transition:
+          background 0.25s,
+          color 0.25s;
+      }
+      .topbar {
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 0 40px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 99;
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+      }
+      .topbar-logo {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .topbar-logo span {
+        color: var(--accent);
+      }
+      .back-link {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text2);
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        transition: all 0.18s;
+      }
+      .back-link:hover {
+        background: var(--bg3);
+      }
+      .content {
+        max-width: 820px;
+        margin: 40px auto;
+        padding: 0 24px 60px;
+      }
+      .page-header {
+        margin-bottom: 28px;
+      }
+      .page-header h1 {
+        font-size: 26px;
+        font-weight: 800;
+        margin-bottom: 4px;
+      }
+      .page-header p {
+        font-size: 14px;
+        color: var(--text3);
+      }
+      .flash {
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-bottom: 20px;
+        font-weight: 500;
+      }
+      .flash.success {
+        background: var(--green-bg);
+        color: var(--green-fg);
+      }
+      .flash.danger {
+        background: var(--red-bg);
+        color: var(--red-fg);
+      }
+      .form-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 28px;
+        margin-bottom: 20px;
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+      }
+      .form-card h2 {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .form-group.full {
+        grid-column: 1/-1;
+      }
+      label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .required {
+        color: #ef4444;
+      }
+      .hint {
+        font-size: 11px;
+        color: var(--text3);
+        margin-top: 2px;
+      }
+      input,
+      select,
+      textarea {
+        padding: 11px 14px;
+        border: 1.5px solid var(--input-border);
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: "Inter", sans-serif;
+        color: var(--text);
+        background: var(--input-bg);
+        outline: none;
+        width: 100%;
+        transition:
+          border-color 0.18s,
+          background 0.25s,
+          color 0.25s;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--accent);
+      }
+      select {
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 36px;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .btn-save {
+        background: #22c55e;
+        color: white;
+        border: none;
+        padding: 13px 28px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: background 0.18s;
+      }
+      .btn-save:hover {
+        background: #16a34a;
+      }
+      .btn-cancel {
+        background: var(--bg3);
+        color: var(--text2);
+        border: 1px solid var(--border);
+        padding: 13px 28px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.18s;
+      }
+      .btn-cancel:hover {
+        opacity: 0.8;
+      }
+      @media (max-width: 600px) {
+        .topbar {
+          padding: 0 16px;
+        }
+        .content {
+          padding: 0 16px 40px;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .form-group.full {
+          grid-column: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <a href="/" class="topbar-logo">Shivya<span>Spaces</span></a>
+      <a href="/dashboard" class="back-link">Back to Dashboard</a>
+    </div>
+    <div class="content">
+      <div class="page-header">
+        <h1>Create New Property</h1>
+        <p>Fill in the details to add a new listing.</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% for
+      category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %} {% endwith %}
+
+      <form method="POST" action="/create">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <div class="form-card">
+          <h2>Basic Information</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Title <span class="required">*</span></label>
+              <input
+                type="text"
+                name="title"
+                placeholder="e.g. Sunrise Apartments"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Location <span class="required">*</span></label>
+              <input
+                type="text"
+                name="location"
+                placeholder="e.g. Whitefield, Bangalore"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Rent <span class="required">*</span></label>
+              <input
+                type="text"
+                name="rent"
+                placeholder="e.g. Rs. 32,000"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select name="status">
+                <option value="Available">Available</option>
+                <option value="Not Available">Not Available</option>
+                <option value="Rented">Rented</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Property Type <span class="required">*</span></label>
+              <select name="property_type" required>
+                <option value="">Select a type</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Villa">Villa</option>
+                <option value="Studio Apartment">Studio Apartment</option>
+                <option value="1BHK Apartment">1BHK Apartment</option>
+                <option value="2BHK Apartment">2BHK Apartment</option>
+                <option value="3BHK Apartment">3BHK Apartment</option>
+                <option value="Independent House">Independent House</option>
+                <option value="Commercial Retail">Commercial Retail</option>
+                <option value="Office Space">Office Space</option>
+                <option value="Mixed Use Property">Mixed Use Property</option>
+                <option value="Plot">Plot</option>
+                <option value="Warehouse">Warehouse</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Security Deposit</label>
+              <input
+                type="text"
+                name="security_deposit"
+                placeholder="e.g. Rs. 1,00,000"
+              />
+            </div>
+            <div class="form-group full">
+              <label>Description <span class="required">*</span></label>
+              <textarea
+                name="description"
+                placeholder="Describe the property..."
+                required
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h2>Property Details</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Bedrooms</label>
+              <input
+                type="number"
+                name="beds"
+                placeholder="0"
+                min="0"
+                value="0"
+              />
+            </div>
+            <div class="form-group">
+              <label>Bathrooms</label>
+              <input
+                type="number"
+                name="baths"
+                placeholder="0"
+                min="0"
+                value="0"
+              />
+            </div>
+            <div class="form-group">
+              <label>Square Feet</label>
+              <input
+                type="number"
+                name="sqft"
+                placeholder="0"
+                min="0"
+                value="0"
+              />
+            </div>
+            <div class="form-group">
+              <label>Floor</label>
+              <input type="text" name="floor" placeholder="e.g. 2nd Floor" />
+            </div>
+            <div class="form-group">
+              <label>Facing</label>
+              <select name="facing">
+                <option value="">Select facing</option>
+                <option value="East Facing">East Facing</option>
+                <option value="West Facing">West Facing</option>
+                <option value="North Facing">North Facing</option>
+                <option value="South Facing">South Facing</option>
+                <option value="North East Facing">North East Facing</option>
+                <option value="North West Facing">North West Facing</option>
+                <option value="South East Facing">South East Facing</option>
+                <option value="South West Facing">South West Facing</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Maintenance</label>
+              <select name="maintenance">
+                <option value="">Select</option>
+                <option value="Included">Included in Rent</option>
+                <option value="Not Included">Not Included</option>
+                <option value="Rs. 500/month">Rs. 500/month</option>
+                <option value="Rs. 1,000/month">Rs. 1,000/month</option>
+                <option value="Rs. 1,500/month">Rs. 1,500/month</option>
+                <option value="Rs. 2,000/month">Rs. 2,000/month</option>
+                <option value="Rs. 2,500/month">Rs. 2,500/month</option>
+                <option value="Rs. 3,000/month">Rs. 3,000/month</option>
+                <option value="Rs. 5,000/month">Rs. 5,000/month</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Year Built</label>
+              <input type="text" name="built" placeholder="e.g. 2023" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h2>Amenities</h2>
+          <div class="form-group">
+            <label>Amenities</label>
+            <input
+              type="text"
+              name="amenities"
+              placeholder="Swimming Pool, Gym, 24/7 Security, Power Backup"
+            />
+            <p class="hint">Separate each with a comma.</p>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h2>Gallery Images</h2>
+          <div class="form-group">
+            <label>Image URLs <span class="required">*</span></label>
+            <textarea
+              name="gallery_images"
+              style="min-height: 120px"
+              placeholder="Paste one image URL per line.&#10;e.g. https://images.unsplash.com/photo-xxx"
+            ></textarea>
+            <p class="hint">
+              First image is used as the main photo. One URL per line.
+            </p>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Create Property</button>
+          <a href="/dashboard" class="btn-cancel">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

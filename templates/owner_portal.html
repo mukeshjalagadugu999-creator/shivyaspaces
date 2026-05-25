@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ owner.brand_name }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <style>
+      .empty-state {
+        text-align: center;
+        padding: 100px 24px;
+        color: white;
+      }
+      .empty-state h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: white;
+      }
+      .empty-state p {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 28px;
+      }
+      .empty-state a {
+        display: inline-block;
+        background: white;
+        color: #111827;
+        text-decoration: none;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: opacity 0.18s;
+      }
+      .empty-state a:hover {
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+
+  <body class="home-page">
+    <nav class="navbar">
+      <a href="/" class="logo">Shivya<span class="logo-accent">Spaces</span></a>
+      <div class="nav-links">
+        {% if session.get('owner_slug') == owner.slug %}
+        <a href="/dashboard">Dashboard</a>
+        {% endif %}
+        <a href="/">Home</a>
+      </div>
+    </nav>
+
+    <div class="page-content">
+      {% if properties %}
+
+      <div class="listings-header">
+        <h2>Available Properties</h2>
+        <p>
+          {{ properties | length }} propert{{ 'y' if properties | length == 1
+          else 'ies' }} listed by {{ owner.name }}.
+        </p>
+      </div>
+
+      <div class="grid">
+        {% for prop in properties %}
+        <a href="/{{ owner.slug }}/property/{{ prop.id }}" class="tile">
+          <div class="image-wrapper">
+            <img src="{{ prop.image }}" alt="{{ prop.title }}" />
+            <div class="badge">{{ prop.status }}</div>
+          </div>
+          <div class="tile-info">
+            <div class="card-price">{{ prop.rent }}<span> / month</span></div>
+            <h2>{{ prop.title }}</h2>
+            <div class="location">{{ prop.location }}</div>
+            <div class="meta">
+              {% if prop.beds and prop.beds > 0 %}
+              <div>{{ prop.beds }} Beds</div>
+              {% endif %}
+              <div>{{ prop.baths }} Baths</div>
+              <div>{{ prop.sqft }} Sq Ft</div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+
+      {% else %}
+
+      <div class="empty-state">
+        <h2>No Properties Listed Yet</h2>
+        <p>
+          {{ owner.name }} hasn't added any properties yet. Check back soon.
+        </p>
+        <a href="/search">Browse All Properties</a>
+      </div>
+
+      {% endif %}
+    </div>
+
+    <script>
+      const BG_IMAGES = [
+        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1600",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600",
+        "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1600",
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600",
+        "https://images.unsplash.com/photo-1494526585095-c41746248156?w=1600",
+      ];
+      const theme = document.documentElement.getAttribute("data-theme");
+      const overlay =
+        theme === "dark" ? "rgba(0,0,0,0.82)" : "rgba(0,0,0,0.68)";
+      const img = BG_IMAGES[Math.floor(Math.random() * BG_IMAGES.length)];
+      document.body.style.backgroundImage =
+        "linear-gradient(" + overlay + "," + overlay + "),url('" + img + "')";
+    </script>
+  </body>
+</html>

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShivyaSpaces</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="/static/theme.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.72)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        padding: 24px;
+      }
+      .top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 66px;
+        display: flex;
+        align-items: center;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        z-index: 99;
+      }
+      .top-logo {
+        font-family: "Playfair Display", serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+      }
+      .top-logo span {
+        color: #93c5fd;
+      }
+      .card {
+        width: 100%;
+        max-width: 540px;
+        text-align: center;
+      }
+      .tag {
+        display: inline-block;
+        background: rgba(147, 197, 253, 0.15);
+        border: 1px solid rgba(147, 197, 253, 0.3);
+        color: #93c5fd;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 999px;
+        margin-bottom: 24px;
+      }
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 50px;
+        font-weight: 800;
+        color: white;
+        line-height: 1.1;
+        letter-spacing: -1px;
+        margin-bottom: 14px;
+      }
+      h1 span {
+        color: #93c5fd;
+      }
+      .sub {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.55);
+        line-height: 1.7;
+        margin-bottom: 48px;
+      }
+      .question {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 18px;
+      }
+      .choices {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .choice {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 32px 20px;
+        text-decoration: none;
+        color: white;
+        transition: all 0.22s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        backdrop-filter: blur(10px);
+      }
+      .choice:hover {
+        transform: translateY(-5px);
+        border-color: rgba(147, 197, 253, 0.55);
+        background: rgba(255, 255, 255, 0.13);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      }
+      .choice-title {
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      .choice-desc {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.5;
+      }
+      .choice-arrow {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.3);
+        font-weight: 600;
+        transition:
+          transform 0.18s,
+          color 0.18s;
+      }
+      .choice:hover .choice-arrow {
+        transform: translateX(4px);
+        color: #93c5fd;
+      }
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 34px;
+        }
+        .choices {
+          grid-template-columns: 1fr;
+        }
+        .top-bar {
+          padding: 0 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <a href="/" class="top-logo">Shivya<span>Spaces</span></a>
+    </div>
+    <div class="card">
+      <div class="tag">Welcome</div>
+      <h1>Find Your <span>Perfect</span> Home</h1>
+      <p class="sub">Premium rental properties across Bangalore.</p>
+      <p class="question">I am a...</p>
+      <div class="choices">
+        <a href="/search" class="choice">
+          <div class="choice-title">Tenant</div>
+          <div class="choice-desc">Looking for a property to rent</div>
+          <span class="choice-arrow">→</span>
+        </a>
+        <a href="/login" class="choice">
+          <div class="choice-title">Owner</div>
+          <div class="choice-desc">I manage properties on this platform</div>
+          <span class="choice-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

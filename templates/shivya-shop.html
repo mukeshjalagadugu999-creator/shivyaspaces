@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ prop.title }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body
+    class="detail-page"
+    style="background-image: url('{{ prop.gallery_images[0] }}');"
+  >
+    <nav class="navbar">
+      <a href="/" class="logo"
+        >Shivya <span class="logo-accent">Properties</span></a
+      >
+      <div class="nav-links">
+        <a href="/login">Login</a>
+        <a href="#">Contact Owner</a>
+      </div>
+    </nav>
+
+    <section class="property-hero">
+      <div class="property-hero-content">
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          {{ prop.status }}
+        </div>
+        <h1>{{ prop.title }}</h1>
+        <p>{{ prop.location }}</p>
+      </div>
+    </section>
+
+    <div class="property-wrapper">
+      <div class="property-header">
+        <div>
+          <p class="breadcrumb">
+            <a href="/shivya-heights">← Back to Shivya Heights</a>
+          </p>
+          <h1>{{ prop.title }}</h1>
+          <p class="property-sub">{{ prop.location }}</p>
+        </div>
+        <div class="header-price">{{ prop.rent }} <span>/ month</span></div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="main-image">
+          <img id="mainImage" src="{{ prop.gallery_images[0] }}" />
+        </div>
+        <div class="thumbnail-row">
+          {% for img in prop.gallery_images %}
+          <img
+            class="thumb {% if loop.first %}active-thumb{% endif %}"
+            src="{{ img }}"
+            onclick="changeImage(this)"
+          />
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="property-layout">
+        <div class="property-left">
+          <div class="info-grid">
+            <div class="info-card">
+              <strong>{{ prop.sqft }}</strong><span>Sq Ft</span>
+            </div>
+            <div class="info-card">
+              <strong>{{ prop.floor }}</strong><span>Floor</span>
+            </div>
+            <div class="info-card">
+              <strong>{{ prop.baths }}</strong><span>Washrooms</span>
+            </div>
+            <div class="info-card">
+              <strong>{{ prop.built }}</strong><span>Built</span>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>About This Space</h2>
+            <p>{{ prop.description }}</p>
+          </div>
+
+          <div class="section">
+            <h2>Property Overview</h2>
+            <div class="overview-grid">
+              <div class="overview-item">
+                <span>Property Type</span
+                ><strong>{{ prop.property_type }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Status</span><strong>{{ prop.status }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Floor</span><strong>{{ prop.floor }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Maintenance</span><strong>{{ prop.maintenance }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Location</span><strong>{{ prop.location }}</strong>
+              </div>
+              <div class="overview-item">
+                <span>Security Deposit</span
+                ><strong>{{ prop.security_deposit }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>Features & Amenities</h2>
+            <div class="features">
+              {% for amenity in prop.amenities %}
+              <div>{{ amenity }}</div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>Other Available Units</h2>
+            <div class="units-grid">
+              {% for other in others %}
+              <div class="unit-card">
+                <h3>{{ other.title }}</h3>
+                <div class="unit-price">
+                  {{ other.rent }} <span>/ month</span>
+                </div>
+                <div class="unit-meta">
+                  {% if other.beds > 0 %}
+                  <div>{{ other.beds }} Beds</div>
+                  {% endif %}
+                  <div>{{ other.baths }} Baths</div>
+                  <div>{{ other.sqft }} Sq Ft</div>
+                </div>
+                <a href="/{{ other.title | lower | replace(' ', '-') }}"
+                  ><button class="primary-btn">View Details</button></a
+                >
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="property-right">
+          <div class="contact-box">
+            <h3>Interested in this space?</h3>
+            <p>Contact the owner or apply directly for this commercial unit.</p>
+            <button class="primary-btn">Apply Now</button>
+            <button class="secondary-btn">Contact Owner</button>
+            <button class="secondary-btn">Rental Agreement</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function changeImage(el) {
+        document.getElementById("mainImage").src = el.src;
+        document
+          .querySelectorAll(".thumb")
+          .forEach((t) => t.classList.remove("active-thumb"));
+        el.classList.add("active-thumb");
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Applications — {{ brand_name }}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f8fafc;
+        color: #111827;
+        min-height: 100vh;
+      }
+
+      .topbar {
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 0 40px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 99;
+      }
+      .topbar-logo {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #111827;
+        text-decoration: none;
+      }
+      .topbar-logo span {
+        color: #2563eb;
+      }
+      .back-link {
+        font-size: 13px;
+        font-weight: 500;
+        color: #4b5563;
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        transition: all 0.18s;
+      }
+      .back-link:hover {
+        background: #f3f4f6;
+      }
+
+      .content {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 0 24px 60px;
+      }
+
+      .page-header {
+        margin-bottom: 28px;
+      }
+      .page-header h1 {
+        font-size: 26px;
+        font-weight: 800;
+        margin-bottom: 4px;
+      }
+      .page-header p {
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .empty {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 60px;
+        text-align: center;
+        color: #9ca3af;
+        font-size: 14px;
+      }
+
+      .app-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        margin-bottom: 16px;
+        overflow: hidden;
+      }
+
+      .app-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 24px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.15s;
+      }
+      .app-header:hover {
+        background: #f8fafc;
+      }
+
+      .app-header-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .app-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 800;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      .app-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+      }
+      .app-meta {
+        font-size: 12px;
+        color: #9ca3af;
+        margin-top: 2px;
+      }
+
+      .app-badges {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .badge-prop {
+        background: #eff6ff;
+        color: #2563eb;
+      }
+      .badge-type {
+        background: #f3f4f6;
+        color: #374151;
+      }
+      .badge-date {
+        font-size: 12px;
+        color: #9ca3af;
+      }
+
+      .chevron {
+        font-size: 16px;
+        color: #9ca3af;
+        transition: transform 0.2s;
+      }
+      .chevron.open {
+        transform: rotate(180deg);
+      }
+
+      /* BODY */
+      .app-body {
+        display: none;
+        padding: 0 24px 24px;
+        border-top: 1px solid #f1f5f9;
+      }
+      .app-body.open {
+        display: block;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+      .detail-item {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .detail-label {
+        font-size: 11px;
+        color: #9ca3af;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 5px;
+      }
+      .detail-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #111827;
+      }
+
+      .section-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        margin-top: 20px;
+      }
+
+      .message-box {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 14px;
+        color: #4b5563;
+        line-height: 1.7;
+      }
+
+      .contact-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+      .contact-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.18s;
+      }
+      .contact-btn.email {
+        background: #eff6ff;
+        color: #2563eb;
+      }
+      .contact-btn.email:hover {
+        background: #dbeafe;
+      }
+      .contact-btn.phone {
+        background: #f0fdf4;
+        color: #166534;
+      }
+      .contact-btn.phone:hover {
+        background: #dcfce7;
+      }
+
+      .agreed-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #dcfce7;
+        color: #166534;
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <a href="/dashboard" class="topbar-logo"
+        >{{ brand_name.rsplit(' ',1)[0] }}
+        <span>{{ brand_name.rsplit(' ',1)[-1] }}</span></a
+      >
+      <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+    </div>
+
+    <div class="content">
+      <div class="page-header">
+        <h1>Rental Applications</h1>
+        <p>
+          {{ enquiries | length }} application{{ 's' if enquiries | length != 1
+          else '' }} received across all your properties.
+        </p>
+      </div>
+
+      {% if enquiries %} {% for enq in enquiries %}
+      <div class="app-card">
+        <!-- HEADER (always visible) -->
+        <div class="app-header" onclick="toggle('enq-{{ loop.index }}')">
+          <div class="app-header-left">
+            <div class="app-avatar">
+              {{ (enq.first_name or enq.name or '?')[0].upper() }}
+            </div>
+            <div>
+              <p class="app-name">
+                {{ enq.first_name or enq.name or 'Unknown' }} {{ enq.last_name
+                or '' }}
+              </p>
+              <p class="app-meta">
+                {{ enq.email }} {% if enq.phone %}· {{ enq.phone }}{% endif %}
+              </p>
+            </div>
+          </div>
+          <div class="app-badges">
+            <span class="badge badge-prop">{{ enq.property_title }}</span>
+            {% if enq.tenant_type %}<span class="badge badge-type"
+              >{{ enq.tenant_type }}</span
+            >{% endif %}
+            <span class="badge-date"
+              >{{ enq.created_at[:10] if enq.created_at else '' }}</span
+            >
+            <span class="chevron" id="chev-enq-{{ loop.index }}">▼</span>
+          </div>
+        </div>
+
+        <!-- BODY (expandable) -->
+        <div class="app-body" id="enq-{{ loop.index }}">
+          <p class="section-title">Personal & Employment</p>
+          <div class="detail-grid">
+            {% if enq.date_of_birth %}
+            <div class="detail-item">
+              <p class="detail-label">Date of Birth</p>
+              <p class="detail-value">{{ enq.date_of_birth }}</p>
+            </div>
+            {% endif %} {% if enq.nationality %}
+            <div class="detail-item">
+              <p class="detail-label">Nationality</p>
+              <p class="detail-value">{{ enq.nationality }}</p>
+            </div>
+            {% endif %} {% if enq.profession %}
+            <div class="detail-item">
+              <p class="detail-label">Profession</p>
+              <p class="detail-value">{{ enq.profession }}</p>
+            </div>
+            {% endif %} {% if enq.employer %}
+            <div class="detail-item">
+              <p class="detail-label">Employer</p>
+              <p class="detail-value">{{ enq.employer }}</p>
+            </div>
+            {% endif %} {% if enq.monthly_income %}
+            <div class="detail-item">
+              <p class="detail-label">Monthly Income</p>
+              <p class="detail-value">{{ enq.monthly_income }}</p>
+            </div>
+            {% endif %}
+          </div>
+
+          <p class="section-title">Rental Intent</p>
+          <div class="detail-grid">
+            {% if enq.tenant_type %}
+            <div class="detail-item">
+              <p class="detail-label">Tenant Type</p>
+              <p class="detail-value">{{ enq.tenant_type }}</p>
+            </div>
+            {% endif %} {% if enq.num_occupants %}
+            <div class="detail-item">
+              <p class="detail-label">Occupants</p>
+              <p class="detail-value">{{ enq.num_occupants }}</p>
+            </div>
+            {% endif %} {% if enq.move_in_date %}
+            <div class="detail-item">
+              <p class="detail-label">Move-in Date</p>
+              <p class="detail-value">{{ enq.move_in_date }}</p>
+            </div>
+            {% endif %} {% if enq.lease_duration %}
+            <div class="detail-item">
+              <p class="detail-label">Lease Duration</p>
+              <p class="detail-value">{{ enq.lease_duration }}</p>
+            </div>
+            {% endif %} {% if enq.have_pets %}
+            <div class="detail-item">
+              <p class="detail-label">Pets</p>
+              <p class="detail-value">
+                {{ enq.have_pets }}{% if enq.pet_details %} — {{ enq.pet_details
+                }}{% endif %}
+              </p>
+            </div>
+            {% endif %}
+          </div>
+
+          {% if enq.message %}
+          <p class="section-title">Message from Applicant</p>
+          <div class="message-box">{{ enq.message }}</div>
+          {% endif %} {% if enq.agreed_to_terms %}
+          <div class="agreed-badge">✓ Applicant agreed to declaration</div>
+          {% endif %}
+
+          <!-- CONTACT BUTTONS -->
+          <div class="contact-row">
+            <a href="mailto:{{ enq.email }}" class="contact-btn email"
+              >📧 Email {{ enq.first_name or enq.name }}</a
+            >
+            {% if enq.phone %}
+            <a href="tel:{{ enq.phone }}" class="contact-btn phone"
+              >📞 Call {{ enq.phone }}</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <div class="empty">
+        <p>
+          No applications yet. They'll appear here when tenants apply for your
+          properties.
+        </p>
+      </div>
+      {% endif %}
+    </div>
+
+    <script>
+      function toggle(id) {
+        const body = document.getElementById(id);
+        const chev = document.getElementById("chev-" + id);
+        body.classList.toggle("open");
+        chev.classList.toggle("open");
+      }
+    </script>
+  </body>
+</html>

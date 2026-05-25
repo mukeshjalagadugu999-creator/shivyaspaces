@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — {{ brand_name }}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #f8fafc;
+        --bg2: #ffffff;
+        --bg3: #f1f5f9;
+        --border: #e5e7eb;
+        --text: #111827;
+        --text2: #4b5563;
+        --text3: #9ca3af;
+        --accent: #2563eb;
+        --accent-hover: #1d4ed8;
+        --green-bg: #dcfce7;
+        --green-fg: #166534;
+        --red-bg: #fee2e2;
+        --red-fg: #991b1b;
+        --yellow-bg: #fef9c3;
+        --yellow-fg: #854d0e;
+        --blue-bg: #eff6ff;
+        --blue-fg: #2563eb;
+      }
+      [data-theme="dark"] {
+        --bg: #0d1117;
+        --bg2: #161b22;
+        --bg3: #21262d;
+        --border: #30363d;
+        --text: #e6edf3;
+        --text2: #8b949e;
+        --text3: #484f58;
+        --accent: #58a6ff;
+        --accent-hover: #79b8ff;
+        --green-bg: #0d2b1a;
+        --green-fg: #3fb950;
+        --red-bg: #2d1215;
+        --red-fg: #f85149;
+        --yellow-bg: #2d2000;
+        --yellow-fg: #e3b341;
+        --blue-bg: #0d2137;
+        --blue-fg: #58a6ff;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        transition:
+          background 0.25s,
+          color 0.25s;
+      }
+
+      .topbar {
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 0 40px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 99;
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+      }
+      .topbar-logo {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .topbar-logo span {
+        color: var(--accent);
+      }
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .owner-name {
+        font-size: 13px;
+        color: var(--text3);
+        padding: 0 6px;
+      }
+      .nav-btn {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text2);
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: all 0.18s;
+        white-space: nowrap;
+      }
+      .nav-btn:hover {
+        background: var(--bg3);
+        color: var(--text);
+      }
+      .nav-btn.theme-toggle {
+        border: 1px solid var(--border);
+        background: var(--bg3);
+      }
+      .nav-btn.mypage {
+        background: var(--accent);
+        color: white;
+      }
+      .nav-btn.mypage:hover {
+        background: var(--accent-hover);
+      }
+      .nav-btn.signout {
+        background: var(--red-bg);
+        color: var(--red-fg);
+      }
+
+      .content {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 24px 60px;
+      }
+      .page-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .page-header h1 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 4px;
+      }
+      .page-header p {
+        font-size: 14px;
+        color: var(--text3);
+      }
+      .btn-create {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #22c55e;
+        color: white;
+        text-decoration: none;
+        padding: 11px 22px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: background 0.18s;
+        white-space: nowrap;
+      }
+      .btn-create:hover {
+        background: #16a34a;
+      }
+
+      .flash {
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-bottom: 20px;
+        font-weight: 500;
+      }
+      .flash.success {
+        background: var(--green-bg);
+        color: var(--green-fg);
+      }
+      .flash.danger {
+        background: var(--red-bg);
+        color: var(--red-fg);
+      }
+      .flash.info {
+        background: var(--blue-bg);
+        color: var(--blue-fg);
+      }
+      .flash.warning {
+        background: var(--yellow-bg);
+        color: var(--yellow-fg);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 36px;
+      }
+      .stat-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+      }
+      .stat-label {
+        font-size: 12px;
+        color: var(--text3);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+      }
+      .stat-value {
+        font-size: 30px;
+        font-weight: 800;
+        color: var(--text);
+      }
+
+      .table-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 40px;
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+      }
+      .table-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+      }
+      .table-header h2 {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        text-align: left;
+        padding: 12px 24px;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: var(--bg3);
+        border-bottom: 1px solid var(--border);
+      }
+      tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: background 0.15s;
+      }
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background: var(--bg3);
+      }
+      tbody td {
+        padding: 16px 24px;
+        font-size: 14px;
+        color: var(--text2);
+        vertical-align: middle;
+      }
+      .prop-title {
+        font-weight: 600;
+        color: var(--text);
+      }
+      .prop-location {
+        font-size: 12px;
+        color: var(--text3);
+        margin-top: 2px;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .status-Available {
+        background: var(--green-bg);
+        color: var(--green-fg);
+      }
+      .status-Rented {
+        background: var(--red-bg);
+        color: var(--red-fg);
+      }
+      .status-Maintenance {
+        background: var(--yellow-bg);
+        color: var(--yellow-fg);
+      }
+      .action-links {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .btn-edit {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        background: var(--accent);
+        color: white;
+      }
+      .btn-view {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        background: var(--bg3);
+        color: var(--text2);
+        border: 1px solid var(--border);
+      }
+      .btn-delete {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 8px;
+        border: none;
+        background: var(--red-bg);
+        color: var(--red-fg);
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+      }
+
+      /* ================================
+         DELETE MODAL
+      ================================ */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .modal-overlay.open {
+        display: flex;
+      }
+
+      .modal {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 32px;
+        max-width: 420px;
+        width: 100%;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+      }
+
+      .modal-icon {
+        width: 48px;
+        height: 48px;
+        background: var(--red-bg);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+        font-size: 20px;
+      }
+
+      .modal h2 {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+
+      .modal p {
+        font-size: 14px;
+        color: var(--text2);
+        line-height: 1.6;
+        margin-bottom: 8px;
+      }
+
+      .modal .prop-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      .modal .warning-text {
+        font-size: 13px;
+        color: var(--red-fg);
+        font-weight: 500;
+        margin-bottom: 24px;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .modal-cancel {
+        flex: 1;
+        background: var(--bg3);
+        color: var(--text2);
+        border: 1px solid var(--border);
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: all 0.18s;
+      }
+      .modal-cancel:hover {
+        opacity: 0.8;
+      }
+
+      .modal-confirm {
+        flex: 1;
+        background: var(--red-fg);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: all 0.18s;
+      }
+      .modal-confirm:hover {
+        opacity: 0.85;
+      }
+
+      @media (max-width: 768px) {
+        .topbar {
+          padding: 0 16px;
+        }
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .content {
+          padding: 0 16px;
+        }
+        .owner-name {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <a href="/" class="topbar-logo">Shivya<span>Spaces</span></a>
+      <div class="topbar-right">
+        <span class="owner-name">{{ owner_name }}</span>
+        <button class="nav-btn theme-toggle" onclick="toggleTheme()">
+          Dark Mode
+        </button>
+        <a href="/{{ owner_slug }}" class="nav-btn mypage">My Page</a>
+        <a href="/logout" class="nav-btn signout">Sign Out</a>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p>{{ brand_name }} — manage your properties.</p>
+        </div>
+        <a href="/create" class="btn-create">New Property</a>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% for
+      category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %} {% endwith %}
+
+      <div class="stats">
+        <div class="stat-card">
+          <p class="stat-label">Total Properties</p>
+          <p class="stat-value">{{ properties | length }}</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Available</p>
+          <p class="stat-value">
+            {{ properties | selectattr('status','equalto','Available') | list |
+            length }}
+          </p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Rented</p>
+          <p class="stat-value">
+            {{ properties | selectattr('status','equalto','Rented') | list |
+            length }}
+          </p>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header"><h2>All Properties</h2></div>
+        <table>
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Rent</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for prop in properties %}
+            <tr>
+              <td>
+                <p class="prop-title">{{ prop.title }}</p>
+                <p class="prop-location">{{ prop.location }}</p>
+              </td>
+              <td>
+                {{ prop.rent }}<br /><small style="color: var(--text3)"
+                  >/ month</small
+                >
+              </td>
+              <td>
+                <span
+                  class="status-badge status-{{ prop.status | replace(' ','') }}"
+                  >{{ prop.status }}</span
+                >
+              </td>
+              <td>
+                <div class="action-links">
+                  <a href="/edit/{{ prop.id }}" class="btn-edit">Edit</a>
+                  <a
+                    href="/{{ owner_slug }}/property/{{ prop.id }}"
+                    class="btn-view"
+                    >View</a
+                  >
+                  <button
+                    class="btn-delete"
+                    onclick="openDeleteModal('{{ prop.id }}', '{{ prop.title }}')"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div class="modal-overlay" id="deleteModal">
+      <div class="modal">
+        <div class="modal-icon">🗑️</div>
+        <h2>Delete Property</h2>
+        <p>You are about to delete:</p>
+        <p class="prop-name" id="modalPropName">—</p>
+        <p class="warning-text">
+          This cannot be undone. All data for this property will be permanently
+          removed.
+        </p>
+        <div class="modal-actions">
+          <button class="modal-cancel" onclick="closeDeleteModal()">
+            Cancel
+          </button>
+          <form id="deleteForm" method="POST" style="flex: 1">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button type="submit" class="modal-confirm" style="width: 100%">
+              Yes, Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openDeleteModal(propId, propTitle) {
+        document.getElementById("modalPropName").textContent = propTitle;
+        document.getElementById("deleteForm").action = "/delete/" + propId;
+        document.getElementById("deleteModal").classList.add("open");
+      }
+
+      function closeDeleteModal() {
+        document.getElementById("deleteModal").classList.remove("open");
+      }
+
+      // Close if clicking outside modal
+      document
+        .getElementById("deleteModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closeDeleteModal();
+        });
+
+      // Close on Escape key
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeDeleteModal();
+      });
+    </script>
+  </body>
+</html>

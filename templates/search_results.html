@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Properties — ShivyaSpaces</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <style>
+      .page-body {
+        padding-top: 66px;
+      }
+
+      .results-bar {
+        position: sticky;
+        top: 66px;
+        z-index: 90;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+      }
+
+      .results-bar-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .results-meta h1 {
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.3px;
+      }
+
+      .results-meta p {
+        font-size: 13px;
+        color: var(--text3);
+        margin-top: 2px;
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .control-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+
+      .group-select {
+        appearance: none;
+        -webkit-appearance: none;
+        padding: 9px 36px 9px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+        color: var(--text);
+        background-color: var(--bg2);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        cursor: pointer;
+        outline: none;
+        min-width: 220px;
+        transition:
+          border-color 0.18s,
+          background 0.25s,
+          color 0.25s;
+      }
+
+      .group-select:focus {
+        border-color: var(--accent);
+      }
+
+      .active-filters {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .filter-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--accent-light);
+        color: var(--accent);
+        border: 1px solid var(--accent-border);
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .filter-chip a {
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 14px;
+        line-height: 1;
+        opacity: 0.7;
+      }
+
+      .filter-chip a:hover {
+        opacity: 1;
+      }
+
+      .refine-btn {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text2);
+        text-decoration: none;
+        padding: 9px 16px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+        transition: all 0.18s;
+        white-space: nowrap;
+      }
+
+      .refine-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .results-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 24px 60px;
+      }
+
+      .group-section {
+        margin-bottom: 48px;
+      }
+
+      .group-heading {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .group-heading h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: -0.3px;
+      }
+
+      .group-count {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text3);
+        background: var(--bg3);
+        padding: 3px 9px;
+        border-radius: 999px;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 80px 24px;
+      }
+      .no-results h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 10px;
+      }
+      .no-results p {
+        font-size: 14px;
+        color: var(--text3);
+        margin-bottom: 24px;
+      }
+      .no-results a {
+        background: var(--accent);
+        color: white;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body class="page-body">
+    <nav class="navbar">
+      <a href="/" class="logo">Shivya<span class="logo-accent">Spaces</span></a>
+      <div class="nav-links">
+        <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+        <a href="/search">Refine Search</a>
+      </div>
+    </nav>
+
+    <div class="results-bar">
+      <div class="results-bar-inner">
+        <div class="results-meta">
+          <h1>
+            {% if prop_type %}{{ prop_type }}{% else %}All Properties{% endif %}
+          </h1>
+          <p>
+            {{ properties | length }} propert{{ 'y' if properties | length == 1
+            else 'ies' }} found {% if prop_type %} &middot; {{ prop_type }}{%
+            endif %} {% if beds %} &middot; {{ beds }} BHK{% endif %}
+          </p>
+        </div>
+
+        <div class="controls">
+          {% if prop_type or beds %}
+          <div class="active-filters">
+            {% if prop_type %}
+            <span class="filter-chip">
+              {{ prop_type }}
+              <a
+                href="/results{% if beds %}?beds={{ beds }}{% endif %}{% if group_by %}&group={{ group_by }}{% endif %}"
+                >×</a
+              >
+            </span>
+            {% endif %} {% if beds %}
+            <span class="filter-chip">
+              {{ beds }} BHK
+              <a
+                href="/results{% if prop_type %}?type={{ prop_type }}{% endif %}{% if group_by %}&group={{ group_by }}{% endif %}"
+                >×</a
+              >
+            </span>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <span class="control-label">Group by</span>
+
+          <select
+            class="group-select"
+            id="groupSelect"
+            onchange="applyGroup(this.value)"
+          >
+            <option value="">No Grouping — Show All</option>
+            <option value="type">Property Type (Apartment, Villa...)</option>
+            <option value="owner">Owner / Property Manager</option>
+            <option value="beds">Number of Bedrooms (1 BHK, 2 BHK...)</option>
+            <option value="status">Availability (Available, Rented...)</option>
+          </select>
+
+          <a href="/search" class="refine-btn">Refine Search</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-content">
+      {% if properties %} {% if not group_by %}
+      <div class="grid" style="padding: 0">
+        {% for item in properties %}
+        <a href="/{{ item.slug }}/property/{{ item.id }}" class="tile">
+          <div class="image-wrapper">
+            <img src="{{ item.image }}" alt="{{ item.title }}" />
+            <div class="badge">{{ item.status }}</div>
+          </div>
+          <div class="tile-info">
+            <div class="card-price">{{ item.rent }}<span> / month</span></div>
+            <h2>{{ item.title }}</h2>
+            <div class="location">{{ item.location }}</div>
+            <div class="meta">
+              {% if item.beds and item.beds > 0 %}
+              <div>{{ item.beds }} Beds</div>
+              {% endif %} {% if item.baths %}
+              <div>{{ item.baths }} Baths</div>
+              {% endif %}
+              <div>{{ item.sqft }} Sq Ft</div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+
+      {% else %} {% for group_name, items in grouped.items() %}
+      <div class="group-section">
+        <div class="group-heading">
+          <h2>{{ group_name or 'Other' }}</h2>
+          <span class="group-count"
+            >{{ items | length }} propert{{ 'y' if items | length == 1 else
+            'ies' }}</span
+          >
+        </div>
+        <div class="grid" style="padding: 0">
+          {% for item in items %}
+          <a href="/{{ item.slug }}/property/{{ item.id }}" class="tile">
+            <div class="image-wrapper">
+              <img src="{{ item.image }}" alt="{{ item.title }}" />
+              <div class="badge">{{ item.status }}</div>
+            </div>
+            <div class="tile-info">
+              <div class="card-price">{{ item.rent }}<span> / month</span></div>
+              <h2>{{ item.title }}</h2>
+              <div class="location">{{ item.location }}</div>
+              <div class="meta">
+                {% if item.beds and item.beds > 0 %}
+                <div>{{ item.beds }} Beds</div>
+                {% endif %} {% if item.baths %}
+                <div>{{ item.baths }} Baths</div>
+                {% endif %}
+                <div>{{ item.sqft }} Sq Ft</div>
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %} {% endif %} {% else %}
+      <div class="no-results">
+        <h2>No properties found</h2>
+        <p>Try adjusting your search filters to see more results.</p>
+        <a href="/search">Refine Search</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <script>
+      document.getElementById("groupSelect").value = "{{ group_by }}";
+
+      function applyGroup(value) {
+        var params = new URLSearchParams(window.location.search);
+        if (value) {
+          params.set("group", value);
+        } else {
+          params.delete("group");
+        }
+        window.location.href = "/results?" + params.toString();
+      }
+    </script>
+  </body>
+</html>
