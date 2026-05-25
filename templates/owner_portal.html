@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ owner.brand_name }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -52,7 +53,20 @@
 
   <body class="home-page">
     <nav class="navbar">
-      <a href="/" class="logo">Shivya<span class="logo-accent">Spaces</span></a>
+      <a href="/" class="logo"
+        ><img
+          src="/static/Shivya_Logo.jpeg"
+          alt="ShivyaSpaces"
+          style="
+            height: 36px;
+            width: 36px;
+            object-fit: contain;
+            border-radius: 4px;
+            margin-right: 8px;
+            vertical-align: middle;
+          "
+        />Shivya<span class="logo-accent">Spaces</span></a
+      >
       <div class="nav-links">
         {% if session.get('owner_slug') == owner.slug %}
         <a href="/dashboard">Dashboard</a>

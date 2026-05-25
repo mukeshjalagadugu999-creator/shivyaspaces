@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Owner Login — ShivyaSpaces</title>
     <link
@@ -179,7 +180,20 @@
   </head>
   <body>
     <div class="box">
-      <p class="brand">Shivya<span>Spaces</span></p>
+      <p class="brand">
+        <img
+          src="/static/Shivya_Logo.jpeg"
+          alt="ShivyaSpaces"
+          style="
+            height: 36px;
+            width: 36px;
+            object-fit: contain;
+            border-radius: 4px;
+            margin-right: 8px;
+            vertical-align: middle;
+          "
+        />Shivya<span>Spaces</span>
+      </p>
       <p class="sub">Owner portal — sign in to manage your listings</p>
       {% with messages = get_flashed_messages(with_categories=true) %} {% for
       category, message in messages %}

@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
     <link
@@ -550,7 +551,20 @@
   </head>
   <body>
     <div class="topbar">
-      <a href="/" class="topbar-logo">Shivya<span>Spaces</span></a>
+      <a href="/" class="topbar-logo"
+        ><img
+          src="/static/Shivya_Logo.jpeg"
+          alt="ShivyaSpaces"
+          style="
+            height: 36px;
+            width: 36px;
+            object-fit: contain;
+            border-radius: 4px;
+            margin-right: 8px;
+            vertical-align: middle;
+          "
+        />Shivya<span>Spaces</span></a
+      >
       <div class="topbar-right">
         <span class="admin-name">{{ admin_name }}</span>
         <button class="nav-btn theme-toggle" onclick="toggleTheme()">
