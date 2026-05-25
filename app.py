@@ -34,7 +34,7 @@ app.config["MAIL_DEFAULT_SENDER"] = ("ShivyaSpaces", "mukesh.bunny999@gmail.com"
 # -----------------------------------------------
 # SITE URL — change this after hosting
 # -----------------------------------------------
-SITE_URL = "http://127.0.0.1:5000"
+SITE_URL = "https://shivyaspaces.up.railway.app"
 mail = Mail(app)
 
 
