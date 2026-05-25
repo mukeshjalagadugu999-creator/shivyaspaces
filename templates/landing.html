@@ -40,11 +40,10 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 72px;
+        height: 70px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: 0 48px;
+        padding: 0 40px;
         background: rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -54,32 +53,33 @@
       .top-logo {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         text-decoration: none;
       }
 
+      /* Logo image — bigger, clear */
       .top-logo img {
-        height: 46px;
-        width: 46px;
+        height: 44px;
+        width: 44px;
         object-fit: contain;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.08);
-        padding: 2px;
+        border-radius: 6px;
         flex-shrink: 0;
       }
 
+      /* Text block next to logo */
       .top-logo-text {
         display: flex;
         flex-direction: column;
+        gap: 3px; /* small but visible gap between name and tagline */
       }
 
       .top-logo-name {
         font-family: "Playfair Display", serif;
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 700;
         color: white;
-        line-height: 1.1;
-        letter-spacing: -0.3px;
+        line-height: 1;
+        letter-spacing: -0.2px;
       }
       .top-logo-name span {
         color: #93c5fd;
@@ -87,18 +87,18 @@
 
       .top-logo-tagline {
         font-size: 10px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.45);
-        letter-spacing: 0.3px;
-        margin-top: 1px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.42);
+        letter-spacing: 0.2px;
+        line-height: 1;
       }
 
       /* MAIN CARD */
       .card {
         width: 100%;
-        max-width: 620px;
+        max-width: 540px;
         text-align: center;
-        margin-top: 20px;
+        margin-top: 16px;
       }
 
       .tag {
@@ -110,104 +110,101 @@
         font-weight: 700;
         letter-spacing: 1.5px;
         text-transform: uppercase;
-        padding: 6px 18px;
+        padding: 6px 16px;
         border-radius: 999px;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
       }
 
       h1 {
         font-family: "Playfair Display", serif;
-        font-size: 52px;
+        font-size: 38px;
         font-weight: 800;
         color: white;
-        line-height: 1.1;
-        letter-spacing: -1px;
-        margin-bottom: 14px;
+        line-height: 1.15;
+        letter-spacing: -0.5px;
+        margin-bottom: 10px;
       }
       h1 span {
         color: #93c5fd;
       }
 
       .sub {
-        font-size: 16px;
-        color: rgba(255, 255, 255, 0.55);
-        line-height: 1.7;
-        margin-bottom: 20px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.6;
+        margin-bottom: 18px;
       }
 
       /* NRI info block */
       .nri-block {
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        padding: 20px 28px;
-        margin-bottom: 40px;
+        border-radius: 14px;
+        padding: 16px 22px;
+        margin-bottom: 32px;
         text-align: left;
         backdrop-filter: blur(8px);
       }
       .nri-block h3 {
-        font-size: 14px;
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.9);
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 6px;
       }
       .nri-block p {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
         line-height: 1.7;
       }
 
       .question {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 700;
         letter-spacing: 1.2px;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.38);
-        margin-bottom: 16px;
+        color: rgba(255, 255, 255, 0.35);
+        margin-bottom: 14px;
       }
 
       .choices {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 14px;
+        gap: 12px;
       }
 
       .choice {
         background: rgba(255, 255, 255, 0.07);
         border: 1.5px solid rgba(255, 255, 255, 0.14);
-        border-radius: 20px;
-        padding: 28px 20px;
+        border-radius: 18px;
+        padding: 26px 18px;
         text-decoration: none;
         color: white;
         transition: all 0.22s ease;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         backdrop-filter: blur(10px);
       }
       .choice:hover {
-        transform: translateY(-5px);
+        transform: translateY(-4px);
         border-color: rgba(147, 197, 253, 0.55);
-        background: rgba(255, 255, 255, 0.13);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        background: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
       }
       .choice-title {
         font-family: "Playfair Display", serif;
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 700;
       }
       .choice-desc {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.48);
         line-height: 1.5;
         text-align: center;
       }
       .choice-arrow {
-        font-size: 14px;
+        font-size: 13px;
         color: rgba(255, 255, 255, 0.28);
         font-weight: 600;
         transition:
@@ -221,7 +218,7 @@
 
       @media (max-width: 480px) {
         h1 {
-          font-size: 34px;
+          font-size: 28px;
         }
         .choices {
           grid-template-columns: 1fr;
@@ -236,14 +233,11 @@
         .top-logo-name {
           font-size: 17px;
         }
-        .nri-block {
-          padding: 16px 18px;
-        }
       }
     </style>
   </head>
   <body>
-    <div class="top-bar" mt-2>
+    <div class="top-bar">
       <a href="/" class="top-logo">
         <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces Logo" />
         <div class="top-logo-text">
