@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ShivyaSpaces</title>
+    <title>
+      ShivyaSpaces — Trusted Rental Lifecycle Platform for NRI Property Owners
+    </title>
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -24,58 +26,98 @@
         align-items: center;
         justify-content: center;
         background:
-          linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.72)),
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
           url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
         padding: 24px;
       }
+
+      /* TOP BAR */
       .top-bar {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        height: 66px;
+        height: 72px;
         display: flex;
         align-items: center;
-        padding: 0 40px;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(14px);
+        justify-content: space-between;
+        padding: 0 48px;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         z-index: 99;
       }
+
       .top-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+
+      .top-logo img {
+        height: 46px;
+        width: 46px;
+        object-fit: contain;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 2px;
+        flex-shrink: 0;
+      }
+
+      .top-logo-text {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .top-logo-name {
         font-family: "Playfair Display", serif;
         font-size: 20px;
         font-weight: 700;
         color: white;
-        text-decoration: none;
+        line-height: 1.1;
+        letter-spacing: -0.3px;
       }
-      .top-logo span {
+      .top-logo-name span {
         color: #93c5fd;
       }
+
+      .top-logo-tagline {
+        font-size: 10px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.45);
+        letter-spacing: 0.3px;
+        margin-top: 1px;
+      }
+
+      /* MAIN CARD */
       .card {
         width: 100%;
-        max-width: 540px;
+        max-width: 620px;
         text-align: center;
+        margin-top: 20px;
       }
+
       .tag {
         display: inline-block;
-        background: rgba(147, 197, 253, 0.15);
-        border: 1px solid rgba(147, 197, 253, 0.3);
+        background: rgba(147, 197, 253, 0.12);
+        border: 1px solid rgba(147, 197, 253, 0.28);
         color: #93c5fd;
         font-size: 11px;
         font-weight: 700;
         letter-spacing: 1.5px;
         text-transform: uppercase;
-        padding: 6px 16px;
+        padding: 6px 18px;
         border-radius: 999px;
         margin-bottom: 24px;
       }
+
       h1 {
         font-family: "Playfair Display", serif;
-        font-size: 50px;
+        font-size: 52px;
         font-weight: 800;
         color: white;
         line-height: 1.1;
@@ -85,37 +127,66 @@
       h1 span {
         color: #93c5fd;
       }
+
       .sub {
         font-size: 16px;
         color: rgba(255, 255, 255, 0.55);
         line-height: 1.7;
-        margin-bottom: 48px;
+        margin-bottom: 20px;
       }
+
+      /* NRI info block */
+      .nri-block {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 20px 28px;
+        margin-bottom: 40px;
+        text-align: left;
+        backdrop-filter: blur(8px);
+      }
+      .nri-block h3 {
+        font-size: 14px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nri-block p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.7;
+      }
+
       .question {
         font-size: 12px;
         font-weight: 700;
         letter-spacing: 1.2px;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.4);
-        margin-bottom: 18px;
+        color: rgba(255, 255, 255, 0.38);
+        margin-bottom: 16px;
       }
+
       .choices {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 14px;
       }
+
       .choice {
         background: rgba(255, 255, 255, 0.07);
-        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border: 1.5px solid rgba(255, 255, 255, 0.14);
         border-radius: 20px;
-        padding: 32px 20px;
+        padding: 28px 20px;
         text-decoration: none;
         color: white;
         transition: all 0.22s ease;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         backdrop-filter: blur(10px);
       }
       .choice:hover {
@@ -133,10 +204,11 @@
         font-size: 13px;
         color: rgba(255, 255, 255, 0.5);
         line-height: 1.5;
+        text-align: center;
       }
       .choice-arrow {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.3);
+        color: rgba(255, 255, 255, 0.28);
         font-weight: 600;
         transition:
           transform 0.18s,
@@ -146,6 +218,7 @@
         transform: translateX(4px);
         color: #93c5fd;
       }
+
       @media (max-width: 480px) {
         h1 {
           font-size: 34px;
@@ -156,30 +229,47 @@
         .top-bar {
           padding: 0 20px;
         }
+        .top-logo img {
+          height: 38px;
+          width: 38px;
+        }
+        .top-logo-name {
+          font-size: 17px;
+        }
+        .nri-block {
+          padding: 16px 18px;
+        }
       }
     </style>
   </head>
   <body>
     <div class="top-bar">
-      <a href="/" class="top-logo"
-        ><img
-          src="/static/Shivya_Logo.jpeg"
-          alt="ShivyaSpaces"
-          style="
-            height: 36px;
-            width: 36px;
-            object-fit: contain;
-            border-radius: 4px;
-            margin-right: 8px;
-            vertical-align: middle;
-          "
-        />Shivya<span>Spaces</span></a
-      >
+      <a href="/" class="top-logo">
+        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces Logo" />
+        <div class="top-logo-text">
+          <span class="top-logo-name">Shivya<span>Spaces</span></span>
+          <span class="top-logo-tagline"
+            >Trusted Rental Lifecycle Platform for NRI Property Owners</span
+          >
+        </div>
+      </a>
     </div>
+
     <div class="card">
       <div class="tag">Welcome</div>
-      <h1>Find Your <span>Perfect</span> Home</h1>
-      <p class="sub">Premium rental properties across Bangalore.</p>
+      <h1>Your Properties.<br /><span>Managed Remotely.</span></h1>
+      <p class="sub">
+        Trusted Rental Lifecycle Platform for NRI Property Owners
+      </p>
+
+      <div class="nri-block">
+        <h3>🌏 Built for NRIs managing properties in India remotely</h3>
+        <p>
+          Manage listings, tenant inquiries, onboarding, agreements, rent
+          reminders, receipts, and property lifecycle in one place.
+        </p>
+      </div>
+
       <p class="question">I am a...</p>
       <div class="choices">
         <a href="/search" class="choice">
