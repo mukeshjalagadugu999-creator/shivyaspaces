@@ -9,6 +9,11 @@
       rel="stylesheet"
     />
     <script src="/static/theme.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
     <style>
       * {
         margin: 0;
@@ -369,12 +374,18 @@
             </div>
             <div class="form-group">
               <label>Phone Number <span class="required">*</span></label>
-              <input
-                type="tel"
-                name="phone"
-                placeholder="e.g. +91 98765 43210"
-                required
-              />
+              <input type="tel" id="phoneInput" placeholder="Enter number" />
+              <input type="hidden" name="phone" id="phoneHidden" />
+              <span
+                style="
+                  font-size: 12px;
+                  color: var(--red-fg);
+                  margin-top: 4px;
+                  display: none;
+                "
+                id="phoneError"
+                >Please enter a valid phone number.</span
+              >
             </div>
             <div class="form-group full">
               <label>Email Address <span class="required">*</span></label>
@@ -430,5 +441,27 @@
       </form>
       {% endif %}
     </div>
+    <script>
+      var iti = window.intlTelInput(document.getElementById("phoneInput"), {
+        initialCountry: "in",
+        preferredCountries: ["in", "ae", "gb", "us", "au", "sg"],
+        separateDialCode: true,
+        utilsScript:
+          "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
+      });
+
+      document.querySelector("form").addEventListener("submit", function (e) {
+        var err = document.getElementById("phoneError");
+        if (!iti.isValidNumber()) {
+          e.preventDefault();
+          err.style.display = "block";
+          return;
+        }
+        err.style.display = "none";
+        document.getElementById("phoneHidden").value = iti
+          .getNumber()
+          .replace("+", "");
+      });
+    </script>
   </body>
 </html>

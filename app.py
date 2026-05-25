@@ -34,7 +34,7 @@ app.config["MAIL_DEFAULT_SENDER"] = ("ShivyaSpaces", "mukesh.bunny999@gmail.com"
 # -----------------------------------------------
 # SITE URL — change this after hosting
 # -----------------------------------------------
-SITE_URL = "https://shivyaspaces.up.railway.app"
+SITE_URL = "http://127.0.0.1:5000"
 mail = Mail(app)
 
 
@@ -137,20 +137,33 @@ def parse_property(row):
 
 def clean_phone(phone):
     """
-    Stores phone in international format: +91 90011 69531
-    Keeps spaces for display. For wa.me links, spaces are stripped separately.
+    Returns digits only for wa.me links e.g. 919876543210
+    Strips +, spaces, dashes — everything except digits.
     """
     if not phone:
         return ""
     phone = phone.strip()
-    if phone.startswith("+"):
-        return phone  # already formatted by intl-tel-input
+    # Strip everything except digits
     digits = re.sub(r"[^\d]", "", phone)
+    # Handle 00-prefix international numbers
     if digits.startswith("00"):
-        return "+" + digits[2:]
+        digits = digits[2:]
+    # Bare 10 digits = assume India
     if len(digits) == 10:
-        return "+91 " + digits
-    return "+" + digits
+        digits = "91" + digits
+    return digits
+
+
+def format_phone_display(phone):
+    """
+    Returns phone for display with + prefix e.g. +91 98765 43210
+    """
+    if not phone:
+        return ""
+    digits = clean_phone(phone)
+    if digits:
+        return "+" + digits
+    return phone
 
 
 def validate_phone(phone):
@@ -1022,6 +1035,7 @@ def owner_signup():
         # Send WhatsApp to admin
         admin_whatsapp = get_setting("admin_whatsapp", "")
         whatsapp_sent = False
+        whatsapp_url = ""
         if admin_whatsapp:
             clean = re.sub(r"[^\d]", "", admin_whatsapp)
             wa_text = (
