@@ -237,9 +237,11 @@
 
       /* FOOTER */
       footer {
-        background: #1a0a00;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(16px);
         padding: 52px 40px 0;
         margin-top: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
       .footer-grid {
         display: grid;
@@ -370,7 +372,7 @@
         <a href="/">Home</a>
         <a href="/login">For Owners</a>
         <a href="/results">Browse Properties</a>
-        <a href="/owner-signup">About</a>
+        <a href="/about">About</a>
         <a href="mailto:support@shivyaspaces.com">Contact</a>
         <a href="/login" class="nav-login">Login</a>
       </div>
@@ -431,28 +433,27 @@
         <div>
           <p class="footer-col-title">Company</p>
           <div class="footer-links">
-            <a href="/owner-signup">About Us</a>
+            <a href="/about">About Us</a>
             <a href="mailto:support@shivyaspaces.com">Contact</a>
             <a href="/privacy">Privacy Policy</a>
-            <a href="/termsandconditions">Terms & Conditions</a>
+            <a href="/termsandconditions">Terms &amp; Conditions</a>
           </div>
         </div>
         <div>
           <p class="footer-col-title">Contact</p>
           <div class="footer-contact">
             <div class="footer-contact-item">
-              <span>📍</span>
-              <span>Bangalore, India</span>
+              <span>📍</span><span>Bangalore, India</span>
             </div>
             <div class="footer-contact-item">
-              <span>✉️</span>
-              <a href="mailto:support@shivyaspaces.com"
+              <span>✉️</span
+              ><a href="mailto:support@shivyaspaces.com"
                 >support@shivyaspaces.com</a
               >
             </div>
             <div class="footer-contact-item">
-              <span style="color: #25d366">💬</span>
-              <a href="#">WhatsApp Support</a>
+              <span style="color: #25d366">💬</span
+              ><a href="#">WhatsApp Support</a>
             </div>
           </div>
         </div>
@@ -461,6 +462,9 @@
         <p>© <span id="yr"></span> Shivya Spaces. All Rights Reserved.</p>
       </div>
     </footer>
+    <script>
+      document.getElementById("yr").textContent = new Date().getFullYear();
+    </script>
 
     <script>
       document.getElementById("yr").textContent = new Date().getFullYear();
