@@ -1061,5 +1061,15 @@ def owner_signup():
     return render_template("owner_signup.html", submitted=False)
 
 
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
+
+@app.route("/termsandconditions")
+def termsandconditions():
+    return render_template("termsandconditions.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)

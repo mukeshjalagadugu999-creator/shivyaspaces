@@ -23,89 +23,116 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
         background:
           linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
           url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
-        padding: 24px;
       }
 
-      /* TOP BAR */
-      .top-bar {
+      /* NAVBAR */
+      .navbar {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        height: 70px;
+        height: 68px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 0 40px;
-        background: rgba(0, 0, 0, 0.35);
+        background: rgba(0, 0, 0, 0.3);
         backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         z-index: 99;
       }
-
-      .top-logo {
+      .nav-logo {
         display: flex;
         align-items: center;
         gap: 10px;
         text-decoration: none;
       }
-
-      /* Logo image — bigger, clear */
-      .top-logo img {
-        height: 44px;
-        width: 44px;
+      .nav-logo img {
+        height: 38px;
+        width: 38px;
         object-fit: contain;
-        border-radius: 6px;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
         flex-shrink: 0;
       }
-
-      /* Text block next to logo */
-      .top-logo-text {
+      .nav-logo-text {
         display: flex;
         flex-direction: column;
-        gap: 3px; /* small but visible gap between name and tagline */
+        gap: 2px;
       }
-
-      .top-logo-name {
-        font-family: "Playfair Display", serif;
-        font-size: 19px;
+      .nav-logo-name {
+        font-size: 15px;
         font-weight: 700;
         color: white;
+        letter-spacing: 0.5px;
         line-height: 1;
-        letter-spacing: -0.2px;
       }
-      .top-logo-name span {
-        color: #93c5fd;
+      .nav-logo-name span {
+        color: #d4a017;
       }
-
-      .top-logo-tagline {
-        font-size: 10px;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 0.75);
+      .nav-logo-tagline {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.45);
         letter-spacing: 0.2px;
         line-height: 1;
       }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      .nav-links a {
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        padding: 7px 11px;
+        border-radius: 6px;
+        transition: color 0.18s;
+      }
+      .nav-links a:hover {
+        color: white;
+      }
+      .nav-login {
+        font-size: 13px;
+        font-weight: 600;
+        color: #1a0a00 !important;
+        text-decoration: none;
+        padding: 8px 18px;
+        border-radius: 6px;
+        background: #d4a017;
+        margin-left: 8px;
+        transition: opacity 0.18s;
+      }
+      .nav-login:hover {
+        opacity: 0.88;
+      }
 
-      /* MAIN CARD */
+      /* HERO */
+      .hero {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 24px 60px;
+      }
       .card {
         width: 100%;
         max-width: 540px;
         text-align: center;
-        margin-top: 16px;
       }
-
       .tag {
         display: inline-block;
-        background: rgba(147, 197, 253, 0.12);
-        border: 1px solid rgba(147, 197, 253, 0.28);
-        color: #93c5fd;
+        background: rgba(212, 160, 23, 0.15);
+        border: 1px solid rgba(212, 160, 23, 0.35);
+        color: #d4a017;
         font-size: 11px;
         font-weight: 700;
         letter-spacing: 1.5px;
@@ -114,7 +141,6 @@
         border-radius: 999px;
         margin-bottom: 20px;
       }
-
       h1 {
         font-family: "Playfair Display", serif;
         font-size: 38px;
@@ -125,17 +151,14 @@
         margin-bottom: 10px;
       }
       h1 span {
-        color: #93c5fd;
+        color: #d4a017;
       }
-
       .sub {
         font-size: 14px;
         color: rgba(255, 255, 255, 0.5);
         line-height: 1.6;
         margin-bottom: 18px;
       }
-
-      /* NRI info block */
       .nri-block {
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -156,7 +179,6 @@
         color: rgba(255, 255, 255, 0.45);
         line-height: 1.7;
       }
-
       .question {
         font-size: 11px;
         font-weight: 700;
@@ -165,13 +187,11 @@
         color: rgba(255, 255, 255, 0.35);
         margin-bottom: 14px;
       }
-
       .choices {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
       }
-
       .choice {
         background: rgba(255, 255, 255, 0.07);
         border: 1.5px solid rgba(255, 255, 255, 0.14);
@@ -188,9 +208,8 @@
       }
       .choice:hover {
         transform: translateY(-4px);
-        border-color: rgba(147, 197, 253, 0.55);
+        border-color: rgba(212, 160, 23, 0.55);
         background: rgba(255, 255, 255, 0.12);
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
       }
       .choice-title {
         font-family: "Playfair Display", serif;
@@ -213,9 +232,110 @@
       }
       .choice:hover .choice-arrow {
         transform: translateX(4px);
-        color: #93c5fd;
+        color: #d4a017;
       }
 
+      /* FOOTER */
+      footer {
+        background: #1a0a00;
+        padding: 52px 40px 0;
+        margin-top: auto;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1.2fr;
+        gap: 40px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid rgba(212, 160, 23, 0.18);
+      }
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .footer-logo img {
+        height: 34px;
+        width: 34px;
+        object-fit: contain;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+      }
+      .footer-logo-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.5px;
+      }
+      .footer-logo-name span {
+        color: #d4a017;
+      }
+      .footer-desc {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.48);
+        line-height: 1.75;
+      }
+      .footer-col-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #d4a017;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+      }
+      .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .footer-links a {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.58);
+        text-decoration: none;
+        transition: color 0.18s;
+      }
+      .footer-links a:hover {
+        color: #d4a017;
+      }
+      .footer-contact {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .footer-contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .footer-contact-item span {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.58);
+      }
+      .footer-contact-item a {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.58);
+        text-decoration: none;
+      }
+      .footer-contact-item a:hover {
+        color: #d4a017;
+      }
+      .footer-bottom {
+        padding: 20px 0;
+        text-align: center;
+      }
+      .footer-bottom p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.28);
+      }
+
+      @media (max-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+      }
       @media (max-width: 480px) {
         h1 {
           font-size: 28px;
@@ -223,60 +343,127 @@
         .choices {
           grid-template-columns: 1fr;
         }
-        .top-bar {
+        .navbar {
           padding: 0 20px;
         }
-        .top-logo img {
-          height: 38px;
-          width: 38px;
+        .footer-grid {
+          grid-template-columns: 1fr;
         }
-        .top-logo-name {
-          font-size: 17px;
+        footer {
+          padding: 40px 20px 0;
         }
       }
     </style>
   </head>
   <body>
-    <div class="top-bar">
-      <a href="/" class="top-logo">
-        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces Logo" />
-        <div class="top-logo-text">
-          <span class="top-logo-name">Shivya<span>Spaces</span></span>
-          <span class="top-logo-tagline"
-            >Trusted Rental Lifecycle Platform for NRI Property Owners</span
+    <nav class="navbar">
+      <a href="/" class="nav-logo">
+        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+        <div class="nav-logo-text">
+          <span class="nav-logo-name">SHIVYA<span>SPACES</span></span>
+          <span class="nav-logo-tagline"
+            >Trusted Rental Lifecycle Platform</span
           >
         </div>
       </a>
-    </div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/login">For Owners</a>
+        <a href="/results">Browse Properties</a>
+        <a href="/owner-signup">About</a>
+        <a href="mailto:support@shivyaspaces.com">Contact</a>
+        <a href="/login" class="nav-login">Login</a>
+      </div>
+    </nav>
 
-    <div class="card">
-      <div class="tag">Welcome</div>
-      <h1>Your Properties.<br /><span>Managed Remotely.</span></h1>
-      <p class="sub">
-        Trusted Rental Lifecycle Platform for NRI Property Owners
-      </p>
-
-      <div class="nri-block">
-        <h3>🌏 Built for NRIs managing properties in India remotely</h3>
-        <p>
-          Manage listings, tenant inquiries, onboarding, agreements, rent
-          reminders, receipts, and property lifecycle in one place.
+    <div class="hero">
+      <div class="card">
+        <div class="tag">Welcome</div>
+        <h1>Your Properties.<br /><span>Managed Remotely.</span></h1>
+        <p class="sub">
+          Trusted Rental Lifecycle Platform for NRI Property Owners
         </p>
-      </div>
-
-      <p class="question">I am a...</p>
-      <div class="choices">
-        <a href="/search" class="choice">
-          <div class="choice-title">Tenant</div>
-          <div class="choice-desc">Looking for a property to rent</div>
-          <span class="choice-arrow">→</span>
-        </a>
-        <a href="/login" class="choice">
-          <div class="choice-title">Owner</div>
-          <div class="choice-desc">I manage properties on this platform</div>
-          <span class="choice-arrow">→</span>
-        </a>
+        <div class="nri-block">
+          <h3>🌏 Built for NRIs managing properties in India remotely</h3>
+          <p>
+            Manage listings, tenant inquiries, onboarding, agreements, rent
+            reminders, receipts, and property lifecycle in one place.
+          </p>
+        </div>
+        <p class="question">I am a...</p>
+        <div class="choices">
+          <a href="/search" class="choice">
+            <div class="choice-title">Tenant</div>
+            <div class="choice-desc">Looking for a property to rent</div>
+            <span class="choice-arrow">→</span>
+          </a>
+          <a href="/login" class="choice">
+            <div class="choice-title">Owner</div>
+            <div class="choice-desc">I manage properties on this platform</div>
+            <span class="choice-arrow">→</span>
+          </a>
+        </div>
       </div>
     </div>
+
+    <footer>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">
+            <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+            <span class="footer-logo-name">SHIVYA<span>SPACES</span></span>
+          </div>
+          <p class="footer-desc">
+            Shivya Spaces is a trusted rental lifecycle platform helping NRI
+            property owners manage listings, tenants, agreements, and rental
+            operations digitally from anywhere in the world.
+          </p>
+        </div>
+        <div>
+          <p class="footer-col-title">Platform</p>
+          <div class="footer-links">
+            <a href="/login">For Owners</a>
+            <a href="/results">Browse Properties</a>
+            <a href="/owner-signup">Owner Signup</a>
+            <a href="/search">Tenant Login</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-title">Company</p>
+          <div class="footer-links">
+            <a href="/owner-signup">About Us</a>
+            <a href="mailto:support@shivyaspaces.com">Contact</a>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/termsandconditions">Terms & Conditions</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-title">Contact</p>
+          <div class="footer-contact">
+            <div class="footer-contact-item">
+              <span>📍</span>
+              <span>Bangalore, India</span>
+            </div>
+            <div class="footer-contact-item">
+              <span>✉️</span>
+              <a href="mailto:support@shivyaspaces.com"
+                >support@shivyaspaces.com</a
+              >
+            </div>
+            <div class="footer-contact-item">
+              <span style="color: #25d366">💬</span>
+              <a href="#">WhatsApp Support</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span id="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("yr").textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>
