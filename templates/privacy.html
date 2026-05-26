@@ -236,20 +236,93 @@
           font-size: 26px;
         }
       }
+
+      /* === UNIVERSAL NAVBAR === */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 68px;
+        display: flex;
+        align-items: center;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        z-index: 999;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .nav-logo img {
+        height: 38px;
+        width: 38px;
+        object-fit: contain;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+        flex-shrink: 0;
+      }
+      .nav-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .nav-logo-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.5px;
+        line-height: 1;
+      }
+      .nav-accent {
+        color: #d4a017;
+      }
+      .nav-logo-tagline {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.45);
+        letter-spacing: 0.2px;
+        line-height: 1;
+      }
+      /* === UNIVERSAL FOOTER === */
+      .page-footer {
+        padding: 18px 40px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.4);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .page-footer p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.35);
+      }
+      /* === UNIVERSAL BACKGROUND === */
+      body {
+        min-height: 100vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+      }
     </style>
   </head>
   <body>
     <nav class="navbar">
       <a href="/" class="nav-logo">
         <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
-        <span class="nav-logo-name">SHIVYA<span>SPACES</span></span>
+        <div class="nav-logo-text">
+          <span class="nav-logo-name"
+            >SHIVYA<span class="nav-accent">SPACES</span></span
+          >
+          <span class="nav-logo-tagline"
+            >Trusted Rental Lifecycle Platform</span
+          >
+        </div>
       </a>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/results">Browse Properties</a>
-        <a href="/owner-signup">For Owners</a>
-        <a href="/login" class="nav-login">Login</a>
-      </div>
     </nav>
 
     <div class="content">
@@ -425,24 +498,12 @@
     </div>
 
     <footer class="page-footer">
-      <p>
-        © <span id="yr"></span> Shivya Spaces. All Rights Reserved.
-        &nbsp;·&nbsp;
-        <a
-          href="/privacy"
-          style="color: rgba(255, 255, 255, 0.4); text-decoration: none"
-          >Privacy Policy</a
-        >
-        &nbsp;·&nbsp;
-        <a
-          href="/termsandconditions"
-          style="color: rgba(255, 255, 255, 0.4); text-decoration: none"
-          >Terms & Conditions</a
-        >
-      </p>
+      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>
     <script>
-      document.getElementById("yr").textContent = new Date().getFullYear();
+      document
+        .querySelectorAll(".yr")
+        .forEach((e) => (e.textContent = new Date().getFullYear()));
     </script>
   </body>
 </html>

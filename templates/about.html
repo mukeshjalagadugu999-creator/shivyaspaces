@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us — ShivyaSpaces</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="/static/theme.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
+      }
+
+      /* NAVBAR */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 68px;
+        display: flex;
+        align-items: center;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        z-index: 999;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .nav-logo img {
+        height: 38px;
+        width: 38px;
+        object-fit: contain;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+        flex-shrink: 0;
+      }
+      .nav-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .nav-logo-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.5px;
+        line-height: 1;
+      }
+      .nav-accent {
+        color: #d4a017;
+      }
+      .nav-logo-tagline {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.45);
+        letter-spacing: 0.2px;
+        line-height: 1;
+      }
+
+      /* CONTENT */
+      .content {
+        flex: 1;
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 100px 24px 60px;
+        width: 100%;
+      }
+      .page-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #d4a017;
+        margin-bottom: 12px;
+      }
+      .page-title {
+        font-family: "Playfair Display", serif;
+        font-size: 38px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 8px;
+      }
+      .page-meta {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 40px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .intro {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.85;
+        margin-bottom: 40px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 24px;
+        backdrop-filter: blur(8px);
+      }
+
+      .section {
+        margin-bottom: 36px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 24px;
+        backdrop-filter: blur(6px);
+      }
+      .section h2 {
+        font-size: 17px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 14px;
+        padding-left: 14px;
+        border-left: 3px solid #d4a017;
+      }
+      .section p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.8;
+        margin-bottom: 10px;
+      }
+      .section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .section ul li {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.7;
+        padding-left: 20px;
+        position: relative;
+      }
+      .section ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: #d4a017;
+        font-size: 12px;
+        top: 2px;
+      }
+
+      /* Mission/Vision cards */
+      .mv-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 36px;
+      }
+      .mv-card {
+        background: rgba(212, 160, 23, 0.08);
+        border: 1px solid rgba(212, 160, 23, 0.25);
+        border-radius: 14px;
+        padding: 24px;
+        backdrop-filter: blur(6px);
+      }
+      .mv-card h3 {
+        font-size: 13px;
+        font-weight: 700;
+        color: #d4a017;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+      }
+      .mv-card p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.75;
+        margin: 0;
+      }
+
+      /* FOOTER */
+      .page-footer {
+        padding: 20px 40px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.4);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .page-footer p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      @media (max-width: 600px) {
+        .navbar {
+          padding: 0 20px;
+        }
+        .content {
+          padding: 88px 16px 40px;
+        }
+        .page-title {
+          font-size: 28px;
+        }
+        .mv-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="nav-logo">
+        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+        <div class="nav-logo-text">
+          <span class="nav-logo-name"
+            >SHIVYA<span class="nav-accent">SPACES</span></span
+          >
+          <span class="nav-logo-tagline"
+            >Trusted Rental Lifecycle Platform</span
+          >
+        </div>
+      </a>
+    </nav>
+
+    <div class="content">
+      <p class="page-label">Who We Are</p>
+      <h1 class="page-title">About Us</h1>
+      <p class="page-meta">
+        Shivya Spaces — Trusted Rental Lifecycle Platform for NRI Property
+        Owners
+      </p>
+
+      <div class="intro">
+        Shivya Spaces is a trusted rental lifecycle platform built to simplify
+        property management for NRI property owners managing rental homes
+        remotely in India. Managing rental properties from abroad often comes
+        with challenges — dependence on brokers, lack of transparency, tenant
+        coordination difficulties, documentation hassles, rent tracking issues,
+        and operational follow-ups. Shivya Spaces was created to solve these
+        real-world problems through a modern digital platform focused on trust,
+        simplicity, and operational visibility.
+      </div>
+
+      <div class="section">
+        <h2>What We Do</h2>
+        <p>Our platform enables property owners to:</p>
+        <ul>
+          <li>Create their own branded property portal</li>
+          <li>List and manage rental properties</li>
+          <li>Receive tenant inquiries directly</li>
+          <li>Digitally manage onboarding workflows</li>
+          <li>Generate rental agreements</li>
+          <li>Track rent reminders and receipts</li>
+          <li>Streamline rental operations from anywhere in the world</li>
+        </ul>
+        <br />
+        <p>
+          Unlike traditional listing platforms that focus primarily on property
+          advertisements and lead generation, Shivya Spaces focuses on the
+          complete rental lifecycle experience for both owners and tenants.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>What We Believe</h2>
+        <p>We believe rental management should be:</p>
+        <ul>
+          <li>Transparent</li>
+          <li>Professional</li>
+          <li>Digital-first</li>
+          <li>Owner-controlled</li>
+          <li>Accessible globally</li>
+        </ul>
+      </div>
+
+      <div class="mv-grid">
+        <div class="mv-card">
+          <h3>Our Mission</h3>
+          <p>
+            To empower property owners with a modern digital platform that
+            simplifies rental property management and creates a trusted
+            ecosystem for owners and tenants.
+          </p>
+        </div>
+        <div class="mv-card">
+          <h3>Our Vision</h3>
+          <p>
+            To build a reliable and technology-driven rental management
+            ecosystem that transforms how NRI property owners manage rental
+            operations remotely.
+          </p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Why Shivya Spaces</h2>
+        <ul>
+          <li>Dedicated owner portals</li>
+          <li>Direct owner-to-tenant connection</li>
+          <li>Digital rental lifecycle management</li>
+          <li>Simplified onboarding workflows</li>
+          <li>Rental agreement support</li>
+          <li>Rent reminders and receipts</li>
+          <li>Owner-focused operational platform</li>
+          <li>Trusted and scalable ecosystem</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Where We Are</h2>
+        <p>
+          Shivya Spaces is initially focused on serving Bangalore's rental
+          ecosystem and helping NRI owners manage their properties in India more
+          efficiently and confidently.
+        </p>
+        <p>
+          Our long-term vision is to become a trusted digital rental operating
+          platform for property owners globally.
+        </p>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <p>© <span id="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+    </footer>
+    <script>
+      document.getElementById("yr").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
