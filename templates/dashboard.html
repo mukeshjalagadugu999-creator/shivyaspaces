@@ -29,7 +29,7 @@
       }
       body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; transition:background 0.25s,color 0.25s; }
 
-      .topbar { background:var(--bg2); border-bottom:1px solid var(--border); padding:0 40px; height:64px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:99; transition:background 0.25s,border-color 0.25s; }
+      .topbar { background:var(--bg2); border-bottom:1px solid var(--border); padding:0 40px; height:68px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:99; transition:background 0.25s,border-color 0.25s; box-shadow:0 1px 3px rgba(0,0,0,0.05); }
       .topbar-logo { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--text); text-decoration:none; }
       .topbar-logo span { color:var(--accent); }
       .topbar-right { display:flex; align-items:center; gap:8px; }
@@ -41,7 +41,7 @@
       .nav-btn.mypage:hover { background:var(--accent-hover); }
       .nav-btn.signout { background:var(--red-bg); color:var(--red-fg); }
 
-      .content { max-width:1100px; margin:40px auto; padding:0 24px 60px; }
+      .content { max-width:1100px; margin:40px auto; padding-top:28px; padding-bottom:60px; padding-left:24px; padding-right:24px; max-width:0 24px 60px; }
       .page-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:32px; flex-wrap:wrap; gap:16px; }
       .page-header h1 { font-size:28px; font-weight:800; margin-bottom:4px; }
       .page-header p { font-size:14px; color:var(--text3); }
@@ -155,47 +155,12 @@
       .modal-confirm:hover { opacity:0.85; }
 
       @media(max-width:768px) {
-        .topbar { padding:0 16px; }
+        .topbar { background:var(--bg2); border-bottom:1px solid var(--border); padding:0 40px; height:68px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:99; transition:background 0.25s,border-color 0.25s; box-shadow:0 1px 3px rgba(0,0,0,0.05); }
         .stats { grid-template-columns:repeat(2,1fr); }
         .content { padding:0 16px; }
         .owner-name { display:none; }
       }
       /* === UNIVERSAL BACKGROUND === */
-      body {
-        min-height:100vh;
-        background:linear-gradient(rgba(0,0,0,0.72),rgba(0,0,0,0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size:cover !important;
-        background-position:center !important;
-        background-attachment:fixed !important;
-      }
-    
-      /* === UNIVERSAL NAVBAR === */
-      .navbar {
-        position:fixed; top:0; left:0; right:0; height:68px;
-        display:flex; align-items:center;
-        padding:0 40px;
-        background:rgba(0,0,0,0.55);
-        backdrop-filter:blur(16px);
-        border-bottom:1px solid rgba(255,255,255,0.08);
-        z-index:999;
-      }
-      .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-      .nav-logo img { height:38px; width:38px; object-fit:contain; border-radius:50%; border:1.5px solid #D4A017; flex-shrink:0; }
-      .nav-logo-text { display:flex; flex-direction:column; gap:2px; }
-      .nav-logo-name { font-size:15px; font-weight:700; color:white; letter-spacing:0.5px; line-height:1; }
-      .nav-accent { color:#D4A017; }
-      .nav-logo-tagline { font-size:9px; color:rgba(255,255,255,0.45); letter-spacing:0.2px; line-height:1; }
-      /* === UNIVERSAL FOOTER === */
-      .page-footer { padding:18px 40px; text-align:center; }
-      .page-footer p { font-size:12px; }
-      body {
-        min-height:100vh;
-        background:var(--bg) !important;
-        color:var(--text);
-      }
-      .page-footer { background:var(--bg2); border-top:1px solid var(--border); }
-      .page-footer p { color:var(--text3); }
       /* White page navbar override */
       .navbar {
         background:rgba(255,255,255,0.95) !important;
@@ -204,19 +169,27 @@
       }
       .nav-logo-name { color:#1f2937 !important; }
       .nav-logo-tagline { color:#9ca3af !important; }
+    
+      /* ===== SHIVYASPACES NAVBAR OVERRIDE ===== */
+      .navbar, .topbar { background:var(--bg2); border-bottom:1px solid var(--border); padding:0 40px; height:68px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:99; transition:background 0.25s,border-color 0.25s; box-shadow:0 1px 3px rgba(0,0,0,0.05); }
+      .topbar-logo, .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; font-family:'Inter',sans-serif; }
+      .topbar-logo img, .nav-logo img { height:36px; width:36px; object-fit:contain; border-radius:50%; border:1.5px solid #D4A017; flex-shrink:0; }
+      .topbar-right, .nav-right { display:flex; align-items:center; gap:8px; }
+      .topbar-btn, .nav-btn { font-size:13px; font-weight:500; color:#4b5563; text-decoration:none; padding:7px 14px; border-radius:7px; border:1px solid #e5e7eb; background:#f9fafb; transition:all 0.18s; cursor:pointer; font-family:'Inter',sans-serif; white-space:nowrap; }
+      .topbar-btn:hover, .nav-btn:hover { background:#f3f4f6; }
+      .btn-primary, .nav-btn-primary { background:#8B1E3F !important; color:white !important; border-color:#8B1E3F !important; font-weight:600 !important; }
+      .btn-danger, .nav-btn-danger { background:#fee2e2 !important; color:#991b1b !important; border-color:#fca5a5 !important; }
+      .btn-gold { background:#D4A017 !important; color:#1a0a00 !important; border-color:#D4A017 !important; font-weight:700 !important; }
+      /* Ensure content starts below navbar */
+      .content, .page-content { padding-top:88px !important; }
+      /* Footer */
+      .page-footer { padding:18px 40px; text-align:center; background:var(--bg2); border-top:1px solid var(--border); }
+      .page-footer p { font-size:12px; color:var(--text3); }
+      /* Remove dark bg injection */
+      body { background:var(--bg) !important; color:var(--text) !important; }
     </style>
   </head>
   <body>
-
-            <nav class="navbar">
-      <a href="/" class="nav-logo">
-        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
-        <div class="nav-logo-text">
-          <span class="nav-logo-name">SHIVYA<span class="nav-accent">SPACES</span></span>
-          <span class="nav-logo-tagline">Trusted Rental Lifecycle Platform</span>
-        </div>
-      </a>
-    </nav>
     </div>
 
     <div class="content">
@@ -311,9 +284,6 @@
         if (e.key === "Escape") closeDeleteModal();
       });
     </script>
-
-      
-    
       <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>

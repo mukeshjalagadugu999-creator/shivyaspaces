@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Terms & Conditions — ShivyaSpaces</title>
+    <title>Terms &amp; Conditions — ShivyaSpaces</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script src="/static/theme.js"></script>
@@ -16,219 +16,19 @@
         padding: 0;
         box-sizing: border-box;
       }
-      :root {
-        --bg: #f8fafc;
-        --bg2: #ffffff;
-        --border: #e5e7eb;
-        --text: #111827;
-        --text2: #4b5563;
-        --text3: #9ca3af;
-        --accent: #8b1e3f;
-        --gold: #d4a017;
-      }
-      [data-theme="dark"] {
-        --bg: #0d1117;
-        --bg2: #161b22;
-        --border: #30363d;
-        --text: #e6edf3;
-        --text2: #8b949e;
-        --text3: #484f58;
-      }
       body {
         font-family: "Inter", sans-serif;
-        background: var(--bg);
-        color: var(--text);
         min-height: 100vh;
-        transition:
-          background 0.25s,
-          color 0.25s;
-      }
-      .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 40px;
-        background: #ffffff;
-        border-bottom: 1px solid #e5e7eb;
-        z-index: 99;
-      }
-      [data-theme="dark"] .navbar {
-        background: #161b22;
-        border-color: #30363d;
-      }
-      .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-      }
-      .nav-logo img {
-        height: 36px;
-        width: 36px;
-        object-fit: contain;
-        border-radius: 50%;
-        border: 1.5px solid #d4a017;
-      }
-      .nav-logo-name {
-        font-size: 15px;
-        font-weight: 700;
-        color: #1f2937;
-        letter-spacing: 0.5px;
-      }
-      [data-theme="dark"] .nav-logo-name {
-        color: #e6edf3;
-      }
-      .nav-logo-name span {
-        color: #8b1e3f;
-      }
-      .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 2px;
-      }
-      .nav-links a {
-        font-size: 13px;
-        font-weight: 500;
-        color: #1f2937;
-        text-decoration: none;
-        padding: 7px 11px;
-        border-radius: 6px;
-      }
-      [data-theme="dark"] .nav-links a {
-        color: #e6edf3;
-      }
-      .nav-login {
-        font-size: 13px;
-        font-weight: 600;
-        color: white !important;
-        text-decoration: none;
-        padding: 8px 18px;
-        border-radius: 6px;
-        background: #8b1e3f;
-        margin-left: 8px;
-      }
-      .content {
-        max-width: 780px;
-        margin: 0 auto;
-        padding: 100px 24px 80px;
-      }
-      .page-label {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: var(--gold);
-        margin-bottom: 12px;
-      }
-      .page-title {
-        font-family: "Playfair Display", serif;
-        font-size: 36px;
-        font-weight: 700;
-        color: var(--text);
-        margin-bottom: 8px;
-      }
-      .page-meta {
-        font-size: 13px;
-        color: var(--text3);
-        margin-bottom: 40px;
-        padding-bottom: 32px;
-        border-bottom: 1px solid var(--border);
-      }
-      .intro {
-        font-size: 15px;
-        color: var(--text2);
-        line-height: 1.8;
-        margin-bottom: 40px;
-      }
-      .section {
-        margin-bottom: 36px;
-      }
-      .section h2 {
-        font-size: 17px;
-        font-weight: 700;
-        color: var(--text);
-        margin-bottom: 12px;
-        padding-left: 14px;
-        border-left: 3px solid var(--gold);
-      }
-      .section p {
-        font-size: 14px;
-        color: var(--text2);
-        line-height: 1.8;
-        margin-bottom: 10px;
-      }
-      .section ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
       }
-      .section ul li {
-        font-size: 14px;
-        color: var(--text2);
-        line-height: 1.7;
-        padding-left: 18px;
-        position: relative;
-      }
-      .section ul li::before {
-        content: "→";
-        position: absolute;
-        left: 0;
-        color: var(--gold);
-        font-size: 12px;
-        top: 2px;
-      }
-      .contact-box {
-        background: var(--bg2);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 24px;
-        margin-top: 12px;
-      }
-      .contact-box p {
-        font-size: 14px;
-        color: var(--text2);
-        line-height: 1.8;
-        margin: 0;
-      }
-      .contact-box a {
-        color: #8b1e3f;
-        text-decoration: none;
-        font-weight: 600;
-      }
-      .page-footer {
-        background: #1a0a00;
-        padding: 24px 40px;
-        text-align: center;
-        margin-top: 60px;
-      }
-      .page-footer p {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.3);
-      }
-      @media (max-width: 600px) {
-        .navbar {
-          padding: 0 20px;
-        }
-        .nav-links {
-          display: none;
-        }
-        .content {
-          padding: 88px 16px 60px;
-        }
-        .page-title {
-          font-size: 26px;
-        }
-      }
-
-      /* === UNIVERSAL NAVBAR === */
       .navbar {
         position: fixed;
         top: 0;
@@ -240,7 +40,7 @@
         padding: 0 40px;
         background: rgba(0, 0, 0, 0.55);
         backdrop-filter: blur(16px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         z-index: 999;
       }
       .nav-logo {
@@ -255,7 +55,6 @@
         object-fit: contain;
         border-radius: 50%;
         border: 1.5px solid #d4a017;
-        flex-shrink: 0;
       }
       .nav-logo-text {
         display: flex;
@@ -275,29 +74,133 @@
       .nav-logo-tagline {
         font-size: 9px;
         color: rgba(255, 255, 255, 0.45);
-        letter-spacing: 0.2px;
-        line-height: 1;
       }
-      /* === UNIVERSAL FOOTER === */
+      .content {
+        flex: 1;
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 100px 24px 60px;
+        width: 100%;
+      }
+      .page-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #d4a017;
+        margin-bottom: 12px;
+      }
+      .page-title {
+        font-family: "Playfair Display", serif;
+        font-size: 38px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 8px;
+      }
+      .page-meta {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 40px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .intro {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.85;
+        margin-bottom: 36px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 24px;
+        backdrop-filter: blur(8px);
+      }
+      .section {
+        margin-bottom: 28px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 24px;
+        backdrop-filter: blur(6px);
+      }
+      .section h2 {
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 14px;
+        padding-left: 14px;
+        border-left: 3px solid #d4a017;
+      }
+      .section p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.8;
+        margin-bottom: 10px;
+      }
+      .section p:last-child {
+        margin-bottom: 0;
+      }
+      .section ul {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .section ul li {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.7;
+        padding-left: 20px;
+        position: relative;
+      }
+      .section ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: #d4a017;
+        font-size: 12px;
+        top: 2px;
+      }
+      .contact-box {
+        background: rgba(212, 160, 23, 0.08);
+        border: 1px solid rgba(212, 160, 23, 0.25);
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 12px;
+      }
+      .contact-box p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.8;
+        margin: 0;
+      }
+      .contact-box a {
+        color: #d4a017;
+        text-decoration: none;
+        font-weight: 600;
+      }
       .page-footer {
-        padding: 18px 40px;
+        padding: 20px 40px;
         text-align: center;
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.45);
         border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
       .page-footer p {
         font-size: 12px;
         color: rgba(255, 255, 255, 0.35);
       }
-      /* === UNIVERSAL BACKGROUND === */
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
+      @media (max-width: 600px) {
+        .navbar {
+          padding: 0 20px;
+        }
+        .content {
+          padding: 88px 16px 40px;
+        }
+        .page-title {
+          font-size: 28px;
+        }
       }
     </style>
   </head>
@@ -315,21 +218,18 @@
         </div>
       </a>
     </nav>
-
     <div class="content">
       <p class="page-label">Legal</p>
-      <h1 class="page-title">Terms & Conditions</h1>
+      <h1 class="page-title">Terms &amp; Conditions</h1>
       <p class="page-meta">
         Effective Date: June 2026 &nbsp;·&nbsp; Shivya Spaces
       </p>
-
-      <p class="intro">
+      <div class="intro">
         Welcome to Shivya Spaces. By accessing or using the Shivya Spaces
         platform, website, or related services, you agree to comply with and be
-        bound by the following Terms & Conditions. If you do not agree with
+        bound by the following Terms &amp; Conditions. If you do not agree with
         these terms, please do not use the platform.
-      </p>
-
+      </div>
       <div class="section">
         <h2>1. About Shivya Spaces</h2>
         <p>
@@ -340,180 +240,120 @@
           properties unless explicitly stated.
         </p>
       </div>
-
       <div class="section">
         <h2>2. User Eligibility</h2>
-        <p>By using the platform, you confirm that:</p>
         <ul>
           <li>You are legally capable of entering into agreements</li>
           <li>Information provided by you is accurate and lawful</li>
           <li>You will use the platform only for lawful purposes</li>
         </ul>
       </div>
-
       <div class="section">
         <h2>3. Owner Responsibilities</h2>
         <p>
           Property owners are solely responsible for accuracy of property
           details, legality of listings, uploaded images and content, rental
           pricing and terms, agreements with tenants, and property condition and
-          compliance.
-        </p>
-        <p>
-          Owners must ensure they are authorized to list the property, listings
-          do not violate any law or third-party rights, and information shared
-          is genuine and updated.
-        </p>
-        <p>
-          Shivya Spaces reserves the right to remove or suspend listings that
-          appear misleading, fraudulent, inappropriate, or inactive.
+          compliance. Shivya Spaces reserves the right to remove or suspend
+          listings that appear misleading, fraudulent, or inactive.
         </p>
       </div>
-
       <div class="section">
         <h2>4. Tenant Responsibilities</h2>
         <p>
           Tenants are responsible for verifying property suitability, reviewing
           rental terms carefully, validating agreements before signing, and
-          conducting their own due diligence prior to occupancy.
-        </p>
-        <p>
-          Shivya Spaces does not guarantee property quality, owner authenticity
-          beyond available verification processes, or suitability of any
-          property for a tenant's requirements.
+          conducting their own due diligence prior to occupancy. Shivya Spaces
+          does not guarantee property quality or owner authenticity beyond
+          available verification processes.
         </p>
       </div>
-
       <div class="section">
         <h2>5. Platform Usage</h2>
         <p>Users agree NOT to:</p>
         <ul>
-          <li>Provide false information</li>
-          <li>Impersonate another person or entity</li>
+          <li>Provide false information or impersonate another person</li>
           <li>Misuse platform communication systems</li>
           <li>Upload illegal, offensive, or misleading content</li>
           <li>Attempt unauthorized access to platform systems</li>
           <li>Use the platform for fraudulent activities</li>
         </ul>
-        <p>
-          Any misuse may result in suspension or permanent removal from the
-          platform.
-        </p>
       </div>
-
       <div class="section">
         <h2>6. Verification Disclaimer</h2>
         <p>
-          Shivya Spaces may provide verification badges or checks for owners,
-          tenants, or listings. However, verification is limited to available
-          documentation and checks, and Shivya Spaces does not provide legal
-          guarantees regarding users or properties. Users should independently
-          verify all important details before entering into rental agreements or
-          transactions.
+          Shivya Spaces may provide verification badges or checks for owners and
+          listings. However, verification is limited to available documentation
+          and checks. Users should independently verify all important details
+          before entering into rental agreements or transactions.
         </p>
       </div>
-
       <div class="section">
         <h2>7. Rental Agreements & Documentation</h2>
         <p>
           The platform may facilitate rental agreement workflows, document
-          generation, e-stamping support, and onboarding coordination. However,
-          final agreements remain solely between owners and tenants, Shivya
-          Spaces is not a legal party to such agreements, and users are advised
-          to review agreements independently.
+          generation, e-stamping support, and onboarding coordination. Final
+          agreements remain solely between owners and tenants. Shivya Spaces is
+          not a legal party to such agreements.
         </p>
       </div>
-
       <div class="section">
         <h2>8. Payments & Financial Transactions</h2>
         <p>
-          Unless explicitly stated otherwise, Shivya Spaces does not act as a
-          financial intermediary or escrow service. Rental payments are
-          transactions between owners and tenants, and users are responsible for
-          validating payment details and records.
-        </p>
-        <p>
-          Shivya Spaces shall not be liable for failed transactions, delayed
-          payments, or disputes regarding deposits, rent, or damages.
+          Unless explicitly stated, Shivya Spaces does not act as a financial
+          intermediary or escrow service. Rental payments are transactions
+          between owners and tenants. Shivya Spaces shall not be liable for
+          failed transactions, delayed payments, or disputes regarding deposits,
+          rent, or damages.
         </p>
       </div>
-
       <div class="section">
-        <h2>9. Third-Party Services</h2>
-        <p>
-          The platform may integrate with third-party services including
-          WhatsApp communication, payment gateways, mapping services, e-stamping
-          providers, and analytics services. Shivya Spaces is not responsible
-          for the availability, security, or policies of third-party services.
-        </p>
-      </div>
-
-      <div class="section">
-        <h2>10. Limitation of Liability</h2>
+        <h2>9. Limitation of Liability</h2>
         <p>
           Shivya Spaces provides the platform on an "as-is" and "as-available"
-          basis. Shivya Spaces shall not be liable for property disputes,
-          owner-tenant disagreements, financial losses, property damages, legal
-          claims between users, service interruptions, or data loss beyond
-          reasonable control. Users use the platform at their own discretion and
-          risk.
+          basis and shall not be liable for property disputes, owner-tenant
+          disagreements, financial losses, property damages, legal claims
+          between users, or service interruptions. Users use the platform at
+          their own discretion and risk.
         </p>
       </div>
-
       <div class="section">
-        <h2>11. Intellectual Property</h2>
+        <h2>10. Intellectual Property</h2>
         <p>
           All platform branding, logos, software, content, and designs related
           to Shivya Spaces are protected intellectual property and may not be
           copied, reproduced, or distributed without prior permission.
         </p>
       </div>
-
       <div class="section">
-        <h2>12. Suspension & Termination</h2>
+        <h2>11. Suspension & Termination</h2>
         <p>
           Shivya Spaces reserves the right to suspend accounts, remove listings,
           restrict access, or terminate services for users violating platform
           policies or applicable laws.
         </p>
       </div>
-
       <div class="section">
-        <h2>13. Changes to Terms</h2>
+        <h2>12. Governing Jurisdiction</h2>
         <p>
-          Shivya Spaces may modify these Terms & Conditions periodically.
-          Updated versions will be published on the website. Continued use of
-          the platform after updates constitutes acceptance of revised terms.
-        </p>
-      </div>
-
-      <div class="section">
-        <h2>14. Governing Jurisdiction</h2>
-        <p>
-          These Terms & Conditions shall be governed in accordance with
+          These Terms &amp; Conditions shall be governed in accordance with
           applicable laws of India. Any disputes shall be subject to applicable
           jurisdiction and legal processes.
         </p>
       </div>
-
       <div class="section">
-        <h2>15. Contact Us</h2>
+        <h2>13. Contact Us</h2>
         <div class="contact-box">
           <p>
-            For questions or support regarding these Terms & Conditions, please
-            contact:<br /><br />
-            <strong>Shivya Spaces</strong><br />
-            Email:
+            <strong style="color: white">Shivya Spaces</strong><br />Email:
             <a href="mailto:support@shivyaspaces.com"
               >support@shivyaspaces.com</a
-            ><br />
-            Website:
+            ><br />Website:
             <a href="https://www.shivyaspaces.com">www.shivyaspaces.com</a>
           </p>
         </div>
       </div>
     </div>
-
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>

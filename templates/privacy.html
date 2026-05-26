@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Privacy Policy — ShivyaSpaces</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script src="/static/theme.js"></script>
@@ -16,228 +16,19 @@
         padding: 0;
         box-sizing: border-box;
       }
-      :root {
-        --bg: #f8fafc;
-        --bg2: #ffffff;
-        --border: #e5e7eb;
-        --text: #111827;
-        --text2: #4b5563;
-        --text3: #9ca3af;
-        --accent: #8b1e3f;
-        --gold: #d4a017;
-      }
-      [data-theme="dark"] {
-        --bg: #0d1117;
-        --bg2: #161b22;
-        --border: #30363d;
-        --text: #e6edf3;
-        --text2: #8b949e;
-        --text3: #484f58;
-      }
       body {
         font-family: "Inter", sans-serif;
-        background: var(--bg);
-        color: var(--text);
         min-height: 100vh;
-        transition:
-          background 0.25s,
-          color 0.25s;
-      }
-
-      /* NAVBAR */
-      .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 40px;
-        background: #ffffff;
-        border-bottom: 1px solid #e5e7eb;
-        z-index: 99;
-      }
-      [data-theme="dark"] .navbar {
-        background: #161b22;
-        border-color: #30363d;
-      }
-      .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-      }
-      .nav-logo img {
-        height: 36px;
-        width: 36px;
-        object-fit: contain;
-        border-radius: 50%;
-        border: 1.5px solid #d4a017;
-      }
-      .nav-logo-name {
-        font-size: 15px;
-        font-weight: 700;
-        color: #1f2937;
-        letter-spacing: 0.5px;
-      }
-      [data-theme="dark"] .nav-logo-name {
-        color: #e6edf3;
-      }
-      .nav-logo-name span {
-        color: #8b1e3f;
-      }
-      .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 2px;
-      }
-      .nav-links a {
-        font-size: 13px;
-        font-weight: 500;
-        color: #1f2937;
-        text-decoration: none;
-        padding: 7px 11px;
-        border-radius: 6px;
-      }
-      [data-theme="dark"] .nav-links a {
-        color: #e6edf3;
-      }
-      .nav-login {
-        font-size: 13px;
-        font-weight: 600;
-        color: white !important;
-        text-decoration: none;
-        padding: 8px 18px;
-        border-radius: 6px;
-        background: #8b1e3f;
-        margin-left: 8px;
-      }
-
-      /* CONTENT */
-      .content {
-        max-width: 780px;
-        margin: 0 auto;
-        padding: 100px 24px 80px;
-      }
-      .page-label {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: var(--gold);
-        margin-bottom: 12px;
-      }
-      .page-title {
-        font-family: "Playfair Display", serif;
-        font-size: 36px;
-        font-weight: 700;
-        color: var(--text);
-        margin-bottom: 8px;
-      }
-      .page-meta {
-        font-size: 13px;
-        color: var(--text3);
-        margin-bottom: 40px;
-        padding-bottom: 32px;
-        border-bottom: 1px solid var(--border);
-      }
-      .intro {
-        font-size: 15px;
-        color: var(--text2);
-        line-height: 1.8;
-        margin-bottom: 40px;
-      }
-
-      .section {
-        margin-bottom: 36px;
-      }
-      .section h2 {
-        font-size: 17px;
-        font-weight: 700;
-        color: var(--text);
-        margin-bottom: 12px;
-        padding-left: 14px;
-        border-left: 3px solid var(--gold);
-      }
-      .section p {
-        font-size: 14px;
-        color: var(--text2);
-        line-height: 1.8;
-        margin-bottom: 10px;
-      }
-      .section ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
       }
-      .section ul li {
-        font-size: 14px;
-        color: var(--text2);
-        line-height: 1.7;
-        padding-left: 18px;
-        position: relative;
-      }
-      .section ul li::before {
-        content: "→";
-        position: absolute;
-        left: 0;
-        color: var(--gold);
-        font-size: 12px;
-        top: 2px;
-      }
-
-      .contact-box {
-        background: var(--bg2);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 24px;
-        margin-top: 12px;
-      }
-      .contact-box p {
-        font-size: 14px;
-        color: var(--text2);
-        line-height: 1.8;
-        margin: 0;
-      }
-      .contact-box a {
-        color: #8b1e3f;
-        text-decoration: none;
-        font-weight: 600;
-      }
-
-      /* FOOTER */
-      .page-footer {
-        background: #1a0a00;
-        padding: 24px 40px;
-        text-align: center;
-        margin-top: 60px;
-      }
-      .page-footer p {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.3);
-      }
-
-      @media (max-width: 600px) {
-        .navbar {
-          padding: 0 20px;
-        }
-        .nav-links {
-          display: none;
-        }
-        .content {
-          padding: 88px 16px 60px;
-        }
-        .page-title {
-          font-size: 26px;
-        }
-      }
-
-      /* === UNIVERSAL NAVBAR === */
       .navbar {
         position: fixed;
         top: 0;
@@ -249,7 +40,7 @@
         padding: 0 40px;
         background: rgba(0, 0, 0, 0.55);
         backdrop-filter: blur(16px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         z-index: 999;
       }
       .nav-logo {
@@ -264,7 +55,6 @@
         object-fit: contain;
         border-radius: 50%;
         border: 1.5px solid #d4a017;
-        flex-shrink: 0;
       }
       .nav-logo-text {
         display: flex;
@@ -284,29 +74,133 @@
       .nav-logo-tagline {
         font-size: 9px;
         color: rgba(255, 255, 255, 0.45);
-        letter-spacing: 0.2px;
-        line-height: 1;
       }
-      /* === UNIVERSAL FOOTER === */
+      .content {
+        flex: 1;
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 100px 24px 60px;
+        width: 100%;
+      }
+      .page-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #d4a017;
+        margin-bottom: 12px;
+      }
+      .page-title {
+        font-family: "Playfair Display", serif;
+        font-size: 38px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 8px;
+      }
+      .page-meta {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 40px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .intro {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.85;
+        margin-bottom: 36px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 24px;
+        backdrop-filter: blur(8px);
+      }
+      .section {
+        margin-bottom: 28px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 24px;
+        backdrop-filter: blur(6px);
+      }
+      .section h2 {
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 14px;
+        padding-left: 14px;
+        border-left: 3px solid #d4a017;
+      }
+      .section p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.8;
+        margin-bottom: 10px;
+      }
+      .section p:last-child {
+        margin-bottom: 0;
+      }
+      .section ul {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .section ul li {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.7;
+        padding-left: 20px;
+        position: relative;
+      }
+      .section ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: #d4a017;
+        font-size: 12px;
+        top: 2px;
+      }
+      .contact-box {
+        background: rgba(212, 160, 23, 0.08);
+        border: 1px solid rgba(212, 160, 23, 0.25);
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 12px;
+      }
+      .contact-box p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.8;
+        margin: 0;
+      }
+      .contact-box a {
+        color: #d4a017;
+        text-decoration: none;
+        font-weight: 600;
+      }
       .page-footer {
-        padding: 18px 40px;
+        padding: 20px 40px;
         text-align: center;
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.45);
         border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
       .page-footer p {
         font-size: 12px;
         color: rgba(255, 255, 255, 0.35);
       }
-      /* === UNIVERSAL BACKGROUND === */
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
+      @media (max-width: 600px) {
+        .navbar {
+          padding: 0 20px;
+        }
+        .content {
+          padding: 88px 16px 40px;
+        }
+        .page-title {
+          font-size: 28px;
+        }
       }
     </style>
   </head>
@@ -324,53 +218,35 @@
         </div>
       </a>
     </nav>
-
     <div class="content">
       <p class="page-label">Legal</p>
       <h1 class="page-title">Privacy Policy</h1>
       <p class="page-meta">
         Effective Date: June 2026 &nbsp;·&nbsp; Shivya Spaces
       </p>
-
-      <p class="intro">
+      <div class="intro">
         Shivya Spaces values your privacy and is committed to protecting your
         personal information. This Privacy Policy explains how we collect, use,
         store, and protect information shared by users of our platform. By using
         Shivya Spaces, you agree to the terms outlined in this Privacy Policy.
-      </p>
-
+      </div>
       <div class="section">
         <h2>1. Information We Collect</h2>
         <p>
           We may collect the following information from property owners,
           tenants, and platform users:
         </p>
-        <p><strong>Personal Information</strong></p>
         <ul>
-          <li>Full name</li>
-          <li>Mobile number</li>
-          <li>Email address</li>
-          <li>Address details</li>
-          <li>Identification details (if verification is required)</li>
-        </ul>
-        <br />
-        <p><strong>Property Information</strong></p>
-        <ul>
-          <li>Property location</li>
-          <li>Rental details</li>
-          <li>Images uploaded by owners</li>
-          <li>Availability and pricing information</li>
-        </ul>
-        <br />
-        <p><strong>Technical Information</strong></p>
-        <ul>
-          <li>IP address</li>
-          <li>Browser/device information</li>
-          <li>Cookies and usage analytics</li>
-          <li>Login activity</li>
+          <li>Full name, mobile number, email address, address details</li>
+          <li>Property location, rental details, images uploaded by owners</li>
+          <li>
+            Tenant inquiry details, rental preferences, communication records
+          </li>
+          <li>
+            IP address, browser/device information, cookies and usage analytics
+          </li>
         </ul>
       </div>
-
       <div class="section">
         <h2>2. How We Use Your Information</h2>
         <ul>
@@ -380,77 +256,55 @@
           <li>Generate rental agreements and related documents</li>
           <li>Send rent reminders and notifications</li>
           <li>Improve platform performance and user experience</li>
-          <li>Verify owners and listings</li>
           <li>Prevent fraud, misuse, and unauthorized activities</li>
-          <li>Provide customer support</li>
         </ul>
       </div>
-
       <div class="section">
         <h2>3. Owner & Tenant Responsibility</h2>
         <p>
           Property owners are solely responsible for the accuracy and legality
-          of property information, rental terms, and uploaded content.
-        </p>
-        <p>
-          Tenants are responsible for verifying rental suitability, agreements,
-          and property conditions before entering into any rental arrangement.
-        </p>
-        <p>
-          Shivya Spaces acts as a technology platform facilitating communication
-          and rental lifecycle workflows.
+          of property information, rental terms, and uploaded content. Tenants
+          are responsible for verifying rental suitability and property
+          conditions before entering into any rental arrangement. Shivya Spaces
+          acts as a technology platform facilitating communication and rental
+          lifecycle workflows.
         </p>
       </div>
-
       <div class="section">
         <h2>4. Information Sharing</h2>
         <p>
           We do not sell personal information to third parties. Information may
-          be shared only:
+          be shared only between owners and prospective tenants as part of
+          platform functionality, with third-party service providers when
+          required, or if required under applicable law or government request.
         </p>
-        <ul>
-          <li>
-            Between owners and prospective tenants as part of platform
-            functionality
-          </li>
-          <li>
-            With third-party verification or service providers when required
-          </li>
-          <li>If required under applicable law or government request</li>
-          <li>To protect platform security, users, or legal rights</li>
-        </ul>
       </div>
-
       <div class="section">
         <h2>5. Data Security</h2>
         <p>
           We implement reasonable technical and operational measures to protect
           user information from unauthorized access, misuse, alteration, or
-          disclosure. However, no online platform can guarantee absolute
-          security, and users share information at their own discretion.
+          disclosure. No online platform can guarantee absolute security, and
+          users share information at their own discretion.
         </p>
       </div>
-
       <div class="section">
         <h2>6. Cookies & Analytics</h2>
         <p>
           Shivya Spaces may use cookies and analytics tools to improve website
-          functionality, understand user behavior, enhance user experience, and
-          maintain login sessions. Users may disable cookies through browser
-          settings where applicable.
+          functionality, understand user behavior, and maintain login sessions.
+          Users may disable cookies through browser settings where applicable.
         </p>
       </div>
-
       <div class="section">
         <h2>7. Third-Party Services</h2>
         <p>
           Our platform may integrate with third-party services including
-          WhatsApp communication, payment gateways, map/location services,
-          e-stamping or documentation providers, and analytics tools. These
-          services may operate under their own privacy policies.
+          WhatsApp communication, payment gateways, map/location services, and
+          analytics tools. These services may operate under their own privacy
+          policies.
         </p>
       </div>
-
       <div class="section">
         <h2>8. Data Retention</h2>
         <p>
@@ -460,7 +314,6 @@
           requirements.
         </p>
       </div>
-
       <div class="section">
         <h2>9. User Rights</h2>
         <p>
@@ -469,7 +322,6 @@
           or report misuse or suspicious activity.
         </p>
       </div>
-
       <div class="section">
         <h2>10. Policy Updates</h2>
         <p>
@@ -479,24 +331,19 @@
           terms.
         </p>
       </div>
-
       <div class="section">
         <h2>11. Contact Us</h2>
         <div class="contact-box">
           <p>
-            For privacy-related questions or concerns, please contact:<br /><br />
-            <strong>Shivya Spaces</strong><br />
-            Email:
+            <strong style="color: white">Shivya Spaces</strong><br />Email:
             <a href="mailto:support@shivyaspaces.com"
               >support@shivyaspaces.com</a
-            ><br />
-            Website:
+            ><br />Website:
             <a href="https://www.shivyaspaces.com">www.shivyaspaces.com</a>
           </p>
         </div>
       </div>
     </div>
-
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>

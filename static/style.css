@@ -210,12 +210,12 @@ body.home-page .tile { border-color: rgba(255,255,255,0.15); }
    PROPERTY HERO
 ================================ */
 .property-hero {
-  width: 100%; padding-top: 66px;
+  width: 100%; padding-top: 68px;
   background:
     linear-gradient(var(--hero-overlay), var(--hero-overlay)),
     url("https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600");
   background-size: cover; background-position: center;
-  min-height: 260px; display: flex; align-items: flex-end;
+  min-height: 280px; display: flex; align-items: flex-end;
 }
 
 .property-hero-content { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 40px 36px; color: white; }

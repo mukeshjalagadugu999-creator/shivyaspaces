@@ -67,7 +67,7 @@
         background: var(--bg2);
         border-bottom: 1px solid var(--border);
         padding: 0 40px;
-        height: 64px;
+        height: 68px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -77,6 +77,7 @@
         transition:
           background 0.25s,
           border-color 0.25s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       }
       .topbar-logo {
         font-family: "Playfair Display", serif;
@@ -104,7 +105,11 @@
       .content {
         max-width: 1000px;
         margin: 40px auto;
-        padding: 0 24px 60px;
+        padding-top: 28px;
+        padding-bottom: 60px;
+        padding-left: 24px;
+        padding-right: 24px;
+        max-width: 0 24px 60px;
       }
       .page-header {
         display: flex;
@@ -397,86 +402,6 @@
         font-family: "Inter", sans-serif;
       }
       /* === UNIVERSAL BACKGROUND === */
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-      }
-
-      /* === UNIVERSAL NAVBAR === */
-      .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 68px;
-        display: flex;
-        align-items: center;
-        padding: 0 40px;
-        background: rgba(0, 0, 0, 0.55);
-        backdrop-filter: blur(16px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        z-index: 999;
-      }
-      .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-      }
-      .nav-logo img {
-        height: 38px;
-        width: 38px;
-        object-fit: contain;
-        border-radius: 50%;
-        border: 1.5px solid #d4a017;
-        flex-shrink: 0;
-      }
-      .nav-logo-text {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-      .nav-logo-name {
-        font-size: 15px;
-        font-weight: 700;
-        color: white;
-        letter-spacing: 0.5px;
-        line-height: 1;
-      }
-      .nav-accent {
-        color: #d4a017;
-      }
-      .nav-logo-tagline {
-        font-size: 9px;
-        color: rgba(255, 255, 255, 0.45);
-        letter-spacing: 0.2px;
-        line-height: 1;
-      }
-      /* === UNIVERSAL FOOTER === */
-      .page-footer {
-        padding: 18px 40px;
-        text-align: center;
-      }
-      .page-footer p {
-        font-size: 12px;
-      }
-      body {
-        min-height: 100vh;
-        background: var(--bg) !important;
-        color: var(--text);
-      }
-      .page-footer {
-        background: var(--bg2);
-        border-top: 1px solid var(--border);
-      }
-      .page-footer p {
-        color: var(--text3);
-      }
       /* White page navbar override */
       .navbar {
         background: rgba(255, 255, 255, 0.95) !important;
@@ -489,22 +414,110 @@
       .nav-logo-tagline {
         color: #9ca3af !important;
       }
+
+      /* ===== SHIVYASPACES NAVBAR OVERRIDE ===== */
+      .navbar,
+      .topbar {
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 0 40px;
+        height: 68px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 99;
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .topbar-logo,
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-family: "Inter", sans-serif;
+      }
+      .topbar-logo img,
+      .nav-logo img {
+        height: 36px;
+        width: 36px;
+        object-fit: contain;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+        flex-shrink: 0;
+      }
+      .topbar-right,
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .topbar-btn,
+      .nav-btn {
+        font-size: 13px;
+        font-weight: 500;
+        color: #4b5563;
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 7px;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        transition: all 0.18s;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        white-space: nowrap;
+      }
+      .topbar-btn:hover,
+      .nav-btn:hover {
+        background: #f3f4f6;
+      }
+      .btn-primary,
+      .nav-btn-primary {
+        background: #8b1e3f !important;
+        color: white !important;
+        border-color: #8b1e3f !important;
+        font-weight: 600 !important;
+      }
+      .btn-danger,
+      .nav-btn-danger {
+        background: #fee2e2 !important;
+        color: #991b1b !important;
+        border-color: #fca5a5 !important;
+      }
+      .btn-gold {
+        background: #d4a017 !important;
+        color: #1a0a00 !important;
+        border-color: #d4a017 !important;
+        font-weight: 700 !important;
+      }
+      /* Ensure content starts below navbar */
+      .content,
+      .page-content {
+        padding-top: 88px !important;
+      }
+      /* Footer */
+      .page-footer {
+        padding: 18px 40px;
+        text-align: center;
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
+      }
+      .page-footer p {
+        font-size: 12px;
+        color: var(--text3);
+      }
+      /* Remove dark bg injection */
+      body {
+        background: var(--bg) !important;
+        color: var(--text) !important;
+      }
     </style>
   </head>
   <body>
-    <nav class="navbar">
-      <a href="/" class="nav-logo">
-        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
-        <div class="nav-logo-text">
-          <span class="nav-logo-name"
-            >SHIVYA<span class="nav-accent">SPACES</span></span
-          >
-          <span class="nav-logo-tagline"
-            >Trusted Rental Lifecycle Platform</span
-          >
-        </div>
-      </a>
-    </nav>
     <div class="content">
       <div class="page-header">
         <div>
@@ -651,7 +664,6 @@
         </form>
       </div>
     </div>
-
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>

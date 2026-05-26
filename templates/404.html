@@ -118,21 +118,40 @@
         background-position: center !important;
         background-attachment: fixed !important;
       }
+      body {
+        min-height: 100vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+        color: white;
+      }
 
-      /* === UNIVERSAL NAVBAR === */
+      /* ===== DARK PAGE OVERRIDES ===== */
+      body {
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+        color: white !important;
+      }
       .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 68px;
-        display: flex;
-        align-items: center;
-        padding: 0 40px;
-        background: rgba(0, 0, 0, 0.55);
-        backdrop-filter: blur(16px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        z-index: 999;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 68px !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 0 40px !important;
+        background: rgba(0, 0, 0, 0.55) !important;
+        backdrop-filter: blur(16px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        z-index: 999 !important;
       }
       .nav-logo {
         display: flex;
@@ -146,52 +165,150 @@
         object-fit: contain;
         border-radius: 50%;
         border: 1.5px solid #d4a017;
-        flex-shrink: 0;
-      }
-      .nav-logo-text {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
       }
       .nav-logo-name {
         font-size: 15px;
         font-weight: 700;
-        color: white;
+        color: white !important;
         letter-spacing: 0.5px;
         line-height: 1;
       }
       .nav-accent {
-        color: #d4a017;
+        color: #d4a017 !important;
       }
       .nav-logo-tagline {
         font-size: 9px;
         color: rgba(255, 255, 255, 0.45);
-        letter-spacing: 0.2px;
-        line-height: 1;
       }
-      /* === UNIVERSAL FOOTER === */
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-btn {
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.75) !important;
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        white-space: nowrap;
+      }
+      /* Glass cards */
+      .card,
+      .form-card,
+      .tile,
+      .filter-card,
+      .glass-card {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        backdrop-filter: blur(10px) !important;
+        color: white !important;
+      }
+      /* Inputs inside dark pages */
+      input,
+      select,
+      textarea {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.4) !important;
+      }
+      select option {
+        background: #1a1008;
+        color: white;
+      }
+      label {
+        color: rgba(255, 255, 255, 0.7) !important;
+      }
+      /* Ensure content starts below navbar */
+      .page-body,
+      .page,
+      .content,
+      .results-content,
+      .results-wrapper {
+        padding-top: 88px !important;
+      }
+      .results-bar {
+        top: 68px !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+      .results-bar-inner h1,
+      .results-meta h1 {
+        color: white !important;
+      }
+      .results-meta p {
+        color: rgba(255, 255, 255, 0.5) !important;
+      }
+      /* Group select */
+      .group-select {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+      }
+      .control-label {
+        color: rgba(255, 255, 255, 0.5) !important;
+      }
+      .refine-btn {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+      }
+      /* Property cards */
+      .grid .tile {
+        background: rgba(255, 255, 255, 0.07) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: blur(8px) !important;
+      }
+      .tile:hover {
+        background: rgba(255, 255, 255, 0.12) !important;
+        border-color: rgba(212, 160, 23, 0.5) !important;
+      }
+      .tile-info {
+        background: rgba(0, 0, 0, 0.3) !important;
+      }
+      .card-price {
+        color: white !important;
+      }
+      .tile-info h2 {
+        color: white !important;
+      }
+      .location {
+        color: rgba(255, 255, 255, 0.6) !important;
+      }
+      .meta div {
+        background: rgba(255, 255, 255, 0.12) !important;
+        color: rgba(255, 255, 255, 0.7) !important;
+        border: none !important;
+      }
+      /* Section titles */
+      h1,
+      h2,
+      h3 {
+        color: white !important;
+      }
+      p {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      /* Footer */
       .page-footer {
         padding: 18px 40px;
         text-align: center;
-      }
-      .page-footer p {
-        font-size: 12px;
-      }
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-        color: white;
-      }
-      .page-footer {
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.45);
         border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
       .page-footer p {
+        font-size: 12px;
         color: rgba(255, 255, 255, 0.35);
       }
     </style>
@@ -204,7 +321,6 @@
       <a href="/" class="btn-home">Go to Home</a>
       <a href="/search" class="btn-search">Search Properties</a>
     </div>
-
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>
