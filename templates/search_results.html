@@ -207,6 +207,16 @@
         font-size: 14px;
         font-weight: 600;
       }
+      /* === UNIVERSAL BACKGROUND === */
+      body {
+        min-height: 100vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+      }
 
       /* === UNIVERSAL NAVBAR === */
       .navbar {
@@ -262,14 +272,10 @@
       .page-footer {
         padding: 18px 40px;
         text-align: center;
-        background: rgba(0, 0, 0, 0.4);
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
       .page-footer p {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.35);
       }
-      /* === UNIVERSAL BACKGROUND === */
       body {
         min-height: 100vh;
         background:
@@ -278,6 +284,14 @@
         background-size: cover !important;
         background-position: center !important;
         background-attachment: fixed !important;
+        color: white;
+      }
+      .page-footer {
+        background: rgba(0, 0, 0, 0.4);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .page-footer p {
+        color: rgba(255, 255, 255, 0.35);
       }
     </style>
   </head>
@@ -433,6 +447,7 @@
         window.location.href = "/results?" + params.toString();
       }
     </script>
+
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>

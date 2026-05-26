@@ -261,6 +261,16 @@
           grid-column: 1;
         }
       }
+      /* === UNIVERSAL BACKGROUND === */
+      body {
+        min-height: 100vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+      }
 
       /* === UNIVERSAL NAVBAR === */
       .navbar {
@@ -316,22 +326,33 @@
       .page-footer {
         padding: 18px 40px;
         text-align: center;
-        background: rgba(0, 0, 0, 0.4);
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
       .page-footer p {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.35);
       }
-      /* === UNIVERSAL BACKGROUND === */
       body {
         min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
+        background: var(--bg) !important;
+        color: var(--text);
+      }
+      .page-footer {
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
+      }
+      .page-footer p {
+        color: var(--text3);
+      }
+      /* White page navbar override */
+      .navbar {
+        background: rgba(255, 255, 255, 0.95) !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        backdrop-filter: blur(12px);
+      }
+      .nav-logo-name {
+        color: #1f2937 !important;
+      }
+      .nav-logo-tagline {
+        color: #9ca3af !important;
       }
     </style>
   </head>
@@ -545,6 +566,7 @@
         </div>
       </form>
     </div>
+
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>
