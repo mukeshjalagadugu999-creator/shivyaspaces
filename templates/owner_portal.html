@@ -2,96 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/static/Shivya_Logo_Round.png" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ owner.brand_name }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <title>{{ owner.brand_name }} — ShivyaSpaces</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
-    />
-    <script src="{{ url_for('static', filename='theme.js') }}"></script>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
     />
     <style>
-      .empty-state {
-        text-align: center;
-        padding: 100px 24px;
-        color: white;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
-      .empty-state h2 {
-        font-family: "Playfair Display", serif;
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 12px;
-        color: white;
-      }
-      .empty-state p {
-        font-size: 15px;
-        color: rgba(255, 255, 255, 0.55);
-        margin-bottom: 28px;
-      }
-      .empty-state a {
-        display: inline-block;
-        background: white;
-        color: #111827;
-        text-decoration: none;
-        padding: 12px 28px;
-        border-radius: 12px;
-        font-size: 14px;
-        font-weight: 600;
-        transition: opacity 0.18s;
-      }
-      .empty-state a:hover {
-        opacity: 0.85;
-      }
-      /* === UNIVERSAL BACKGROUND === */
+      html,
       body {
         min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
       }
       body {
-        min-height: 100vh;
+        font-family: "Inter", sans-serif;
         background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
+            center/cover fixed;
         color: white;
+        display: flex;
+        flex-direction: column;
       }
-
-      /* ===== DARK PAGE OVERRIDES ===== */
-      body {
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-        color: white !important;
-      }
+      /* NAVBAR */
       .navbar {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        height: 68px !important;
-        display: flex !important;
-        align-items: center !important;
-        padding: 0 40px !important;
-        background: rgba(0, 0, 0, 0.55) !important;
-        backdrop-filter: blur(16px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-        z-index: 999 !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 1000;
       }
       .nav-logo {
         display: flex;
@@ -100,238 +52,267 @@
         text-decoration: none;
       }
       .nav-logo img {
-        height: 38px;
-        width: 38px;
-        object-fit: contain;
+        height: 36px;
+        width: 36px;
         border-radius: 50%;
         border: 1.5px solid #d4a017;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+      .nav-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
       }
       .nav-logo-name {
-        font-size: 15px;
-        font-weight: 700;
-        color: white !important;
-        letter-spacing: 0.5px;
+        font-size: 14px;
+        font-weight: 800;
+        color: white;
+        letter-spacing: 0.8px;
         line-height: 1;
       }
-      .nav-accent {
-        color: #d4a017 !important;
+      .nav-logo-name span {
+        color: #d4a017;
       }
-      .nav-logo-tagline {
+      .nav-logo-sub {
         font-size: 9px;
-        color: rgba(255, 255, 255, 0.45);
+        color: rgba(255, 255, 255, 0.42);
       }
-      .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .nav-btn {
-        font-size: 13px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.75) !important;
+      .nav-back {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.75);
         text-decoration: none;
         padding: 7px 14px;
         border-radius: 7px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         background: rgba(255, 255, 255, 0.08);
         transition: all 0.18s;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        white-space: nowrap;
       }
-      /* Glass cards */
-      .card,
-      .form-card,
-      .tile,
-      .filter-card,
-      .glass-card {
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        backdrop-filter: blur(10px) !important;
-        color: white !important;
-      }
-      /* Inputs inside dark pages */
-      input,
-      select,
-      textarea {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-      }
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(255, 255, 255, 0.4) !important;
-      }
-      select option {
-        background: #1a1008;
+      .nav-back:hover {
+        background: rgba(255, 255, 255, 0.15);
         color: white;
       }
-      label {
-        color: rgba(255, 255, 255, 0.7) !important;
+      /* CONTENT */
+      .content {
+        flex: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 88px 40px 60px;
+        width: 100%;
       }
-      /* Ensure content starts below navbar */
-      .page-body,
-      .page,
-      .content,
-      .results-content,
-      .results-wrapper {
-        padding-top: 88px !important;
+      /* HEADER */
+      .portal-header {
+        margin-bottom: 32px;
       }
-      .results-bar {
-        top: 68px !important;
-        background: rgba(0, 0, 0, 0.5) !important;
-        backdrop-filter: blur(12px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      .portal-header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 30px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 6px;
       }
-      .results-bar-inner h1,
-      .results-meta h1 {
-        color: white !important;
+      .portal-header p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
       }
-      .results-meta p {
-        color: rgba(255, 255, 255, 0.5) !important;
+      /* GRID */
+      .prop-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
       }
-      /* Group select */
-      .group-select {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
+      .prop-card {
+        display: block;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        overflow: hidden;
+        backdrop-filter: blur(8px);
+        transition: all 0.22s ease;
       }
-      .control-label {
-        color: rgba(255, 255, 255, 0.5) !important;
+      .prop-card:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(212, 160, 23, 0.5);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
       }
-      .refine-btn {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
+      .prop-img {
+        position: relative;
+        height: 180px;
+        overflow: hidden;
       }
-      /* Property cards */
-      .grid .tile {
-        background: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        backdrop-filter: blur(8px) !important;
+      .prop-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
-      .tile:hover {
-        background: rgba(255, 255, 255, 0.12) !important;
-        border-color: rgba(212, 160, 23, 0.5) !important;
+      .prop-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
       }
-      .tile-info {
-        background: rgba(0, 0, 0, 0.3) !important;
+      .badge-Available {
+        background: rgba(34, 197, 94, 0.85);
+        color: white;
       }
-      .card-price {
-        color: white !important;
+      .badge-Rented {
+        background: rgba(239, 68, 68, 0.85);
+        color: white;
       }
-      .tile-info h2 {
-        color: white !important;
+      .badge-NotAvailable {
+        background: rgba(107, 114, 128, 0.85);
+        color: white;
       }
-      .location {
-        color: rgba(255, 255, 255, 0.6) !important;
+      .prop-info {
+        padding: 16px;
       }
-      .meta div {
-        background: rgba(255, 255, 255, 0.12) !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        border: none !important;
+      .prop-price {
+        font-size: 18px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 4px;
       }
-      /* Section titles */
-      h1,
-      h2,
-      h3 {
-        color: white !important;
+      .prop-price span {
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.5);
       }
-      p {
-        color: rgba(255, 255, 255, 0.7);
+      .prop-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 4px;
       }
-      /* Footer */
+      .prop-loc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 10px;
+      }
+      .prop-meta {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .meta-chip {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.65);
+        background: rgba(255, 255, 255, 0.08);
+        padding: 3px 9px;
+        border-radius: 999px;
+      }
+      /* EMPTY */
+      .empty {
+        text-align: center;
+        padding: 80px 24px;
+      }
+      .empty h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 10px;
+      }
+      .empty p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 24px;
+      }
+      .empty a {
+        background: #d4a017;
+        color: #1a0a00;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      /* FOOTER */
       .page-footer {
-        padding: 18px 40px;
+        padding: 16px 40px;
         text-align: center;
         background: rgba(0, 0, 0, 0.45);
         border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
       .page-footer p {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.35);
+        color: rgba(255, 255, 255, 0.3);
+      }
+      @media (max-width: 600px) {
+        .navbar {
+          padding: 0 16px;
+        }
+        .content {
+          padding: 80px 16px 40px;
+        }
+        .prop-grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
-
-  <body class="home-page">
+  <body>
     <nav class="navbar">
       <a href="/" class="nav-logo">
         <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
         <div class="nav-logo-text">
-          <span class="nav-logo-name"
-            >SHIVYA<span class="nav-accent">SPACES</span></span
-          >
-          <span class="nav-logo-tagline"
-            >Trusted Rental Lifecycle Platform</span
-          >
+          <span class="nav-logo-name">SHIVYA<span>SPACES</span></span>
+          <span class="nav-logo-sub">Trusted Rental Lifecycle Platform</span>
         </div>
       </a>
+      <a href="/results" class="nav-back">← Browse All Properties</a>
     </nav>
 
-    <div class="page-content">
-      {% if properties %}
-
-      <div class="listings-header">
-        <h2>Available Properties</h2>
+    <div class="content">
+      <div class="portal-header">
+        <h1>{{ owner.brand_name }}</h1>
         <p>
           {{ properties | length }} propert{{ 'y' if properties | length == 1
-          else 'ies' }} listed by {{ owner.name }}.
+          else 'ies' }} listed by {{ owner.name }}
         </p>
       </div>
 
-      <div class="grid">
+      {% if properties %}
+      <div class="prop-grid">
         {% for prop in properties %}
-        <a href="/{{ owner.slug }}/property/{{ prop.id }}" class="tile">
-          <div class="image-wrapper">
+        <a href="/{{ owner.slug }}/property/{{ prop.id }}" class="prop-card">
+          <div class="prop-img">
             <img src="{{ prop.image }}" alt="{{ prop.title }}" />
-            <div class="badge">{{ prop.status }}</div>
+            <span class="prop-badge badge-{{ prop.status | replace(' ','') }}"
+              >{{ prop.status }}</span
+            >
           </div>
-          <div class="tile-info">
-            <div class="card-price">{{ prop.rent }}<span> / month</span></div>
-            <h2>{{ prop.title }}</h2>
-            <div class="location">{{ prop.location }}</div>
-            <div class="meta">
-              {% if prop.beds and prop.beds > 0 %}
-              <div>{{ prop.beds }} Beds</div>
-              {% endif %}
-              <div>{{ prop.baths }} Baths</div>
-              <div>{{ prop.sqft }} Sq Ft</div>
+          <div class="prop-info">
+            <div class="prop-price">{{ prop.rent }}<span> / month</span></div>
+            <div class="prop-title">{{ prop.title }}</div>
+            <div class="prop-loc">{{ prop.location }}</div>
+            <div class="prop-meta">
+              {% if prop.beds and prop.beds > 0 %}<span class="meta-chip"
+                >{{ prop.beds }} Beds</span
+              >{% endif %} {% if prop.baths %}<span class="meta-chip"
+                >{{ prop.baths }} Baths</span
+              >{% endif %}
+              <span class="meta-chip">{{ prop.sqft }} Sq Ft</span>
             </div>
           </div>
         </a>
         {% endfor %}
       </div>
-
       {% else %}
-
-      <div class="empty-state">
-        <h2>No Properties Listed Yet</h2>
+      <div class="empty">
+        <h2>No Properties Yet</h2>
         <p>
           {{ owner.name }} hasn't added any properties yet. Check back soon.
         </p>
-        <a href="/search">Browse All Properties</a>
+        <a href="/results">Browse All Properties</a>
       </div>
-
       {% endif %}
     </div>
 
-    <script>
-      const BG_IMAGES = [
-        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600",
-        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1600",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600",
-        "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1600",
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600",
-        "https://images.unsplash.com/photo-1494526585095-c41746248156?w=1600",
-      ];
-      const theme = document.documentElement.getAttribute("data-theme");
-      const overlay =
-        theme === "dark" ? "rgba(0,0,0,0.82)" : "rgba(0,0,0,0.68)";
-      const img = BG_IMAGES[Math.floor(Math.random() * BG_IMAGES.length)];
-      document.body.style.backgroundImage =
-        "linear-gradient(" + overlay + "," + overlay + "),url('" + img + "')";
-    </script>
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>

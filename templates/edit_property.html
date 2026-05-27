@@ -536,6 +536,26 @@
           padding: 80px 16px 32px !important;
         }
       }
+
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+        margin-bottom: 20px;
+      }
+      .back-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
     </style>
   </head>
   <body>
@@ -545,6 +565,7 @@
         <p>Updating: <strong>{{ prop.title }}</strong></p>
       </div>
 
+      <a href="/dashboard" class="back-btn">← Back to Dashboard</a>
       {% with messages = get_flashed_messages(with_categories=true) %} {% for
       category, message in messages %}
       <div class="flash {{ category }}">{{ message }}</div>

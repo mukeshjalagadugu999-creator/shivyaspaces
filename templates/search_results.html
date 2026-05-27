@@ -2,34 +2,116 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/static/Shivya_Logo_Round.png" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Properties — ShivyaSpaces</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <script src="{{ url_for('static', filename='theme.js') }}"></script>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
     <style>
-      .page-body {
-        padding-top: 66px;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        min-height: 100vh;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
+            center/cover fixed;
+        color: white;
+        display: flex;
+        flex-direction: column;
       }
 
+      /* ── NAVBAR ── */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 1000;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .nav-logo img {
+        height: 36px;
+        width: 36px;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+      .nav-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .nav-logo-name {
+        font-size: 14px;
+        font-weight: 800;
+        color: white;
+        letter-spacing: 0.8px;
+        line-height: 1;
+      }
+      .nav-logo-name span {
+        color: #d4a017;
+      }
+      .nav-logo-sub {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.42);
+        letter-spacing: 0.3px;
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-btn {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+      }
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+
+      /* ── STICKY RESULTS BAR ── */
       .results-bar {
         position: sticky;
-        top: 66px;
-        z-index: 90;
-        background: var(--bg);
-        border-bottom: 1px solid var(--border);
-        transition:
-          background 0.25s,
-          border-color 0.25s;
+        top: 64px;
+        z-index: 100;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
-
       .results-bar-inner {
         max-width: 1200px;
         margin: 0 auto;
@@ -37,152 +119,224 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
+        gap: 12px;
         flex-wrap: wrap;
       }
-
       .results-meta h1 {
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 800;
-        color: var(--text);
+        color: white;
         letter-spacing: -0.3px;
       }
-
       .results-meta p {
-        font-size: 13px;
-        color: var(--text3);
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
         margin-top: 2px;
       }
-
       .controls {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         flex-wrap: wrap;
       }
-
       .control-label {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 600;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.45);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         white-space: nowrap;
       }
-
       .group-select {
         appearance: none;
         -webkit-appearance: none;
-        padding: 9px 36px 9px 14px;
-        border: 1.5px solid var(--border);
-        border-radius: 10px;
-        font-size: 13px;
+        padding: 8px 32px 8px 12px;
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        border-radius: 9px;
+        font-size: 12px;
         font-weight: 600;
         font-family: "Inter", sans-serif;
-        color: var(--text);
-        background-color: var(--bg2);
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23D4A017' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
-        background-position: right 12px center;
+        background-position: right 10px center;
         cursor: pointer;
         outline: none;
-        min-width: 220px;
-        transition:
-          border-color 0.18s,
-          background 0.25s,
-          color 0.25s;
+        min-width: 200px;
       }
-
+      .group-select option {
+        background: #1a1008;
+        color: white;
+      }
       .group-select:focus {
-        border-color: var(--accent);
+        border-color: #d4a017;
       }
-
-      .active-filters {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        align-items: center;
+      .refine-btn {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+        white-space: nowrap;
       }
-
+      .refine-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
       .filter-chip {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        background: var(--accent-light);
-        color: var(--accent);
-        border: 1px solid var(--accent-border);
-        padding: 5px 10px;
+        gap: 5px;
+        background: rgba(212, 160, 23, 0.15);
+        color: #d4a017;
+        border: 1px solid rgba(212, 160, 23, 0.35);
+        padding: 4px 10px;
         border-radius: 999px;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 600;
       }
-
       .filter-chip a {
-        color: var(--accent);
+        color: #d4a017;
         text-decoration: none;
-        font-size: 14px;
-        line-height: 1;
+        font-size: 13px;
         opacity: 0.7;
       }
-
       .filter-chip a:hover {
         opacity: 1;
       }
 
-      .refine-btn {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text2);
-        text-decoration: none;
-        padding: 9px 16px;
-        border-radius: 10px;
-        border: 1px solid var(--border);
-        background: var(--bg2);
-        transition: all 0.18s;
-        white-space: nowrap;
-      }
-
-      .refine-btn:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-
+      /* ── RESULTS CONTENT ── */
       .results-content {
+        flex: 1;
         max-width: 1200px;
         margin: 0 auto;
-        padding: 32px 24px 60px;
+        padding: 28px 24px 60px;
+        width: 100%;
       }
 
-      .group-section {
-        margin-bottom: 48px;
+      /* ── PROPERTY GRID (mimics style.css grid but self-contained) ── */
+      .prop-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
       }
-
-      .group-heading {
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--border);
+      .prop-card {
+        display: block;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        overflow: hidden;
+        backdrop-filter: blur(8px);
+        transition: all 0.22s ease;
       }
-
-      .group-heading h2 {
-        font-family: "Playfair Display", serif;
-        font-size: 20px;
+      .prop-card:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(212, 160, 23, 0.5);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      }
+      .prop-img-wrap {
+        position: relative;
+        height: 180px;
+        overflow: hidden;
+      }
+      .prop-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .prop-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
         font-weight: 700;
-        color: var(--text);
-        letter-spacing: -0.3px;
       }
-
-      .group-count {
+      .badge-Available {
+        background: rgba(34, 197, 94, 0.85);
+        color: white;
+      }
+      .badge-Rented {
+        background: rgba(239, 68, 68, 0.85);
+        color: white;
+      }
+      .badge-NotAvailable {
+        background: rgba(107, 114, 128, 0.85);
+        color: white;
+      }
+      .prop-info {
+        padding: 16px;
+      }
+      .prop-price {
+        font-size: 18px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 4px;
+      }
+      .prop-price span {
         font-size: 12px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .prop-title {
+        font-size: 14px;
         font-weight: 600;
-        color: var(--text3);
-        background: var(--bg3);
+        color: white;
+        margin-bottom: 4px;
+      }
+      .prop-loc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 10px;
+      }
+      .prop-meta {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .prop-meta-chip {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.65);
+        background: rgba(255, 255, 255, 0.08);
         padding: 3px 9px;
         border-radius: 999px;
       }
 
+      /* ── GROUP HEADINGS ── */
+      .group-section {
+        margin-bottom: 40px;
+      }
+      .group-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .group-heading h2 {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+      }
+      .group-count {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(255, 255, 255, 0.08);
+        padding: 3px 9px;
+        border-radius: 999px;
+      }
+
+      /* ── NO RESULTS ── */
       .no-results {
         text-align: center;
         padding: 80px 24px;
@@ -190,200 +344,68 @@
       .no-results h2 {
         font-size: 22px;
         font-weight: 700;
-        color: var(--text);
+        color: white;
         margin-bottom: 10px;
       }
       .no-results p {
         font-size: 14px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.5);
         margin-bottom: 24px;
       }
       .no-results a {
-        background: var(--accent);
-        color: white;
+        background: #d4a017;
+        color: #1a0a00;
         text-decoration: none;
         padding: 12px 24px;
-        border-radius: 12px;
+        border-radius: 10px;
         font-size: 14px;
-        font-weight: 600;
-      }
-      /* === UNIVERSAL BACKGROUND === */
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-      }
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-        color: white;
-      }
-
-      /* Search results dark overrides */
-      body {
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-      }
-      .page-body {
-        padding-top: 68px !important;
-      }
-      .navbar {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        height: 68px !important;
-        background: rgba(0, 0, 0, 0.55) !important;
-        backdrop-filter: blur(16px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-        z-index: 999 !important;
-      }
-      .nav-logo-name {
-        color: white !important;
-      }
-      .nav-logo {
-        display: flex !important;
-        align-items: center !important;
-        gap: 10px !important;
-        text-decoration: none !important;
-      }
-      .nav-logo img {
-        height: 36px !important;
-        width: 36px !important;
-        border-radius: 50% !important;
-        border: 1.5px solid #d4a017 !important;
-        object-fit: contain !important;
-        flex-shrink: 0 !important;
-      }
-      .results-bar {
-        top: 68px !important;
-        background: rgba(0, 0, 0, 0.6) !important;
-        backdrop-filter: blur(14px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-      }
-      .results-meta h1 {
-        color: white !important;
-      }
-      .results-meta p {
-        color: rgba(255, 255, 255, 0.5) !important;
-      }
-      .control-label {
-        color: rgba(255, 255, 255, 0.55) !important;
-      }
-      .group-select {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
-        color: white !important;
-      }
-      .refine-btn {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: rgba(255, 255, 255, 0.8) !important;
-      }
-      .refine-btn:hover {
-        background: rgba(255, 255, 255, 0.18) !important;
-        color: white !important;
-      }
-      .filter-chip {
-        background: rgba(212, 160, 23, 0.15) !important;
-        color: #d4a017 !important;
-        border-color: rgba(212, 160, 23, 0.35) !important;
-      }
-      .filter-chip a {
-        color: #d4a017 !important;
-      }
-      /* Property cards - glass */
-      .grid .tile {
-        background: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.14) !important;
-        backdrop-filter: blur(8px) !important;
-      }
-      .grid .tile:hover {
-        background: rgba(255, 255, 255, 0.12) !important;
-        border-color: rgba(212, 160, 23, 0.5) !important;
-        transform: translateY(-4px) !important;
-      }
-      .tile-info {
-        padding: 16px !important;
-      }
-      .card-price {
-        color: white !important;
-      }
-      .tile-info h2 {
-        color: white !important;
-      }
-      .location {
-        color: rgba(255, 255, 255, 0.6) !important;
-      }
-      .meta div {
-        background: rgba(255, 255, 255, 0.1) !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        border: none !important;
-      }
-      .badge {
-        font-size: 11px;
         font-weight: 700;
       }
-      /* Group heading */
-      .group-heading {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-      }
-      .group-heading h2 {
-        color: white !important;
-      }
-      .group-count {
-        background: rgba(255, 255, 255, 0.1) !important;
-        color: rgba(255, 255, 255, 0.6) !important;
-      }
-      /* No results */
-      .no-results h2 {
-        color: white !important;
-      }
-      .no-results p {
-        color: rgba(255, 255, 255, 0.55) !important;
-      }
-      /* Footer */
+
+      /* ── FOOTER ── */
       .page-footer {
-        padding: 18px 40px;
+        padding: 16px 40px;
         text-align: center;
         background: rgba(0, 0, 0, 0.45);
         border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
       .page-footer p {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.35);
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      @media (max-width: 600px) {
+        .navbar {
+          padding: 0 16px;
+        }
+        .results-bar-inner {
+          padding: 10px 16px;
+        }
+        .results-content {
+          padding: 20px 16px 40px;
+        }
+        .prop-grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
-
-  <body class="page-body">
+  <body>
+    <!-- NAVBAR -->
     <nav class="navbar">
       <a href="/" class="nav-logo">
         <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
         <div class="nav-logo-text">
-          <span class="nav-logo-name"
-            >SHIVYA<span class="nav-accent">SPACES</span></span
-          >
-          <span class="nav-logo-tagline"
-            >Trusted Rental Lifecycle Platform</span
-          >
+          <span class="nav-logo-name">SHIVYA<span>SPACES</span></span>
+          <span class="nav-logo-sub">Trusted Rental Lifecycle Platform</span>
         </div>
       </a>
+      <div class="nav-right">
+        <a href="/search" class="nav-btn">← Refine Search</a>
+      </div>
     </nav>
 
+    <!-- STICKY RESULTS BAR -->
     <div class="results-bar">
       <div class="results-bar-inner">
         <div class="results-meta">
@@ -396,10 +418,16 @@
             endif %} {% if beds %} &middot; {{ beds }} BHK{% endif %}
           </p>
         </div>
-
         <div class="controls">
           {% if prop_type or beds %}
-          <div class="active-filters">
+          <div
+            style="
+              display: flex;
+              gap: 6px;
+              flex-wrap: wrap;
+              align-items: center;
+            "
+          >
             {% if prop_type %}
             <span class="filter-chip">
               {{ prop_type }}
@@ -419,52 +447,51 @@
             {% endif %}
           </div>
           {% endif %}
-
           <span class="control-label">Group by</span>
-
           <select
             class="group-select"
             id="groupSelect"
             onchange="applyGroup(this.value)"
           >
             <option value="">No Grouping — Show All</option>
-            <option value="type">Property Type (Apartment, Villa...)</option>
-            <option value="owner">Owner / Property Manager</option>
-            <option value="beds">Number of Bedrooms (1 BHK, 2 BHK...)</option>
-            <option value="status">Availability (Available, Rented...)</option>
+            <option value="type">Property Type</option>
+            <option value="owner">Owner / Manager</option>
+            <option value="beds">Bedrooms</option>
+            <option value="status">Availability</option>
           </select>
-
           <a href="/search" class="refine-btn">Refine Search</a>
         </div>
       </div>
     </div>
 
+    <!-- CONTENT -->
     <div class="results-content">
       {% if properties %} {% if not group_by %}
-      <div class="grid" style="padding: 0">
+      <div class="prop-grid">
         {% for item in properties %}
-        <a href="/{{ item.slug }}/property/{{ item.id }}" class="tile">
-          <div class="image-wrapper">
+        <a href="/{{ item.slug }}/property/{{ item.id }}" class="prop-card">
+          <div class="prop-img-wrap">
             <img src="{{ item.image }}" alt="{{ item.title }}" />
-            <div class="badge">{{ item.status }}</div>
+            <span class="prop-badge badge-{{ item.status | replace(' ','') }}"
+              >{{ item.status }}</span
+            >
           </div>
-          <div class="tile-info">
-            <div class="card-price">{{ item.rent }}<span> / month</span></div>
-            <h2>{{ item.title }}</h2>
-            <div class="location">{{ item.location }}</div>
-            <div class="meta">
-              {% if item.beds and item.beds > 0 %}
-              <div>{{ item.beds }} Beds</div>
-              {% endif %} {% if item.baths %}
-              <div>{{ item.baths }} Baths</div>
-              {% endif %}
-              <div>{{ item.sqft }} Sq Ft</div>
+          <div class="prop-info">
+            <div class="prop-price">{{ item.rent }}<span> / month</span></div>
+            <div class="prop-title">{{ item.title }}</div>
+            <div class="prop-loc">{{ item.location }}</div>
+            <div class="prop-meta">
+              {% if item.beds and item.beds > 0 %}<span class="prop-meta-chip"
+                >{{ item.beds }} Beds</span
+              >{% endif %} {% if item.baths %}<span class="prop-meta-chip"
+                >{{ item.baths }} Baths</span
+              >{% endif %}
+              <span class="prop-meta-chip">{{ item.sqft }} Sq Ft</span>
             </div>
           </div>
         </a>
         {% endfor %}
       </div>
-
       {% else %} {% for group_name, items in grouped.items() %}
       <div class="group-section">
         <div class="group-heading">
@@ -474,24 +501,26 @@
             'ies' }}</span
           >
         </div>
-        <div class="grid" style="padding: 0">
+        <div class="prop-grid">
           {% for item in items %}
-          <a href="/{{ item.slug }}/property/{{ item.id }}" class="tile">
-            <div class="image-wrapper">
+          <a href="/{{ item.slug }}/property/{{ item.id }}" class="prop-card">
+            <div class="prop-img-wrap">
               <img src="{{ item.image }}" alt="{{ item.title }}" />
-              <div class="badge">{{ item.status }}</div>
+              <span class="prop-badge badge-{{ item.status | replace(' ','') }}"
+                >{{ item.status }}</span
+              >
             </div>
-            <div class="tile-info">
-              <div class="card-price">{{ item.rent }}<span> / month</span></div>
-              <h2>{{ item.title }}</h2>
-              <div class="location">{{ item.location }}</div>
-              <div class="meta">
-                {% if item.beds and item.beds > 0 %}
-                <div>{{ item.beds }} Beds</div>
-                {% endif %} {% if item.baths %}
-                <div>{{ item.baths }} Baths</div>
-                {% endif %}
-                <div>{{ item.sqft }} Sq Ft</div>
+            <div class="prop-info">
+              <div class="prop-price">{{ item.rent }}<span> / month</span></div>
+              <div class="prop-title">{{ item.title }}</div>
+              <div class="prop-loc">{{ item.location }}</div>
+              <div class="prop-meta">
+                {% if item.beds and item.beds > 0 %}<span class="prop-meta-chip"
+                  >{{ item.beds }} Beds</span
+                >{% endif %} {% if item.baths %}<span class="prop-meta-chip"
+                  >{{ item.baths }} Baths</span
+                >{% endif %}
+                <span class="prop-meta-chip">{{ item.sqft }} Sq Ft</span>
               </div>
             </div>
           </a>
@@ -507,9 +536,12 @@
       {% endif %}
     </div>
 
+    <footer class="page-footer">
+      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+    </footer>
+
     <script>
       document.getElementById("groupSelect").value = "{{ group_by }}";
-
       function applyGroup(value) {
         var params = new URLSearchParams(window.location.search);
         if (value) {
@@ -519,11 +551,6 @@
         }
         window.location.href = "/results?" + params.toString();
       }
-    </script>
-    <footer class="page-footer">
-      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
-    </footer>
-    <script>
       document
         .querySelectorAll(".yr")
         .forEach((e) => (e.textContent = new Date().getFullYear()));
