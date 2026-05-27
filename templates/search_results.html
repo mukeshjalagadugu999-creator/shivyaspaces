@@ -228,7 +228,7 @@
         color: white;
       }
 
-      /* ===== DARK PAGE OVERRIDES ===== */
+      /* Search results dark overrides */
       body {
         background:
           linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
@@ -236,7 +236,9 @@
         background-size: cover !important;
         background-position: center !important;
         background-attachment: fixed !important;
-        color: white !important;
+      }
+      .page-body {
+        padding-top: 68px !important;
       }
       .navbar {
         position: fixed !important;
@@ -244,137 +246,64 @@
         left: 0 !important;
         right: 0 !important;
         height: 68px !important;
-        display: flex !important;
-        align-items: center !important;
-        padding: 0 40px !important;
         background: rgba(0, 0, 0, 0.55) !important;
         backdrop-filter: blur(16px) !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
         z-index: 999 !important;
       }
-      .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-      }
-      .nav-logo img {
-        height: 38px;
-        width: 38px;
-        object-fit: contain;
-        border-radius: 50%;
-        border: 1.5px solid #d4a017;
-      }
       .nav-logo-name {
-        font-size: 15px;
-        font-weight: 700;
         color: white !important;
-        letter-spacing: 0.5px;
-        line-height: 1;
-      }
-      .nav-accent {
-        color: #d4a017 !important;
-      }
-      .nav-logo-tagline {
-        font-size: 9px;
-        color: rgba(255, 255, 255, 0.45);
-      }
-      .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .nav-btn {
-        font-size: 13px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.75) !important;
-        text-decoration: none;
-        padding: 7px 14px;
-        border-radius: 7px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.08);
-        transition: all 0.18s;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        white-space: nowrap;
-      }
-      /* Glass cards */
-      .card,
-      .form-card,
-      .tile,
-      .filter-card,
-      .glass-card {
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        backdrop-filter: blur(10px) !important;
-        color: white !important;
-      }
-      /* Inputs inside dark pages */
-      input,
-      select,
-      textarea {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-      }
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(255, 255, 255, 0.4) !important;
-      }
-      select option {
-        background: #1a1008;
-        color: white;
-      }
-      label {
-        color: rgba(255, 255, 255, 0.7) !important;
-      }
-      /* Ensure content starts below navbar */
-      .page-body,
-      .page,
-      .content,
-      .results-content,
-      .results-wrapper {
-        padding-top: 88px !important;
       }
       .results-bar {
         top: 68px !important;
-        background: rgba(0, 0, 0, 0.5) !important;
-        backdrop-filter: blur(12px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        background: rgba(0, 0, 0, 0.6) !important;
+        backdrop-filter: blur(14px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
       }
-      .results-bar-inner h1,
       .results-meta h1 {
         color: white !important;
       }
       .results-meta p {
         color: rgba(255, 255, 255, 0.5) !important;
       }
-      /* Group select */
+      .control-label {
+        color: rgba(255, 255, 255, 0.55) !important;
+      }
       .group-select {
         background: rgba(255, 255, 255, 0.1) !important;
-        border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
         color: white !important;
-      }
-      .control-label {
-        color: rgba(255, 255, 255, 0.5) !important;
       }
       .refine-btn {
         background: rgba(255, 255, 255, 0.1) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+      }
+      .refine-btn:hover {
+        background: rgba(255, 255, 255, 0.18) !important;
         color: white !important;
       }
-      /* Property cards */
+      .filter-chip {
+        background: rgba(212, 160, 23, 0.15) !important;
+        color: #d4a017 !important;
+        border-color: rgba(212, 160, 23, 0.35) !important;
+      }
+      .filter-chip a {
+        color: #d4a017 !important;
+      }
+      /* Property cards - glass */
       .grid .tile {
         background: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
         backdrop-filter: blur(8px) !important;
       }
-      .tile:hover {
+      .grid .tile:hover {
         background: rgba(255, 255, 255, 0.12) !important;
         border-color: rgba(212, 160, 23, 0.5) !important;
+        transform: translateY(-4px) !important;
       }
       .tile-info {
-        background: rgba(0, 0, 0, 0.3) !important;
+        padding: 16px !important;
       }
       .card-price {
         color: white !important;
@@ -386,18 +315,31 @@
         color: rgba(255, 255, 255, 0.6) !important;
       }
       .meta div {
-        background: rgba(255, 255, 255, 0.12) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
         color: rgba(255, 255, 255, 0.7) !important;
         border: none !important;
       }
-      /* Section titles */
-      h1,
-      h2,
-      h3 {
+      .badge {
+        font-size: 11px;
+        font-weight: 700;
+      }
+      /* Group heading */
+      .group-heading {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+      }
+      .group-heading h2 {
         color: white !important;
       }
-      p {
-        color: rgba(255, 255, 255, 0.7);
+      .group-count {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+      }
+      /* No results */
+      .no-results h2 {
+        color: white !important;
+      }
+      .no-results p {
+        color: rgba(255, 255, 255, 0.55) !important;
       }
       /* Footer */
       .page-footer {

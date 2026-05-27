@@ -518,6 +518,46 @@
     </style>
   </head>
   <body>
+    <div class="topbar">
+      <a href="/admin/dashboard" class="topbar-logo">
+        <img
+          src="/static/Shivya_Logo.jpeg"
+          style="
+            height: 34px;
+            width: 34px;
+            border-radius: 50%;
+            border: 1.5px solid #d4a017;
+            object-fit: contain;
+            margin-right: 8px;
+            vertical-align: middle;
+          "
+        />
+        SHIVYA<span style="color: #d4a017">SPACES</span>
+        <span
+          style="
+            font-size: 10px;
+            background: #8b1e3f;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 999px;
+            margin-left: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+          "
+          >ADMIN</span
+        >
+      </a>
+      <div class="topbar-right">
+        <span style="font-size: 13px; color: var(--text3)"
+          >{{ admin_name }}</span
+        >
+        <a href="/admin/settings" class="nav-btn">Settings</a>
+        <form method="POST" action="/admin/logout" style="display: inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button type="submit" class="nav-btn btn-danger">Sign Out</button>
+        </form>
+      </div>
+    </div>
     <div class="content">
       <div class="page-header">
         <div>

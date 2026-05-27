@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/static/Shivya_Logo_Round.png" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Find a Property — ShivyaSpaces</title>
     <link
@@ -16,360 +16,33 @@
         padding: 0;
         box-sizing: border-box;
       }
-
-      :root {
-        --bg: #f8fafc;
-        --bg2: #ffffff;
-        --bg3: #f1f5f9;
-        --border: #e5e7eb;
-        --text: #111827;
-        --text2: #4b5563;
-        --text3: #9ca3af;
-        --accent: #2563eb;
-        --accent-hover: #1d4ed8;
-        --input-bg: #ffffff;
-        --input-border: #e5e7eb;
-        --navbar-bg: rgba(255, 255, 255, 0.95);
-        --navbar-border: rgba(0, 0, 0, 0.07);
-        --shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.05);
-      }
-
-      [data-theme="dark"] {
-        --bg: #0d1117;
-        --bg2: #161b22;
-        --bg3: #21262d;
-        --border: #30363d;
-        --text: #e6edf3;
-        --text2: #8b949e;
-        --text3: #484f58;
-        --accent: #58a6ff;
-        --accent-hover: #79b8ff;
-        --input-bg: #0d1117;
-        --input-border: #30363d;
-        --navbar-bg: rgba(13, 17, 23, 0.95);
-        --navbar-border: rgba(255, 255, 255, 0.06);
-        --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3);
-      }
-
       body {
         font-family: "Inter", sans-serif;
         min-height: 100vh;
-        background: var(--bg);
-        color: var(--text);
-        transition:
-          background 0.25s,
-          color 0.25s;
+        display: flex;
+        flex-direction: column;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
       }
-
+      /* NAVBAR */
       .navbar {
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 64px;
+        right: 0;
+        height: 68px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: 0 48px;
-        background: var(--navbar-bg);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--navbar-border);
-        z-index: 99;
-        transition:
-          background 0.25s,
-          border-color 0.25s;
-      }
-
-      .logo {
-        font-family: "Playfair Display", serif;
-        font-size: 19px;
-        font-weight: 700;
-        color: var(--text);
-        text-decoration: none;
-        letter-spacing: -0.2px;
-      }
-      .logo span {
-        color: var(--accent);
-      }
-
-      .theme-toggle {
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--text2);
-        padding: 7px 14px;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        background: var(--bg3);
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        letter-spacing: 0.2px;
-        transition: all 0.18s;
-      }
-      .theme-toggle:hover {
-        opacity: 0.75;
-      }
-
-      .page {
-        max-width: 680px;
-        margin: 0 auto;
-        padding: 100px 24px 60px;
-      }
-
-      .page-header {
-        margin-bottom: 40px;
-      }
-
-      .page-header h1 {
-        font-family: "Playfair Display", serif;
-        font-size: 34px;
-        font-weight: 700;
-        color: var(--text);
-        letter-spacing: -0.5px;
-        margin-bottom: 8px;
-      }
-
-      .page-header p {
-        font-size: 15px;
-        color: var(--text3);
-        line-height: 1.6;
-      }
-
-      .divider {
-        height: 1px;
-        background: var(--border);
-        margin: 0 0 32px;
-      }
-
-      .section {
-        margin-bottom: 32px;
-      }
-
-      .section-label {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-        color: var(--text3);
-        margin-bottom: 14px;
-        display: block;
-      }
-
-      .type-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-      }
-
-      .type-tile {
-        background: var(--bg2);
-        border: 1.5px solid var(--border);
-        border-radius: 12px;
-        padding: 14px 12px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.18s;
-        user-select: none;
-      }
-
-      .type-tile:hover {
-        border-color: var(--accent);
-      }
-      .type-tile.selected {
-        border-color: var(--accent);
-        background: var(--accent);
-      }
-      .type-tile .label {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text);
-        transition: color 0.18s;
-      }
-      .type-tile.selected .label {
-        color: white;
-      }
-
-      .two-col {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-
-      .field-group {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .field-label {
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--text3);
-      }
-
-      select {
-        padding: 11px 14px;
-        border: 1.5px solid var(--input-border);
-        border-radius: 10px;
-        font-size: 14px;
-        font-family: "Inter", sans-serif;
-        color: var(--text);
-        background: var(--input-bg);
-        outline: none;
-        width: 100%;
-        cursor: pointer;
-        transition:
-          border-color 0.18s,
-          background 0.25s,
-          color 0.25s;
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 14px center;
-        padding-right: 36px;
-      }
-      select:focus {
-        border-color: var(--accent);
-      }
-
-      .beds-row {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      .bed-btn {
-        padding: 9px 20px;
-        background: var(--bg2);
-        border: 1.5px solid var(--border);
-        border-radius: 8px;
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text);
-        cursor: pointer;
-        transition: all 0.18s;
-        user-select: none;
-        font-family: "Inter", sans-serif;
-      }
-      .bed-btn:hover {
-        border-color: var(--accent);
-      }
-      .bed-btn.selected {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: white;
-      }
-
-      .submit-area {
-        margin-top: 36px;
-      }
-
-      .submit-btn {
-        width: 100%;
-        background: var(--accent);
-        color: white;
-        border: none;
-        padding: 15px;
-        border-radius: 12px;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        letter-spacing: 0.2px;
-        transition:
-          background 0.18s,
-          transform 0.15s;
-      }
-      .submit-btn:hover {
-        background: var(--accent-hover);
-        transform: translateY(-1px);
-      }
-
-      .browse-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-top: 16px;
-        justify-content: center;
-      }
-      .browse-label {
-        font-size: 13px;
-        color: var(--text3);
-      }
-      .browse-link {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--accent);
-        text-decoration: none;
-        padding: 7px 14px;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        background: var(--bg2);
-        transition: all 0.18s;
-      }
-      .browse-link:hover {
-        border-color: var(--accent);
-      }
-
-      @media (max-width: 600px) {
-        .navbar {
-          padding: 0 20px;
-        }
-        .page {
-          padding: 88px 16px 40px;
-        }
-        .page-header h1 {
-          font-size: 26px;
-        }
-        .type-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-        .two-col {
-          grid-template-columns: 1fr;
-        }
-      }
-      /* === UNIVERSAL BACKGROUND === */
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-      }
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-        color: white;
-      }
-
-      /* ===== DARK PAGE OVERRIDES ===== */
-      body {
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-        color: white !important;
-      }
-      .navbar {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        height: 68px !important;
-        display: flex !important;
-        align-items: center !important;
-        padding: 0 40px !important;
-        background: rgba(0, 0, 0, 0.55) !important;
-        backdrop-filter: blur(16px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-        z-index: 999 !important;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 999;
       }
       .nav-logo {
         display: flex;
@@ -384,141 +57,225 @@
         border-radius: 50%;
         border: 1.5px solid #d4a017;
       }
+      .nav-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
       .nav-logo-name {
         font-size: 15px;
         font-weight: 700;
-        color: white !important;
+        color: white;
         letter-spacing: 0.5px;
         line-height: 1;
       }
       .nav-accent {
-        color: #d4a017 !important;
+        color: #d4a017;
       }
       .nav-logo-tagline {
         font-size: 9px;
         color: rgba(255, 255, 255, 0.45);
       }
-      .nav-right {
-        display: flex;
-        align-items: center;
+      /* PAGE */
+      .page {
+        flex: 1;
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 100px 24px 60px;
+        width: 100%;
+      }
+      .page-header {
+        margin-bottom: 32px;
+      }
+      .page-header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 34px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: -0.5px;
+        margin-bottom: 8px;
+      }
+      .page-header p {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.55);
+        line-height: 1.6;
+      }
+      .divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.12);
+        margin: 0 0 32px;
+      }
+      /* GLASS CARD */
+      .filter-glass {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 28px;
+        backdrop-filter: blur(12px);
+        margin-bottom: 16px;
+      }
+      .section {
+        margin-bottom: 28px;
+      }
+      .section:last-child {
+        margin-bottom: 0;
+      }
+      .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 14px;
+        display: block;
+      }
+      /* TYPE GRID */
+      .type-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 8px;
       }
-      .nav-btn {
-        font-size: 13px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.75) !important;
-        text-decoration: none;
-        padding: 7px 14px;
-        border-radius: 7px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.08);
-        transition: all 0.18s;
+      .type-tile {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 14px 12px;
+        text-align: center;
         cursor: pointer;
+        transition: all 0.18s;
+        user-select: none;
+      }
+      .type-tile:hover {
+        border-color: rgba(212, 160, 23, 0.6);
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .type-tile.selected {
+        border-color: #d4a017;
+        background: rgba(212, 160, 23, 0.2);
+      }
+      .type-tile .label {
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .type-tile.selected .label {
+        color: #d4a017;
+      }
+      /* BUDGET */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .field-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      select {
+        padding: 11px 14px;
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+        font-size: 14px;
         font-family: "Inter", sans-serif;
-        white-space: nowrap;
-      }
-      /* Glass cards */
-      .card,
-      .form-card,
-      .tile,
-      .filter-card,
-      .glass-card {
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        backdrop-filter: blur(10px) !important;
-        color: white !important;
-      }
-      /* Inputs inside dark pages */
-      input,
-      select,
-      textarea {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-      }
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(255, 255, 255, 0.4) !important;
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        outline: none;
+        width: 100%;
+        cursor: pointer;
+        transition: border-color 0.18s;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23D4A017' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        background-size: 12px;
+        padding-right: 36px;
       }
       select option {
         background: #1a1008;
         color: white;
       }
-      label {
-        color: rgba(255, 255, 255, 0.7) !important;
+      select:focus {
+        border-color: #d4a017;
       }
-      /* Ensure content starts below navbar */
-      .page-body,
-      .page,
-      .content,
-      .results-content,
-      .results-wrapper {
-        padding-top: 88px !important;
+      /* BEDS */
+      .beds-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
       }
-      .results-bar {
-        top: 68px !important;
-        background: rgba(0, 0, 0, 0.5) !important;
-        backdrop-filter: blur(12px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      .bed-btn {
+        padding: 9px 20px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        transition: all 0.18s;
+        user-select: none;
+        font-family: "Inter", sans-serif;
       }
-      .results-bar-inner h1,
-      .results-meta h1 {
-        color: white !important;
+      .bed-btn:hover {
+        border-color: rgba(212, 160, 23, 0.6);
       }
-      .results-meta p {
-        color: rgba(255, 255, 255, 0.5) !important;
+      .bed-btn.selected {
+        background: rgba(212, 160, 23, 0.2);
+        border-color: #d4a017;
+        color: #d4a017;
       }
-      /* Group select */
-      .group-select {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
+      /* SUBMIT */
+      .submit-btn {
+        width: 100%;
+        background: #d4a017;
+        color: #1a0a00;
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: all 0.18s;
+        margin-top: 8px;
       }
-      .control-label {
-        color: rgba(255, 255, 255, 0.5) !important;
+      .submit-btn:hover {
+        background: #c49010;
+        transform: translateY(-1px);
       }
-      .refine-btn {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
+      .browse-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+        justify-content: center;
       }
-      /* Property cards */
-      .grid .tile {
-        background: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        backdrop-filter: blur(8px) !important;
+      .browse-label {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
       }
-      .tile:hover {
-        background: rgba(255, 255, 255, 0.12) !important;
-        border-color: rgba(212, 160, 23, 0.5) !important;
+      .browse-link {
+        font-size: 13px;
+        font-weight: 600;
+        color: #d4a017;
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(212, 160, 23, 0.3);
+        background: rgba(212, 160, 23, 0.08);
+        transition: all 0.18s;
       }
-      .tile-info {
-        background: rgba(0, 0, 0, 0.3) !important;
+      .browse-link:hover {
+        background: rgba(212, 160, 23, 0.15);
+        border-color: #d4a017;
       }
-      .card-price {
-        color: white !important;
-      }
-      .tile-info h2 {
-        color: white !important;
-      }
-      .location {
-        color: rgba(255, 255, 255, 0.6) !important;
-      }
-      .meta div {
-        background: rgba(255, 255, 255, 0.12) !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        border: none !important;
-      }
-      /* Section titles */
-      h1,
-      h2,
-      h3 {
-        color: white !important;
-      }
-      p {
-        color: rgba(255, 255, 255, 0.7);
-      }
-      /* Footer */
+      /* FOOTER */
       .page-footer {
         padding: 18px 40px;
         text-align: center;
@@ -528,6 +285,23 @@
       .page-footer p {
         font-size: 12px;
         color: rgba(255, 255, 255, 0.35);
+      }
+      @media (max-width: 600px) {
+        .navbar {
+          padding: 0 20px;
+        }
+        .page {
+          padding: 90px 16px 40px;
+        }
+        .page-header h1 {
+          font-size: 26px;
+        }
+        .type-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .two-col {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
@@ -554,88 +328,87 @@
           properties.
         </p>
       </div>
-
       <div class="divider"></div>
 
       <form action="/results" method="GET">
-        <div class="section">
-          <span class="section-label">Property Type</span>
-          <div class="type-grid" id="typeGrid">
-            <div class="type-tile selected" onclick="selectType(this, '')">
-              <div class="label">Any Type</div>
+        <div class="filter-glass">
+          <div class="section">
+            <span class="section-label">Property Type</span>
+            <div class="type-grid" id="typeGrid">
+              <div class="type-tile selected" onclick="selectType(this, '')">
+                <div class="label">Any Type</div>
+              </div>
+              <div class="type-tile" onclick="selectType(this, 'Apartment')">
+                <div class="label">Apartment</div>
+              </div>
+              <div class="type-tile" onclick="selectType(this, 'Villa')">
+                <div class="label">Villa</div>
+              </div>
+              <div
+                class="type-tile"
+                onclick="selectType(this, 'Studio Apartment')"
+              >
+                <div class="label">Studio</div>
+              </div>
+              <div
+                class="type-tile"
+                onclick="selectType(this, 'Commercial Retail')"
+              >
+                <div class="label">Commercial</div>
+              </div>
+              <div
+                class="type-tile"
+                onclick="selectType(this, 'Mixed Use Property')"
+              >
+                <div class="label">Mixed Use</div>
+              </div>
             </div>
-            <div class="type-tile" onclick="selectType(this, 'Apartment')">
-              <div class="label">Apartment</div>
-            </div>
-            <div class="type-tile" onclick="selectType(this, 'Villa')">
-              <div class="label">Villa</div>
-            </div>
-            <div
-              class="type-tile"
-              onclick="selectType(this, 'Studio Apartment')"
-            >
-              <div class="label">Studio</div>
-            </div>
-            <div
-              class="type-tile"
-              onclick="selectType(this, 'Commercial Retail')"
-            >
-              <div class="label">Commercial</div>
-            </div>
-            <div
-              class="type-tile"
-              onclick="selectType(this, 'Mixed Use Property')"
-            >
-              <div class="label">Mixed Use</div>
+            <input type="hidden" name="type" id="typeInput" value="" />
+          </div>
+
+          <div class="section">
+            <span class="section-label">Monthly Budget</span>
+            <div class="two-col">
+              <div class="field-group">
+                <span class="field-label">Minimum</span>
+                <select name="min_rent">
+                  <option value="">No minimum</option>
+                  <option value="10000">Rs. 10,000</option>
+                  <option value="20000">Rs. 20,000</option>
+                  <option value="30000">Rs. 30,000</option>
+                  <option value="50000">Rs. 50,000</option>
+                  <option value="75000">Rs. 75,000</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <span class="field-label">Maximum</span>
+                <select name="max_rent">
+                  <option value="">No maximum</option>
+                  <option value="20000">Rs. 20,000</option>
+                  <option value="30000">Rs. 30,000</option>
+                  <option value="50000">Rs. 50,000</option>
+                  <option value="75000">Rs. 75,000</option>
+                  <option value="100000">Rs. 1,00,000</option>
+                  <option value="200000">Rs. 2,00,000+</option>
+                </select>
+              </div>
             </div>
           </div>
-          <input type="hidden" name="type" id="typeInput" value="" />
-        </div>
 
-        <div class="section">
-          <span class="section-label">Monthly Budget</span>
-          <div class="two-col">
-            <div class="field-group">
-              <span class="field-label">Minimum</span>
-              <select name="min_rent">
-                <option value="">No minimum</option>
-                <option value="10000">Rs. 10,000</option>
-                <option value="20000">Rs. 20,000</option>
-                <option value="30000">Rs. 30,000</option>
-                <option value="50000">Rs. 50,000</option>
-                <option value="75000">Rs. 75,000</option>
-              </select>
+          <div class="section">
+            <span class="section-label">Bedrooms</span>
+            <div class="beds-row" id="bedsRow">
+              <div class="bed-btn selected" onclick="selectBeds(this, '')">
+                Any
+              </div>
+              <div class="bed-btn" onclick="selectBeds(this, '1')">1 BHK</div>
+              <div class="bed-btn" onclick="selectBeds(this, '2')">2 BHK</div>
+              <div class="bed-btn" onclick="selectBeds(this, '3')">3 BHK</div>
+              <div class="bed-btn" onclick="selectBeds(this, '4')">4+ BHK</div>
             </div>
-            <div class="field-group">
-              <span class="field-label">Maximum</span>
-              <select name="max_rent">
-                <option value="">No maximum</option>
-                <option value="20000">Rs. 20,000</option>
-                <option value="30000">Rs. 30,000</option>
-                <option value="50000">Rs. 50,000</option>
-                <option value="75000">Rs. 75,000</option>
-                <option value="100000">Rs. 1,00,000</option>
-                <option value="200000">Rs. 2,00,000+</option>
-              </select>
-            </div>
+            <input type="hidden" name="beds" id="bedsInput" value="" />
           </div>
-        </div>
 
-        <div class="section">
-          <span class="section-label">Bedrooms</span>
-          <div class="beds-row" id="bedsRow">
-            <div class="bed-btn selected" onclick="selectBeds(this, '')">
-              Any
-            </div>
-            <div class="bed-btn" onclick="selectBeds(this, '1')">1 BHK</div>
-            <div class="bed-btn" onclick="selectBeds(this, '2')">2 BHK</div>
-            <div class="bed-btn" onclick="selectBeds(this, '3')">3 BHK</div>
-            <div class="bed-btn" onclick="selectBeds(this, '4')">4+ BHK</div>
-          </div>
-          <input type="hidden" name="beds" id="bedsInput" value="" />
-        </div>
-
-        <div class="submit-area">
           <button type="submit" class="submit-btn">
             Show Matching Properties
           </button>
@@ -647,7 +420,13 @@
       </form>
     </div>
 
+    <footer class="page-footer">
+      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+    </footer>
     <script>
+      document
+        .querySelectorAll(".yr")
+        .forEach((e) => (e.textContent = new Date().getFullYear()));
       function selectType(el, value) {
         document
           .querySelectorAll(".type-tile")
@@ -662,14 +441,6 @@
         el.classList.add("selected");
         document.getElementById("bedsInput").value = value;
       }
-    </script>
-    <footer class="page-footer">
-      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
-    </footer>
-    <script>
-      document
-        .querySelectorAll(".yr")
-        .forEach((e) => (e.textContent = new Date().getFullYear()));
     </script>
   </body>
 </html>

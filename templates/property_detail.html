@@ -104,16 +104,12 @@
         color: white;
       }
 
-      /* ===== DARK PAGE OVERRIDES ===== */
+      /* Property detail overrides */
       body {
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-        color: white !important;
+        background: var(--bg) !important;
+        color: var(--text) !important;
       }
+      /* Navbar - white */
       .navbar {
         position: fixed !important;
         top: 0 !important;
@@ -122,222 +118,45 @@
         height: 68px !important;
         display: flex !important;
         align-items: center !important;
+        justify-content: space-between !important;
         padding: 0 40px !important;
-        background: rgba(0, 0, 0, 0.55) !important;
-        backdrop-filter: blur(16px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        background: rgba(255, 255, 255, 0.97) !important;
+        backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid #e5e7eb !important;
         z-index: 999 !important;
-      }
-      .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-      }
-      .nav-logo img {
-        height: 38px;
-        width: 38px;
-        object-fit: contain;
-        border-radius: 50%;
-        border: 1.5px solid #d4a017;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
       }
       .nav-logo-name {
-        font-size: 15px;
-        font-weight: 700;
-        color: white !important;
-        letter-spacing: 0.5px;
-        line-height: 1;
-      }
-      .nav-accent {
-        color: #d4a017 !important;
+        color: #1f2937 !important;
       }
       .nav-logo-tagline {
-        font-size: 9px;
-        color: rgba(255, 255, 255, 0.45);
+        color: #9ca3af !important;
       }
-      .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+      /* Hero - fix image cut off */
+      .property-hero {
+        padding-top: 68px !important;
+        min-height: 300px !important;
+        background-attachment: scroll !important;
       }
-      .nav-btn {
-        font-size: 13px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.75) !important;
-        text-decoration: none;
-        padding: 7px 14px;
-        border-radius: 7px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.08);
-        transition: all 0.18s;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        white-space: nowrap;
-      }
-      /* Glass cards */
-      .card,
-      .form-card,
-      .tile,
-      .filter-card,
-      .glass-card {
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        backdrop-filter: blur(10px) !important;
-        color: white !important;
-      }
-      /* Inputs inside dark pages */
-      input,
-      select,
-      textarea {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-      }
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(255, 255, 255, 0.4) !important;
-      }
-      select option {
-        background: #1a1008;
-        color: white;
-      }
-      label {
-        color: rgba(255, 255, 255, 0.7) !important;
-      }
-      /* Ensure content starts below navbar */
-      .page-body,
-      .page,
-      .content,
-      .results-content,
-      .results-wrapper {
-        padding-top: 88px !important;
-      }
-      .results-bar {
-        top: 68px !important;
-        background: rgba(0, 0, 0, 0.5) !important;
-        backdrop-filter: blur(12px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-      }
-      .results-bar-inner h1,
-      .results-meta h1 {
-        color: white !important;
-      }
-      .results-meta p {
-        color: rgba(255, 255, 255, 0.5) !important;
-      }
-      /* Group select */
-      .group-select {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-      }
-      .control-label {
-        color: rgba(255, 255, 255, 0.5) !important;
-      }
-      .refine-btn {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-      }
-      /* Property cards */
-      .grid .tile {
-        background: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        backdrop-filter: blur(8px) !important;
-      }
-      .tile:hover {
-        background: rgba(255, 255, 255, 0.12) !important;
-        border-color: rgba(212, 160, 23, 0.5) !important;
-      }
-      .tile-info {
-        background: rgba(0, 0, 0, 0.3) !important;
-      }
-      .card-price {
-        color: white !important;
-      }
-      .tile-info h2 {
-        color: white !important;
-      }
-      .location {
-        color: rgba(255, 255, 255, 0.6) !important;
-      }
-      .meta div {
-        background: rgba(255, 255, 255, 0.12) !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        border: none !important;
-      }
-      /* Section titles */
-      h1,
-      h2,
-      h3 {
-        color: white !important;
-      }
-      p {
-        color: rgba(255, 255, 255, 0.7);
+      /* Main card - white with gold outline */
+      .property-wrapper {
+        background: #ffffff !important;
+        border: 2px solid #d4a017 !important;
+        border-radius: 20px !important;
+        box-shadow:
+          0 4px 24px rgba(212, 160, 23, 0.15),
+          0 1px 3px rgba(0, 0, 0, 0.08) !important;
       }
       /* Footer */
       .page-footer {
         padding: 18px 40px;
         text-align: center;
-        background: rgba(0, 0, 0, 0.45);
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
       }
       .page-footer p {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.35);
-      }
-
-      /* Property detail specific */
-      .property-hero {
-        padding-top: 68px !important;
-      }
-      .property-wrapper {
-        background: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        backdrop-filter: blur(12px) !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
-      }
-      .property-header h1,
-      .property-header h2 {
-        color: white !important;
-      }
-      .property-header p,
-      .breadcrumb a {
-        color: rgba(255, 255, 255, 0.6) !important;
-      }
-      .breadcrumb a:hover {
-        color: #d4a017 !important;
-      }
-      .detail-label {
-        color: rgba(255, 255, 255, 0.5) !important;
-      }
-      .detail-value {
-        color: white !important;
-      }
-      .detail-grid div {
-        background: rgba(255, 255, 255, 0.06) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      }
-      .main-image img {
-        border-radius: 12px;
-        width: 100%;
-        max-height: 420px;
-        object-fit: cover;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-      }
-      .desc-text {
-        color: rgba(255, 255, 255, 0.7) !important;
-      }
-      .contact-card {
-        background: rgba(212, 160, 23, 0.1) !important;
-        border: 1px solid rgba(212, 160, 23, 0.3) !important;
-      }
-      .wa-btn {
-        background: #25d366 !important;
-        color: white !important;
-      }
-      hr {
-        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: var(--text3);
       }
     </style>
   </head>
@@ -345,12 +164,24 @@
   <body class="detail-page">
     <nav class="navbar">
       <a href="/" class="nav-logo">
-        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+        <img
+          src="/static/Shivya_Logo.jpeg"
+          alt="ShivyaSpaces"
+          style="
+            height: 36px;
+            width: 36px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 1.5px solid #d4a017;
+          "
+        />
         <div class="nav-logo-text">
-          <span class="nav-logo-name"
-            >SHIVYA<span class="nav-accent">SPACES</span></span
+          <span class="nav-logo-name" style="color: #1f2937"
+            >SHIVYA<span class="nav-accent" style="color: #8b1e3f"
+              >SPACES</span
+            ></span
           >
-          <span class="nav-logo-tagline"
+          <span class="nav-logo-tagline" style="color: #9ca3af"
             >Trusted Rental Lifecycle Platform</span
           >
         </div>
