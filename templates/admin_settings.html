@@ -562,32 +562,13 @@
   <body>
     <div class="topbar">
       <a href="/" class="topbar-logo">
-        <img
-          src="/static/Shivya_Logo.jpeg"
-          style="
-            height: 34px;
-            width: 34px;
-            border-radius: 50%;
-            border: 1.5px solid #d4a017;
-            object-fit: contain;
-            margin-right: 8px;
-            vertical-align: middle;
-          "
-        />
-        SHIVYA<span style="color: #d4a017">SPACES</span>
-        <span
-          style="
-            font-size: 10px;
-            background: #8b1e3f;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 999px;
-            margin-left: 8px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-          "
-          >ADMIN</span
-        >
+        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+        <div class="topbar-logo-text">
+          <span class="topbar-logo-name"
+            >SHIVYA<span class="topbar-logo-accent">SPACES</span></span
+          >
+          <span class="topbar-logo-sub">Trusted Rental Lifecycle Platform</span>
+        </div>
       </a>
       <div class="topbar-right">
         <span style="font-size: 13px; color: var(--text3)"
@@ -608,8 +589,7 @@
           Configure the email address used to send welcome emails to new owners.
         </p>
       </div>
-
-      <a href="javascript:history.back()" class="back-btn">Back</a>
+      <a href="javascript:history.back()" class="page-back">Back</a>
       {% with messages = get_flashed_messages(with_categories=true) %} {% for
       category, message in messages %}
       <div class="flash {{ category }}">{{ message }}</div>

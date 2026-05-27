@@ -215,8 +215,12 @@
         flex: 1;
         max-width: 1200px;
         margin: 0 auto;
-        padding: 36px 24px 60px;
+        padding: 28px 24px 60px;
         width: 100%;
+      }
+      /* Extra spacer so content isn't hidden under sticky bar */
+      .results-spacer {
+        height: 16px;
       }
 
       /* ── PROPERTY GRID (mimics style.css grid but self-contained) ── */
@@ -554,6 +558,16 @@
       document
         .querySelectorAll(".yr")
         .forEach((e) => (e.textContent = new Date().getFullYear()));
+      // Push content down so it clears the sticky results bar
+      function adjustOffset() {
+        var bar = document.querySelector(".results-bar");
+        var content = document.querySelector(".results-content");
+        if (bar && content) {
+          content.style.marginTop = bar.offsetHeight + "px";
+        }
+      }
+      adjustOffset();
+      window.addEventListener("resize", adjustOffset);
     </script>
   </body>
 </html>

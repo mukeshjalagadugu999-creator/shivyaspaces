@@ -607,6 +607,28 @@
           font-size: 22px;
         }
       }
+
+      /* Back button - top right of content */
+      .page-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+        float: right;
+        margin-bottom: 16px;
+      }
+      .page-back:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
     </style>
   </head>
   <body>
@@ -619,7 +641,6 @@
           <span class="nav-logo-sub">Trusted Rental Lifecycle Platform</span>
         </div>
       </a>
-      <a href="javascript:history.back()" class="nav-back">Back</a>
     </nav>
 
     <!-- HERO BANNER -->
@@ -636,10 +657,8 @@
 
     <!-- PAGE WRAP -->
     <div class="page-wrap">
-      <!-- Back breadcrumb -->
-      <div class="breadcrumb">
-        <a href="javascript:history.back()" class="breadcrumb-link">← Back</a>
-      </div>
+      <a href="javascript:history.back()" class="page-back">Back</a>
+      <div style="clear: both"></div>
 
       <!-- PROPERTY CARD -->
       <div class="property-card">

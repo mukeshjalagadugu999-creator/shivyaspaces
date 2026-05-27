@@ -559,6 +559,67 @@
         background: rgba(255, 255, 255, 0.15);
         color: white;
       }
+
+      /* ── TOPBAR LOGO FIX ── */
+      .topbar-logo {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        text-decoration: none !important;
+        font-family: "Inter", sans-serif !important;
+      }
+      .topbar-logo img {
+        height: 36px !important;
+        width: 36px !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #d4a017 !important;
+        object-fit: contain !important;
+        flex-shrink: 0 !important;
+      }
+      .topbar-logo-text {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1px !important;
+      }
+      .topbar-logo-name {
+        font-size: 14px !important;
+        font-weight: 800 !important;
+        color: white !important;
+        letter-spacing: 0.8px !important;
+        line-height: 1 !important;
+        font-family: "Inter", sans-serif !important;
+      }
+      .topbar-logo-accent {
+        color: #d4a017 !important;
+      }
+      .topbar-logo-sub {
+        font-size: 9px !important;
+        color: rgba(255, 255, 255, 0.42) !important;
+        letter-spacing: 0.3px !important;
+        line-height: 1 !important;
+      }
+      /* ── BACK BUTTON (top-right of content, NOT in topbar) ── */
+      .page-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+        float: right;
+        margin-bottom: 16px;
+        cursor: pointer;
+      }
+      .page-back:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
     </style>
   </head>
   <body>
@@ -567,8 +628,6 @@
         <h1>Create New Property</h1>
         <p>Fill in the details to add a new listing.</p>
       </div>
-
-      <a href="javascript:history.back()" class="back-btn">Back</a>
       {% with messages = get_flashed_messages(with_categories=true) %} {% for
       category, message in messages %}
       <div class="flash {{ category }}">{{ message }}</div>
