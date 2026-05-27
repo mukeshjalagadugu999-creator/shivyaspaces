@@ -270,11 +270,13 @@ def search_results():
     group_by  = request.args.get("group", "").strip()
 
     query = """
-        SELECT p.*, o.slug, o.name as owner_name, o.brand_name as owner_brand
+        SELECT p.*,
+               o.slug, o.name as owner_name, o.brand_name as owner_brand,
+               parent.title as parent_title
         FROM properties p
         JOIN owners o ON p.owner_id = o.id
+        LEFT JOIN properties parent ON p.parent_id = parent.id
         WHERE o.is_active = 1
-        AND (p.parent_id IS NULL OR p.parent_id = 0)
     """
     params = []
 
@@ -297,6 +299,11 @@ def search_results():
     properties = []
     for r in rows:
         p = parse_property(r)
+        # Add display title: "Parent — Child" for sub-units
+        if p.get("parent_id") and p.get("parent_title"):
+            p["display_title"] = f"{p['parent_title']} — {p['title']}"
+        else:
+            p["display_title"] = p["title"]
         if min_rent or max_rent:
             rent_num = int("".join(filter(str.isdigit, p["rent"] or "0")))
             if min_rent and rent_num < int(min_rent):
@@ -886,7 +893,7 @@ def admin_edit_owner(owner_id):
         conn.commit()
         conn.close()
         flash(f"Owner '{name}' updated successfully!", "success")
-        return redirect(url_for("admin_view_owner", owner_id=owner_id))
+        return redirect(url_for("admin_dashboard"))
 
     conn.close()
     return render_template("admin_edit_owner.html",

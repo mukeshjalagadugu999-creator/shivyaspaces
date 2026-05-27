@@ -404,9 +404,6 @@
           <span class="nav-logo-sub">Trusted Rental Lifecycle Platform</span>
         </div>
       </a>
-      <div class="nav-right">
-        <a href="/search" class="nav-btn">← Refine Search</a>
-      </div>
     </nav>
 
     <!-- STICKY RESULTS BAR -->
@@ -475,14 +472,14 @@
         {% for item in properties %}
         <a href="/{{ item.slug }}/property/{{ item.id }}" class="prop-card">
           <div class="prop-img-wrap">
-            <img src="{{ item.image }}" alt="{{ item.title }}" />
+            <img src="{{ item.image }}" alt="{{ item.display_title }}" />
             <span class="prop-badge badge-{{ item.status | replace(' ','') }}"
               >{{ item.status }}</span
             >
           </div>
           <div class="prop-info">
             <div class="prop-price">{{ item.rent }}<span> / month</span></div>
-            <div class="prop-title">{{ item.title }}</div>
+            <div class="prop-title">{{ item.display_title }}</div>
             <div class="prop-loc">{{ item.location }}</div>
             <div class="prop-meta">
               {% if item.beds and item.beds > 0 %}<span class="prop-meta-chip"
@@ -509,14 +506,14 @@
           {% for item in items %}
           <a href="/{{ item.slug }}/property/{{ item.id }}" class="prop-card">
             <div class="prop-img-wrap">
-              <img src="{{ item.image }}" alt="{{ item.title }}" />
+              <img src="{{ item.image }}" alt="{{ item.display_title }}" />
               <span class="prop-badge badge-{{ item.status | replace(' ','') }}"
                 >{{ item.status }}</span
               >
             </div>
             <div class="prop-info">
               <div class="prop-price">{{ item.rent }}<span> / month</span></div>
-              <div class="prop-title">{{ item.title }}</div>
+              <div class="prop-title">{{ item.display_title }}</div>
               <div class="prop-loc">{{ item.location }}</div>
               <div class="prop-meta">
                 {% if item.beds and item.beds > 0 %}<span class="prop-meta-chip"
