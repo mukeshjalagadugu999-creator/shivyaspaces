@@ -440,7 +440,7 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/logout")
+@app.route("/logout", methods=["GET","POST"])
 def logout():
     session.clear()
     resp = make_response(redirect("/"))
@@ -678,7 +678,7 @@ def admin_login():
     return render_template("admin_login.html")
 
 
-@app.route("/admin/logout")
+@app.route("/admin/logout", methods=["GET","POST"])
 def admin_logout():
     session.clear()
     resp = make_response(redirect("/"))
