@@ -2,156 +2,46 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/static/Shivya_Logo_Round.png" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page Not Found — ShivyaSpaces</title>
+    <title>404 — ShivyaSpaces</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <script src="/static/theme.js"></script>
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
-      :root {
-        --bg: #f8fafc;
-        --bg2: #ffffff;
-        --border: #e5e7eb;
-        --text: #111827;
-        --text2: #4b5563;
-        --text3: #9ca3af;
-        --accent: #2563eb;
-        --accent-hover: #1d4ed8;
-      }
-      [data-theme="dark"] {
-        --bg: #0d1117;
-        --bg2: #161b22;
-        --border: #30363d;
-        --text: #e6edf3;
-        --text2: #8b949e;
-        --text3: #484f58;
-        --accent: #58a6ff;
-        --accent-hover: #79b8ff;
+      html,
+      body {
+        min-height: 100vh;
       }
       body {
         font-family: "Inter", sans-serif;
-        min-height: 100vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
+            center/cover fixed;
+        color: white;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--bg);
-        color: var(--text);
-        transition:
-          background 0.25s,
-          color 0.25s;
-        padding: 24px;
-        text-align: center;
-      }
-      .container {
-        max-width: 480px;
-        width: 100%;
-      }
-      .code {
-        font-size: 96px;
-        font-weight: 800;
-        color: var(--border);
-        line-height: 1;
-        margin-bottom: 24px;
-        letter-spacing: -4px;
-        font-family: "Playfair Display", serif;
-      }
-      h1 {
-        font-family: "Playfair Display", serif;
-        font-size: 28px;
-        font-weight: 700;
-        color: var(--text);
-        margin-bottom: 12px;
-      }
-      p {
-        font-size: 15px;
-        color: var(--text3);
-        line-height: 1.7;
-        margin-bottom: 36px;
-      }
-      .btn-home {
-        display: inline-block;
-        background: var(--accent);
-        color: white;
-        text-decoration: none;
-        padding: 13px 32px;
-        border-radius: 12px;
-        font-size: 14px;
-        font-weight: 600;
-        transition: background 0.18s;
-        margin-bottom: 12px;
-      }
-      .btn-home:hover {
-        background: var(--accent-hover);
-      }
-      .btn-search {
-        display: inline-block;
-        background: none;
-        color: var(--text3);
-        text-decoration: none;
-        padding: 13px 24px;
-        border-radius: 12px;
-        font-size: 14px;
-        font-weight: 500;
-        border: 1px solid var(--border);
-        margin-left: 8px;
-        transition: all 0.18s;
-      }
-      .btn-search:hover {
-        color: var(--text);
-        border-color: var(--text3);
-      }
-      /* === UNIVERSAL BACKGROUND === */
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-      }
-      body {
-        min-height: 100vh;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-        color: white;
-      }
-
-      /* ===== DARK PAGE OVERRIDES ===== */
-      body {
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-        color: white !important;
+        flex-direction: column;
       }
       .navbar {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        height: 68px !important;
-        display: flex !important;
-        align-items: center !important;
-        padding: 0 40px !important;
-        background: rgba(0, 0, 0, 0.55) !important;
-        backdrop-filter: blur(16px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-        z-index: 999 !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 1000;
       }
       .nav-logo {
         display: flex;
@@ -160,166 +50,123 @@
         text-decoration: none;
       }
       .nav-logo img {
-        height: 38px;
-        width: 38px;
-        object-fit: contain;
+        height: 36px;
+        width: 36px;
         border-radius: 50%;
         border: 1.5px solid #d4a017;
+        object-fit: contain;
+      }
+      .nav-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
       }
       .nav-logo-name {
-        font-size: 15px;
-        font-weight: 700;
-        color: white !important;
-        letter-spacing: 0.5px;
+        font-size: 14px;
+        font-weight: 800;
+        color: white;
+        letter-spacing: 0.8px;
         line-height: 1;
       }
-      .nav-accent {
-        color: #d4a017 !important;
+      .nav-logo-name span {
+        color: #d4a017;
       }
-      .nav-logo-tagline {
+      .nav-logo-sub {
         font-size: 9px;
-        color: rgba(255, 255, 255, 0.45);
+        color: rgba(255, 255, 255, 0.42);
       }
-      .nav-right {
+      .main {
+        flex: 1;
         display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+        padding: 80px 24px 40px;
+        text-align: center;
       }
-      .nav-btn {
-        font-size: 13px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.75) !important;
-        text-decoration: none;
-        padding: 7px 14px;
-        border-radius: 7px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.08);
-        transition: all 0.18s;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        white-space: nowrap;
+      .card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 48px 40px;
+        max-width: 480px;
+        width: 100%;
+        backdrop-filter: blur(12px);
       }
-      /* Glass cards */
-      .card,
-      .form-card,
-      .tile,
-      .filter-card,
-      .glass-card {
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        backdrop-filter: blur(10px) !important;
-        color: white !important;
+      .num {
+        font-family: "Playfair Display", serif;
+        font-size: 96px;
+        font-weight: 800;
+        color: #d4a017;
+        line-height: 1;
+        margin-bottom: 12px;
       }
-      /* Inputs inside dark pages */
-      input,
-      select,
-      textarea {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-      }
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(255, 255, 255, 0.4) !important;
-      }
-      select option {
-        background: #1a1008;
+      h1 {
+        font-size: 24px;
+        font-weight: 700;
         color: white;
-      }
-      label {
-        color: rgba(255, 255, 255, 0.7) !important;
-      }
-      /* Ensure content starts below navbar */
-      .page-body,
-      .page,
-      .content,
-      .results-content,
-      .results-wrapper {
-        padding-top: 88px !important;
-      }
-      .results-bar {
-        top: 68px !important;
-        background: rgba(0, 0, 0, 0.5) !important;
-        backdrop-filter: blur(12px) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-      }
-      .results-bar-inner h1,
-      .results-meta h1 {
-        color: white !important;
-      }
-      .results-meta p {
-        color: rgba(255, 255, 255, 0.5) !important;
-      }
-      /* Group select */
-      .group-select {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-      }
-      .control-label {
-        color: rgba(255, 255, 255, 0.5) !important;
-      }
-      .refine-btn {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-      }
-      /* Property cards */
-      .grid .tile {
-        background: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        backdrop-filter: blur(8px) !important;
-      }
-      .tile:hover {
-        background: rgba(255, 255, 255, 0.12) !important;
-        border-color: rgba(212, 160, 23, 0.5) !important;
-      }
-      .tile-info {
-        background: rgba(0, 0, 0, 0.3) !important;
-      }
-      .card-price {
-        color: white !important;
-      }
-      .tile-info h2 {
-        color: white !important;
-      }
-      .location {
-        color: rgba(255, 255, 255, 0.6) !important;
-      }
-      .meta div {
-        background: rgba(255, 255, 255, 0.12) !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        border: none !important;
-      }
-      /* Section titles */
-      h1,
-      h2,
-      h3 {
-        color: white !important;
+        margin-bottom: 10px;
       }
       p {
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.55);
+        line-height: 1.7;
+        margin-bottom: 28px;
       }
-      /* Footer */
+      .btn {
+        display: inline-block;
+        background: #d4a017;
+        color: #1a0a00;
+        text-decoration: none;
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all 0.18s;
+        margin: 4px;
+      }
+      .btn:hover {
+        background: #c49010;
+      }
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
       .page-footer {
-        padding: 18px 40px;
+        padding: 16px 40px;
         text-align: center;
         background: rgba(0, 0, 0, 0.45);
         border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
       .page-footer p {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.35);
+        color: rgba(255, 255, 255, 0.3);
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="code">404</div>
-      <h1>Page Not Found</h1>
-      <p>The page you're looking for doesn't exist or may have been moved.</p>
-      <a href="/" class="btn-home">Go to Home</a>
-      <a href="/search" class="btn-search">Search Properties</a>
+    <nav class="navbar">
+      <a href="/" class="nav-logo">
+        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+        <div class="nav-logo-text">
+          <span class="nav-logo-name">SHIVYA<span>SPACES</span></span>
+          <span class="nav-logo-sub">Trusted Rental Lifecycle Platform</span>
+        </div>
+      </a>
+    </nav>
+    <div class="main">
+      <div class="card">
+        <div class="num">404</div>
+        <h1>Page Not Found</h1>
+        <p>The page you're looking for doesn't exist or may have been moved.</p>
+        <div>
+          <a href="/" class="btn">Go Home</a>
+          <a href="/results" class="btn btn-ghost">Browse Properties</a>
+        </div>
+      </div>
     </div>
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>

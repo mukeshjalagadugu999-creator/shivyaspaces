@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/static/Shivya_Logo_Round.png" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard — ShivyaSpaces</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -16,242 +16,215 @@
         padding: 0;
         box-sizing: border-box;
       }
-      :root {
-        --bg: #f8fafc;
-        --bg2: #ffffff;
-        --bg3: #f1f5f9;
-        --border: #e5e7eb;
-        --text: #111827;
-        --text2: #4b5563;
-        --text3: #9ca3af;
-        --accent: #7c3aed;
-        --accent-hover: #6d28d9;
-        --green-bg: #dcfce7;
-        --green-fg: #166534;
-        --red-bg: #fee2e2;
-        --red-fg: #991b1b;
-        --yellow-bg: #fef9c3;
-        --yellow-fg: #854d0e;
-        --blue-bg: #eff6ff;
-        --blue-fg: #2563eb;
-      }
-      [data-theme="dark"] {
-        --bg: #0d1117;
-        --bg2: #161b22;
-        --bg3: #21262d;
-        --border: #30363d;
-        --text: #e6edf3;
-        --text2: #8b949e;
-        --text3: #484f58;
-        --accent: #a78bfa;
-        --accent-hover: #8b5cf6;
-        --green-bg: #0d2b1a;
-        --green-fg: #3fb950;
-        --red-bg: #2d1215;
-        --red-fg: #f85149;
-        --yellow-bg: #2d2000;
-        --yellow-fg: #e3b341;
-        --blue-bg: #0d2137;
-        --blue-fg: #58a6ff;
+      html,
+      body {
+        min-height: 100vh;
       }
       body {
         font-family: "Inter", sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        min-height: 100vh;
-        transition:
-          background 0.25s,
-          color 0.25s;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
+            center/cover fixed;
+        color: white;
+        display: flex;
+        flex-direction: column;
       }
-
       .topbar {
-        background: var(--bg2);
-        border-bottom: 1px solid var(--border);
-        padding: 0 40px;
-        height: 68px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        position: sticky;
-        top: 0;
-        z-index: 99;
-        transition:
-          background 0.25s,
-          border-color 0.25s;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 1000;
       }
       .topbar-logo {
-        font-family: "Playfair Display", serif;
-        font-size: 18px;
-        font-weight: 700;
-        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 10px;
         text-decoration: none;
       }
-      .topbar-logo span {
-        color: var(--accent);
+      .topbar-logo img {
+        height: 36px;
+        width: 36px;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+      .topbar-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .topbar-logo-name {
+        font-size: 14px;
+        font-weight: 800;
+        color: white;
+        letter-spacing: 0.8px;
+        line-height: 1;
+      }
+      .topbar-logo-name span {
+        color: #d4a017;
+      }
+      .topbar-logo-sub {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.42);
+        letter-spacing: 0.3px;
+      }
+      .topbar-badge {
+        font-size: 9px;
+        background: #8b1e3f;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        margin-left: 6px;
+        vertical-align: middle;
       }
       .topbar-right {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
       }
-      .admin-name {
-        font-size: 13px;
-        color: var(--text3);
-        padding: 0 6px;
-      }
-      .nav-btn {
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--text2);
+      .topbar-btn {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
         text-decoration: none;
-        padding: 8px 14px;
-        border-radius: 8px;
-        border: none;
-        background: none;
+        padding: 7px 14px;
+        border-radius: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
         cursor: pointer;
         font-family: "Inter", sans-serif;
-        transition: all 0.18s;
         white-space: nowrap;
       }
-      .nav-btn:hover {
-        background: var(--bg3);
-        color: var(--text);
-      }
-      .nav-btn.theme-toggle {
-        border: 1px solid var(--border);
-        background: var(--bg3);
-      }
-      .nav-btn.add-owner {
-        background: var(--accent);
+      .topbar-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
         color: white;
       }
-      .nav-btn.add-owner:hover {
-        background: var(--accent-hover);
+      .topbar-btn-gold {
+        background: rgba(212, 160, 23, 0.2) !important;
+        border-color: #d4a017 !important;
+        color: #d4a017 !important;
       }
-      .nav-btn.signout {
-        background: var(--red-bg);
-        color: var(--red-fg);
+      .topbar-btn-gold:hover {
+        background: rgba(212, 160, 23, 0.35) !important;
       }
-
-      .content {
-        max-width: 1100px;
-        margin: 40px auto;
-        padding-top: 28px;
-        padding-bottom: 60px;
-        padding-left: 24px;
-        padding-right: 24px;
-        max-width: 0 24px 60px;
+      .topbar-btn-danger {
+        background: rgba(239, 68, 68, 0.15) !important;
+        border-color: rgba(239, 68, 68, 0.35) !important;
+        color: #f87171 !important;
       }
-
-      /* Page header with email settings link */
+      .main-content {
+        flex: 1;
+        padding: 88px 40px 40px;
+        max-width: 1300px;
+        margin: 0 auto;
+        width: 100%;
+      }
       .page-header {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
-        margin-bottom: 32px;
+        margin-bottom: 28px;
         flex-wrap: wrap;
-        gap: 16px;
+        gap: 12px;
       }
       .page-header h1 {
-        font-size: 28px;
+        font-size: 26px;
         font-weight: 800;
-        margin-bottom: 4px;
+        color: white;
       }
       .page-header p {
         font-size: 14px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 3px;
       }
-      .email-settings-btn {
+      .btn-create {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        background: var(--bg2);
-        border: 1px solid var(--border);
-        color: var(--text2);
+        gap: 6px;
+        background: #d4a017;
+        color: #1a0a00;
         text-decoration: none;
-        padding: 10px 18px;
+        padding: 10px 20px;
         border-radius: 10px;
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 700;
         transition: all 0.18s;
-        white-space: nowrap;
       }
-      .email-settings-btn:hover {
-        background: var(--bg3);
-        color: var(--text);
-        border-color: var(--accent);
+      .btn-create:hover {
+        background: #c49010;
       }
-      .email-settings-btn svg {
-        width: 15px;
-        height: 15px;
-        stroke: currentColor;
-        fill: none;
-        stroke-width: 2;
-        flex-shrink: 0;
-      }
-
       .flash {
         padding: 12px 16px;
         border-radius: 10px;
         font-size: 13px;
-        margin-bottom: 20px;
         font-weight: 500;
+        margin-bottom: 16px;
       }
       .flash.success {
-        background: var(--green-bg);
-        color: var(--green-fg);
+        background: rgba(34, 197, 94, 0.15);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #86efac;
       }
       .flash.danger {
-        background: var(--red-bg);
-        color: var(--red-fg);
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #fca5a5;
       }
       .flash.info {
-        background: var(--blue-bg);
-        color: var(--blue-fg);
+        background: rgba(59, 130, 246, 0.15);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #93c5fd;
       }
-
       .stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 16px;
-        margin-bottom: 36px;
+        margin-bottom: 32px;
       }
       .stat-card {
-        background: var(--bg2);
-        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 16px;
         padding: 20px;
-        transition:
-          background 0.25s,
-          border-color 0.25s;
+        backdrop-filter: blur(10px);
       }
       .stat-label {
-        font-size: 12px;
-        color: var(--text3);
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.8px;
         margin-bottom: 8px;
       }
       .stat-value {
         font-size: 30px;
         font-weight: 800;
-        color: var(--text);
+        color: white;
       }
-
       .table-card {
-        background: var(--bg2);
-        border: 1px solid var(--border);
-        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
         overflow: hidden;
-        transition:
-          background 0.25s,
-          border-color 0.25s;
+        backdrop-filter: blur(8px);
       }
       .table-header {
-        padding: 16px 24px;
-        border-bottom: 1px solid var(--border);
+        padding: 18px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -259,23 +232,23 @@
         flex-wrap: wrap;
       }
       .table-header h2 {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 700;
-        white-space: nowrap;
+        color: white;
       }
       .search-wrap {
         position: relative;
         flex: 1;
-        max-width: 320px;
+        max-width: 280px;
       }
       .search-wrap svg {
         position: absolute;
-        left: 12px;
+        left: 10px;
         top: 50%;
         transform: translateY(-50%);
-        width: 15px;
-        height: 15px;
-        stroke: var(--text3);
+        width: 14px;
+        height: 14px;
+        stroke: rgba(255, 255, 255, 0.4);
         fill: none;
         stroke-width: 2;
         stroke-linecap: round;
@@ -283,79 +256,69 @@
       }
       .search-input {
         width: 100%;
-        padding: 9px 14px 9px 36px;
-        border: 1.5px solid var(--border);
-        border-radius: 10px;
+        padding: 8px 12px 8px 32px;
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 9px;
         font-size: 13px;
         font-family: "Inter", sans-serif;
-        color: var(--text);
-        background: var(--bg3);
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
         outline: none;
-        transition:
-          border-color 0.18s,
-          background 0.25s;
-      }
-      .search-input:focus {
-        border-color: var(--accent);
-        background: var(--bg2);
+        transition: border-color 0.18s;
       }
       .search-input::placeholder {
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .search-input:focus {
+        border-color: #d4a017;
       }
       .table-count {
         font-size: 12px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.4);
         white-space: nowrap;
       }
-
       table {
         width: 100%;
         border-collapse: collapse;
       }
       thead th {
         text-align: left;
-        padding: 12px 24px;
+        padding: 12px 16px;
         font-size: 11px;
-        font-weight: 600;
-        color: var(--text3);
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.4);
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        background: var(--bg3);
-        border-bottom: 1px solid var(--border);
+        letter-spacing: 0.8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
       tbody tr {
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         transition: background 0.15s;
       }
       tbody tr:last-child {
         border-bottom: none;
       }
       tbody tr:hover {
-        background: var(--bg3);
+        background: rgba(255, 255, 255, 0.04);
       }
       tbody td {
-        padding: 14px 24px;
+        padding: 14px 16px;
         font-size: 14px;
-        color: var(--text2);
+        color: rgba(255, 255, 255, 0.75);
         vertical-align: middle;
       }
-      tbody tr.hidden-row {
-        display: none;
-      }
-
       .owner-name-cell {
         font-weight: 600;
-        color: var(--text);
+        color: white;
       }
       .owner-email {
         font-size: 12px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.4);
         margin-top: 2px;
       }
       .owner-slug-text {
-        font-size: 11px;
-        color: var(--accent);
-        margin-top: 2px;
+        font-size: 12px;
+        color: #d4a017;
         font-weight: 500;
       }
       .active-badge {
@@ -364,97 +327,97 @@
         border-radius: 999px;
         font-size: 11px;
         font-weight: 600;
-        white-space: nowrap;
       }
       .active-badge.on {
-        background: var(--green-bg);
-        color: var(--green-fg);
+        background: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.3);
       }
       .active-badge.off {
-        background: var(--red-bg);
-        color: var(--red-fg);
+        background: rgba(239, 68, 68, 0.15);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
       }
       .count-badge {
-        display: inline-block;
-        background: var(--blue-bg);
-        color: var(--blue-fg);
-        font-size: 12px;
-        font-weight: 600;
-        padding: 3px 10px;
-        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        color: white;
       }
       .since {
         font-size: 12px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.4);
       }
-
-      /* ACTION BUTTONS — always in one row, never wrap */
       .action-links {
         display: flex;
         gap: 6px;
-        flex-wrap: nowrap;
-        align-items: center;
+        flex-wrap: wrap;
       }
       .btn-view {
         font-size: 12px;
         font-weight: 600;
         padding: 6px 12px;
-        border-radius: 8px;
+        border-radius: 7px;
         text-decoration: none;
-        background: var(--blue-bg);
-        color: var(--blue-fg);
-        white-space: nowrap;
-        flex-shrink: 0;
+        background: rgba(212, 160, 23, 0.15);
+        color: #d4a017;
+        border: 1px solid rgba(212, 160, 23, 0.35);
+        transition: all 0.18s;
+      }
+      .btn-view:hover {
+        background: rgba(212, 160, 23, 0.28);
       }
       .btn-toggle {
         font-size: 12px;
         font-weight: 600;
         padding: 6px 12px;
-        border-radius: 8px;
+        border-radius: 7px;
         border: none;
         cursor: pointer;
         font-family: "Inter", sans-serif;
-        white-space: nowrap;
-        flex-shrink: 0;
+        transition: all 0.18s;
       }
       .btn-toggle.deactivate {
-        background: var(--yellow-bg);
-        color: var(--yellow-fg);
+        background: rgba(234, 179, 8, 0.15);
+        color: #fde047;
+        border: 1px solid rgba(234, 179, 8, 0.35);
       }
       .btn-toggle.activate {
-        background: var(--green-bg);
-        color: var(--green-fg);
+        background: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.35);
       }
       .btn-delete-trigger {
         font-size: 12px;
         font-weight: 600;
         padding: 6px 12px;
-        border-radius: 8px;
-        border: none;
+        border-radius: 7px;
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        background: rgba(239, 68, 68, 0.12);
+        color: #f87171;
         cursor: pointer;
         font-family: "Inter", sans-serif;
-        background: var(--red-bg);
-        color: var(--red-fg);
-        white-space: nowrap;
-        flex-shrink: 0;
+        transition: all 0.18s;
       }
-
+      .btn-delete-trigger:hover {
+        background: rgba(239, 68, 68, 0.25);
+      }
+      .hidden-row {
+        display: none;
+      }
       .no-search-results {
         display: none;
         text-align: center;
         padding: 40px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.4);
         font-size: 14px;
       }
-
-      /* DELETE MODAL */
       .modal-overlay {
         display: none;
         position: fixed;
         inset: 0;
-        z-index: 999;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(4px);
+        z-index: 9999;
         align-items: center;
         justify-content: center;
         padding: 24px;
@@ -463,312 +426,125 @@
         display: flex;
       }
       .modal {
-        background: var(--bg2);
-        border: 1px solid var(--border);
+        background: rgba(26, 10, 0, 0.95);
+        border: 1px solid rgba(212, 160, 23, 0.3);
         border-radius: 20px;
         padding: 32px;
         max-width: 420px;
         width: 100%;
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
-        transition:
-          background 0.25s,
-          border-color 0.25s;
+        text-align: center;
       }
       .modal-icon {
-        width: 48px;
-        height: 48px;
-        background: var(--red-bg);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 18px;
-        font-size: 20px;
+        font-size: 40px;
+        margin-bottom: 16px;
       }
       .modal h2 {
-        font-size: 18px;
-        font-weight: 800;
-        color: var(--text);
+        font-size: 20px;
+        font-weight: 700;
+        color: white;
         margin-bottom: 8px;
       }
       .modal p {
         font-size: 14px;
-        color: var(--text2);
-        line-height: 1.6;
-        margin-bottom: 4px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 8px;
       }
-      .modal .owner-name-modal {
-        font-size: 14px;
+      .owner-name-modal {
         font-weight: 700;
-        color: var(--text);
-        margin-bottom: 4px;
+        color: #d4a017 !important;
+        font-size: 15px !important;
       }
-      .modal .warning-text {
-        font-size: 13px;
-        color: var(--red-fg);
-        font-weight: 500;
-        margin-bottom: 24px;
+      .warning-text {
+        font-size: 12px !important;
+        color: rgba(239, 68, 68, 0.8) !important;
       }
       .modal-actions {
         display: flex;
         gap: 10px;
+        margin-top: 24px;
       }
       .modal-cancel {
         flex: 1;
-        background: var(--bg3);
-        color: var(--text2);
-        border: 1px solid var(--border);
-        padding: 12px;
+        padding: 11px;
         border-radius: 10px;
-        font-size: 14px;
-        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
         cursor: pointer;
         font-family: "Inter", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
       }
       .modal-confirm {
         flex: 1;
-        background: var(--red-fg);
-        color: white;
-        border: none;
-        padding: 12px;
+        padding: 11px;
         border-radius: 10px;
-        font-size: 14px;
-        font-weight: 600;
+        border: none;
+        background: #991b1b;
+        color: white;
         cursor: pointer;
         font-family: "Inter", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
       }
-
+      .page-footer {
+        padding: 16px 40px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.45);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .page-footer p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.3);
+      }
       @media (max-width: 768px) {
         .topbar {
-          padding: 0 16px;
+          padding: 0 20px;
+        }
+        .main-content {
+          padding: 80px 16px 32px;
         }
         .stats {
           grid-template-columns: repeat(2, 1fr);
         }
-        .content {
-          padding: 0 16px;
-        }
-        .admin-name {
-          display: none;
-        }
-      }
-      /* === UNIVERSAL BACKGROUND === */
-      /* White page navbar override */
-      .navbar {
-        background: rgba(255, 255, 255, 0.95) !important;
-        border-bottom: 1px solid #e5e7eb !important;
-        backdrop-filter: blur(12px);
-      }
-      .nav-logo-name {
-        color: #1f2937 !important;
-      }
-      .nav-logo-tagline {
-        color: #9ca3af !important;
-      }
-
-      /* ===== SHIVYASPACES NAVBAR OVERRIDE ===== */
-      .navbar,
-      .topbar {
-        background: var(--bg2);
-        border-bottom: 1px solid var(--border);
-        padding: 0 40px;
-        height: 68px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        position: sticky;
-        top: 0;
-        z-index: 99;
-        transition:
-          background 0.25s,
-          border-color 0.25s;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      }
-      .topbar-logo,
-      .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-        font-family: "Inter", sans-serif;
-      }
-      .topbar-logo img,
-      .nav-logo img {
-        height: 36px;
-        width: 36px;
-        object-fit: contain;
-        border-radius: 50%;
-        border: 1.5px solid #d4a017;
-        flex-shrink: 0;
-      }
-      .topbar-right,
-      .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .topbar-btn,
-      .nav-btn {
-        font-size: 13px;
-        font-weight: 500;
-        color: #4b5563;
-        text-decoration: none;
-        padding: 7px 14px;
-        border-radius: 7px;
-        border: 1px solid #e5e7eb;
-        background: #f9fafb;
-        transition: all 0.18s;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        white-space: nowrap;
-      }
-      .topbar-btn:hover,
-      .nav-btn:hover {
-        background: #f3f4f6;
-      }
-      .btn-primary,
-      .nav-btn-primary {
-        background: #8b1e3f !important;
-        color: white !important;
-        border-color: #8b1e3f !important;
-        font-weight: 600 !important;
-      }
-      .btn-danger,
-      .nav-btn-danger {
-        background: #fee2e2 !important;
-        color: #991b1b !important;
-        border-color: #fca5a5 !important;
-      }
-      .btn-gold {
-        background: #d4a017 !important;
-        color: #1a0a00 !important;
-        border-color: #d4a017 !important;
-        font-weight: 700 !important;
-      }
-      /* Ensure content starts below navbar */
-      .content,
-      .page-content {
-        padding-top: 88px !important;
-      }
-      /* Footer */
-      .page-footer {
-        padding: 18px 40px;
-        text-align: center;
-        background: var(--bg2);
-        border-top: 1px solid var(--border);
-      }
-      .page-footer p {
-        font-size: 12px;
-        color: var(--text3);
-      }
-      /* Remove dark bg injection */
-      body {
-        background: var(--bg) !important;
-        color: var(--text) !important;
       }
     </style>
   </head>
   <body>
     <div class="topbar">
-      <a href="/admin/dashboard" class="topbar-logo">
-        <img
-          src="/static/Shivya_Logo.jpeg"
-          style="
-            height: 34px;
-            width: 34px;
-            border-radius: 50%;
-            border: 1.5px solid #d4a017;
-            object-fit: contain;
-            margin-right: 8px;
-            vertical-align: middle;
-          "
-        />
-        SHIVYA<span style="color: #d4a017">SPACES</span>
-        <span
-          style="
-            font-size: 10px;
-            background: #8b1e3f;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 999px;
-            margin-left: 8px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-          "
-          >ADMIN</span
-        >
+      <a href="/" class="topbar-logo">
+        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+        <div class="topbar-logo-text">
+          <span class="topbar-logo-name"
+            >SHIVYA<span>SPACES</span>
+            <span class="topbar-badge">ADMIN</span></span
+          >
+          <span class="topbar-logo-sub">Trusted Rental Lifecycle Platform</span>
+        </div>
       </a>
       <div class="topbar-right">
-        <span style="font-size: 13px; color: var(--text3)"
+        <span style="font-size: 12px; color: rgba(255, 255, 255, 0.45)"
           >{{ admin_name }}</span
         >
-        <a href="/admin/settings" class="nav-btn">Settings</a>
+        <a href="/admin/create-owner" class="topbar-btn topbar-btn-gold"
+          >+ Add Owner</a
+        >
+        <a href="/admin/settings" class="topbar-btn">Settings</a>
         <form method="POST" action="/admin/logout" style="display: inline">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-          <button type="submit" class="nav-btn btn-danger">Sign Out</button>
-        </form>
-      </div>
-    </div>
-    <div class="topbar">
-      <a href="/admin/dashboard" class="topbar-logo">
-        <img
-          src="/static/Shivya_Logo.jpeg"
-          style="
-            height: 34px;
-            width: 34px;
-            border-radius: 50%;
-            border: 1.5px solid #d4a017;
-            object-fit: contain;
-            margin-right: 8px;
-            vertical-align: middle;
-          "
-        />
-        SHIVYA<span style="color: #d4a017">SPACES</span>
-        <span
-          style="
-            font-size: 10px;
-            background: #8b1e3f;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 999px;
-            margin-left: 8px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-          "
-          >ADMIN</span
-        >
-      </a>
-      <div class="topbar-right">
-        <span style="font-size: 13px; color: var(--text3)"
-          >{{ admin_name }}</span
-        >
-        <a href="/admin/settings" class="nav-btn">Settings</a>
-        <form method="POST" action="/admin/logout" style="display: inline">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-          <button type="submit" class="nav-btn btn-danger">Sign Out</button>
+          <button type="submit" class="topbar-btn topbar-btn-danger">
+            Sign Out
+          </button>
         </form>
       </div>
     </div>
 
-    <div class="content">
+    <div class="main-content">
       <div class="page-header">
         <div>
           <h1>Admin Dashboard</h1>
-          <p>Manage all owners and monitor platform activity.</p>
+          <p>Manage owners and platform settings</p>
         </div>
-        <a href="/admin/settings" class="email-settings-btn">
-          <svg
-            viewBox="0 0 24 24"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path
-              d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-            />
-            <polyline points="22,6 12,13 2,6" />
-          </svg>
-          Email Settings
-        </a>
       </div>
 
       {% with messages = get_flashed_messages(with_categories=true) %} {% for
@@ -807,7 +583,7 @@
               class="search-input"
               id="ownerSearch"
               type="text"
-              placeholder="Search by name, email or URL..."
+              placeholder="Search owners..."
               oninput="filterOwners(this.value)"
             />
           </div>
@@ -815,7 +591,6 @@
             >{{ total_owners }} owners</span
           >
         </div>
-
         <table>
           <thead>
             <tr>
@@ -848,7 +623,7 @@
                   target="_blank"
                   style="
                     font-size: 11px;
-                    color: var(--text3);
+                    color: rgba(255, 255, 255, 0.35);
                     text-decoration: none;
                   "
                   >View portal</a
@@ -884,7 +659,7 @@
                   <form
                     method="POST"
                     action="/admin/toggle-owner/{{ owner.id }}"
-                    style="display: inline; flex-shrink: 0"
+                    style="display: inline"
                   >
                     <input
                       type="hidden"
@@ -900,7 +675,7 @@
                   </form>
                   <button
                     class="btn-delete-trigger"
-                    onclick="openDeleteModal('{{ owner.id }}', '{{ owner.name }}')"
+                    onclick="openDeleteModal('{{ owner.id }}','{{ owner.name }}')"
                   >
                     Delete
                   </button>
@@ -916,7 +691,6 @@
       </div>
     </div>
 
-    <!-- DELETE MODAL -->
     <div class="modal-overlay" id="deleteModal">
       <div class="modal">
         <div class="modal-icon">🗑️</div>
@@ -924,7 +698,7 @@
         <p>You are about to permanently delete:</p>
         <p class="owner-name-modal" id="modalOwnerName">—</p>
         <p class="warning-text">
-          This will delete all their properties and data. This cannot be undone.
+          This will delete all their properties and data. Cannot be undone.
         </p>
         <div class="modal-actions">
           <button class="modal-cancel" onclick="closeDeleteModal()">
@@ -940,11 +714,18 @@
       </div>
     </div>
 
+    <footer class="page-footer">
+      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+    </footer>
+
     <script>
-      function openDeleteModal(ownerId, ownerName) {
-        document.getElementById("modalOwnerName").textContent = ownerName;
+      document
+        .querySelectorAll(".yr")
+        .forEach((e) => (e.textContent = new Date().getFullYear()));
+      function openDeleteModal(id, name) {
+        document.getElementById("modalOwnerName").textContent = name;
         document.getElementById("deleteOwnerForm").action =
-          "/admin/delete-owner/" + ownerId;
+          "/admin/delete-owner/" + id;
         document.getElementById("deleteModal").classList.add("open");
       }
       function closeDeleteModal() {
@@ -958,7 +739,6 @@
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") closeDeleteModal();
       });
-
       function filterOwners(query) {
         query = query.toLowerCase().trim();
         var rows = document.querySelectorAll(".owner-row");
@@ -978,14 +758,6 @@
         document.getElementById("noResults").style.display =
           visible === 0 ? "block" : "none";
       }
-    </script>
-    <footer class="page-footer">
-      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
-    </footer>
-    <script>
-      document
-        .querySelectorAll(".yr")
-        .forEach((e) => (e.textContent = new Date().getFullYear()));
     </script>
   </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/static/Shivya_Logo_Round.png" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Settings — Admin</title>
     <link
@@ -265,124 +265,283 @@
         background: var(--accent-hover);
       }
       /* === UNIVERSAL BACKGROUND === */
-      /* White page navbar override */
-      .navbar {
-        background: rgba(255, 255, 255, 0.95) !important;
-        border-bottom: 1px solid #e5e7eb !important;
-        backdrop-filter: blur(12px);
-      }
-      .nav-logo-name {
-        color: #1f2937 !important;
-      }
-      .nav-logo-tagline {
-        color: #9ca3af !important;
-      }
 
-      /* ===== SHIVYASPACES NAVBAR OVERRIDE ===== */
-      .navbar,
+      /* ===== DARK THEME OVERRIDE ===== */
+      html,
+      body {
+        min-height: 100vh;
+      }
+      body {
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
+            center/cover fixed !important;
+        color: white !important;
+        display: flex;
+        flex-direction: column;
+      }
+      /* TOPBAR */
       .topbar {
-        background: var(--bg2);
-        border-bottom: 1px solid var(--border);
-        padding: 0 40px;
-        height: 68px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        position: sticky;
-        top: 0;
-        z-index: 99;
-        transition:
-          background 0.25s,
-          border-color 0.25s;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 64px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0 40px !important;
+        background: rgba(0, 0, 0, 0.6) !important;
+        backdrop-filter: blur(20px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        z-index: 1000 !important;
       }
-      .topbar-logo,
-      .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-        font-family: "Inter", sans-serif;
+      .topbar-logo {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        text-decoration: none !important;
       }
-      .topbar-logo img,
-      .nav-logo img {
-        height: 36px;
-        width: 36px;
-        object-fit: contain;
-        border-radius: 50%;
-        border: 1.5px solid #d4a017;
-        flex-shrink: 0;
+      .topbar-logo img {
+        height: 36px !important;
+        width: 36px !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #d4a017 !important;
+        object-fit: contain !important;
+        flex-shrink: 0 !important;
       }
-      .topbar-right,
-      .nav-right {
+      .topbar-logo-text,
+      .topbar-logo > div {
         display: flex;
-        align-items: center;
-        gap: 8px;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .topbar-logo-name,
+      .topbar-logo > span,
+      .topbar-logo > div > span:first-child {
+        font-size: 14px !important;
+        font-weight: 800 !important;
+        color: white !important;
+        letter-spacing: 0.8px !important;
+        line-height: 1 !important;
+      }
+      .topbar-logo span span,
+      .topbar-logo-name span {
+        color: #d4a017 !important;
+      }
+      .topbar-logo-sub,
+      .topbar-logo > div > span:last-child {
+        font-size: 9px !important;
+        color: rgba(255, 255, 255, 0.42) !important;
+        letter-spacing: 0.3px !important;
+      }
+      .topbar-right {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
       }
       .topbar-btn,
+      .back-link,
       .nav-btn {
-        font-size: 13px;
-        font-weight: 500;
-        color: #4b5563;
-        text-decoration: none;
-        padding: 7px 14px;
-        border-radius: 7px;
-        border: 1px solid #e5e7eb;
-        background: #f9fafb;
-        transition: all 0.18s;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        white-space: nowrap;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+        text-decoration: none !important;
+        padding: 7px 14px !important;
+        border-radius: 7px !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        transition: all 0.18s !important;
+        cursor: pointer !important;
+        font-family: "Inter", sans-serif !important;
+        white-space: nowrap !important;
       }
       .topbar-btn:hover,
-      .nav-btn:hover {
-        background: #f3f4f6;
+      .back-link:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: white !important;
       }
-      .btn-primary,
-      .nav-btn-primary {
+      .btn-reset,
+      .btn-save,
+      .btn-submit {
         background: #8b1e3f !important;
         color: white !important;
-        border-color: #8b1e3f !important;
+        border: none !important;
+      }
+      .btn-reset:hover,
+      .btn-save:hover {
+        background: #7a1a37 !important;
+      }
+      /* CONTENT */
+      .content {
+        padding-top: 88px !important;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-bottom: 48px;
+        flex: 1;
+      }
+      /* CARDS */
+      .owner-card,
+      .form-card,
+      .reset-card,
+      .table-card,
+      .danger-zone,
+      .settings-card {
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: blur(10px) !important;
+      }
+      /* TEXT */
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: white !important;
+      }
+      p {
+        color: rgba(255, 255, 255, 0.65) !important;
+      }
+      label,
+      .form-label,
+      .info-label,
+      .section-label {
+        color: rgba(255, 255, 255, 0.5) !important;
+      }
+      .info-value {
+        color: white !important;
+      }
+      /* INPUTS */
+      input,
+      select,
+      textarea {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+        color: white !important;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.35) !important;
+      }
+      select option {
+        background: #1a1008;
+        color: white;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: #d4a017 !important;
+      }
+      /* TABLE */
+      thead th {
+        color: rgba(255, 255, 255, 0.4) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        background: transparent !important;
+      }
+      tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+      }
+      tbody tr:hover {
+        background: rgba(255, 255, 255, 0.04) !important;
+      }
+      tbody td {
+        color: rgba(255, 255, 255, 0.75) !important;
+      }
+      .prop-title,
+      .owner-name-cell,
+      .prop-name {
+        color: white !important;
         font-weight: 600 !important;
       }
+      .prop-loc,
+      .owner-email,
+      .prop-location {
+        color: rgba(255, 255, 255, 0.4) !important;
+      }
+      /* BADGES */
+      .active-badge.on,
+      .status-Available {
+        background: rgba(34, 197, 94, 0.15) !important;
+        color: #86efac !important;
+        border: 1px solid rgba(34, 197, 94, 0.3) !important;
+      }
+      .active-badge.off,
+      .status-Rented {
+        background: rgba(239, 68, 68, 0.15) !important;
+        color: #fca5a5 !important;
+        border: 1px solid rgba(239, 68, 68, 0.3) !important;
+      }
+      .status-Maintenance,
+      .status-NotAvailable {
+        background: rgba(234, 179, 8, 0.15) !important;
+        color: #fde047 !important;
+        border: 1px solid rgba(234, 179, 8, 0.3) !important;
+      }
+      /* FLASH */
+      .flash.success {
+        background: rgba(34, 197, 94, 0.15) !important;
+        border: 1px solid rgba(34, 197, 94, 0.3) !important;
+        color: #86efac !important;
+      }
+      .flash.danger {
+        background: rgba(239, 68, 68, 0.15) !important;
+        border: 1px solid rgba(239, 68, 68, 0.3) !important;
+        color: #fca5a5 !important;
+      }
+      .flash.info {
+        background: rgba(59, 130, 246, 0.15) !important;
+        border: 1px solid rgba(59, 130, 246, 0.3) !important;
+        color: #93c5fd !important;
+      }
+      .flash.warning {
+        background: rgba(234, 179, 8, 0.15) !important;
+        border: 1px solid rgba(234, 179, 8, 0.3) !important;
+        color: #fde047 !important;
+      }
+      /* DANGER ZONE */
+      .danger-zone {
+        border: 1px solid rgba(239, 68, 68, 0.3) !important;
+      }
+      .danger-zone h2 {
+        color: #f87171 !important;
+      }
       .btn-danger,
-      .nav-btn-danger {
-        background: #fee2e2 !important;
-        color: #991b1b !important;
-        border-color: #fca5a5 !important;
+      .btn-danger-outline {
+        background: rgba(239, 68, 68, 0.15) !important;
+        color: #f87171 !important;
+        border: 1px solid rgba(239, 68, 68, 0.3) !important;
       }
-      .btn-gold {
-        background: #d4a017 !important;
-        color: #1a0a00 !important;
-        border-color: #d4a017 !important;
-        font-weight: 700 !important;
+      /* DIVIDERS */
+      hr,
+      .divider,
+      [style*="border-bottom"] {
+        border-color: rgba(255, 255, 255, 0.1) !important;
       }
-      /* Ensure content starts below navbar */
-      .content,
-      .page-content {
-        padding-top: 88px !important;
-      }
-      /* Footer */
+      /* FOOTER */
       .page-footer {
-        padding: 18px 40px;
+        padding: 16px 40px;
         text-align: center;
-        background: var(--bg2);
-        border-top: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.45) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
       }
       .page-footer p {
         font-size: 12px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.3) !important;
       }
-      /* Remove dark bg injection */
-      body {
-        background: var(--bg) !important;
-        color: var(--text) !important;
+      @media (max-width: 768px) {
+        .topbar {
+          padding: 0 20px !important;
+        }
+        .content {
+          padding: 80px 16px 32px !important;
+        }
       }
     </style>
   </head>
   <body>
     <div class="topbar">
-      <a href="/admin/dashboard" class="topbar-logo">
+      <a href="/" class="topbar-logo">
         <img
           src="/static/Shivya_Logo.jpeg"
           style="
