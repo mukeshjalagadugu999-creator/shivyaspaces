@@ -568,7 +568,7 @@
         <p>Fill in the details to add a new listing.</p>
       </div>
 
-      <a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+      <a href="javascript:history.back()" class="back-btn">Back</a>
       {% with messages = get_flashed_messages(with_categories=true) %} {% for
       category, message in messages %}
       <div class="flash {{ category }}">{{ message }}</div>
