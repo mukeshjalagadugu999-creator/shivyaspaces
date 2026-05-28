@@ -11,27 +11,6 @@
     />
     <script src="/static/theme.js"></script>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        min-height: 100vh;
-      }
-      body {
-        font-family: "Inter", sans-serif;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
-            center/cover fixed;
-        color: white;
-        display: flex;
-        flex-direction: column;
-      }
-
-      /* TOPBAR */
       .topbar {
         position: fixed;
         top: 0;
@@ -64,7 +43,7 @@
       .topbar-logo-text {
         display: flex;
         flex-direction: column;
-        gap: 1px;
+        gap: 2px;
       }
       .topbar-logo-name {
         font-size: 14px;
@@ -73,18 +52,34 @@
         letter-spacing: 0.8px;
         line-height: 1;
       }
-      .topbar-logo-name span {
+      .topbar-logo-name > span:first-child {
         color: #d4a017;
+      }
+      .topbar-badge {
+        font-size: 8px;
+        background: #8b1e3f;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 999px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        vertical-align: middle;
+        margin-left: 4px;
       }
       .topbar-logo-sub {
         font-size: 9px;
         color: rgba(255, 255, 255, 0.42);
         letter-spacing: 0.3px;
+        line-height: 1;
       }
       .topbar-right {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
+      }
+      .topbar-admin-name {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
       }
       .topbar-btn {
         font-size: 12px;
@@ -104,10 +99,37 @@
         background: rgba(255, 255, 255, 0.15);
         color: white;
       }
+      .topbar-btn-gold {
+        background: rgba(212, 160, 23, 0.2) !important;
+        border-color: #d4a017 !important;
+        color: #d4a017 !important;
+      }
+      .topbar-btn-gold:hover {
+        background: rgba(212, 160, 23, 0.35) !important;
+      }
       .topbar-btn-danger {
         background: rgba(239, 68, 68, 0.15) !important;
         border-color: rgba(239, 68, 68, 0.35) !important;
         color: #f87171 !important;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        min-height: 100vh;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
+            center/cover fixed;
+        color: white;
+        display: flex;
+        flex-direction: column;
       }
 
       /* CONTENT */
@@ -463,18 +485,6 @@
         color: rgba(255, 255, 255, 0.45);
         margin-bottom: 16px;
       }
-      .btn-danger {
-        background: rgba(239, 68, 68, 0.15);
-        color: #f87171;
-        border: 1.5px solid rgba(239, 68, 68, 0.3);
-        padding: 10px 20px;
-        border-radius: 9px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        transition: all 0.18s;
-      }
       .btn-danger:hover {
         background: rgba(239, 68, 68, 0.28);
       }
@@ -492,9 +502,6 @@
       }
 
       @media (max-width: 768px) {
-        .topbar {
-          padding: 0 16px;
-        }
         .content {
           padding: 80px 16px 40px;
         }
@@ -510,19 +517,20 @@
         <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
         <div class="topbar-logo-text">
           <span class="topbar-logo-name"
-            >SHIVYA<span class="topbar-logo-accent">SPACES</span></span
+            >SHIVYA<span>SPACES</span>&nbsp;<span class="topbar-badge"
+              >ADMIN</span
+            ></span
           >
           <span class="topbar-logo-sub">Trusted Rental Lifecycle Platform</span>
         </div>
       </a>
       <div class="topbar-right">
-        <span style="font-size: 13px; color: var(--text3)"
-          >{{ admin_name }}</span
-        >
-        <a href="/admin/settings" class="nav-btn">Settings</a>
+        <span class="topbar-admin-name">{{ admin_name }}</span>
         <form method="POST" action="/admin/logout" style="display: inline">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-          <button type="submit" class="nav-btn btn-danger">Sign Out</button>
+          <button type="submit" class="topbar-btn topbar-btn-danger">
+            Sign Out
+          </button>
         </form>
       </div>
     </div>
