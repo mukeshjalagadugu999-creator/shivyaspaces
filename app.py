@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
+from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response, jsonify
 from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -9,6 +9,12 @@ import os
 import re
 from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
+try:
+    import cloudinary
+    import cloudinary.uploader
+    CLOUDINARY_AVAILABLE = True
+except ImportError:
+    CLOUDINARY_AVAILABLE = False
 
 app = Flask(__name__)
 app.secret_key = "shivya_secret_key_2024"
@@ -1081,6 +1087,48 @@ def privacy():
 @app.route("/termsandconditions")
 def termsandconditions():
     return render_template("termsandconditions.html")
+
+
+
+@app.route("/upload-image", methods=["POST"])
+@login_required
+@csrf.exempt
+def upload_image():
+    """Upload image to Cloudinary and return URL."""
+    if not CLOUDINARY_AVAILABLE:
+        return jsonify({"error": "Image upload not configured"}), 500
+
+    if "file" not in request.files:
+        return jsonify({"error": "No file provided"}), 400
+
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "No file selected"}), 400
+
+    # Validate file type
+    allowed = {"jpg", "jpeg", "png", "webp", "gif"}
+    ext = file.filename.rsplit(".", 1)[-1].lower() if "." in file.filename else ""
+    if ext not in allowed:
+        return jsonify({"error": "Only JPG, PNG, WEBP images allowed"}), 400
+
+    # Validate file size (max 5MB)
+    file.seek(0, 2)
+    size = file.tell()
+    file.seek(0)
+    if size > 5 * 1024 * 1024:
+        return jsonify({"error": "Image must be under 5MB"}), 400
+
+    try:
+        result = cloudinary.uploader.upload(
+            file,
+            folder="shivyaspaces",
+            transformation=[
+                {"width": 1200, "height": 800, "crop": "limit", "quality": "auto"},
+            ]
+        )
+        return jsonify({"url": result["secure_url"]}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":

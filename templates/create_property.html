@@ -646,6 +646,98 @@
         overflow: hidden;
         margin-bottom: 4px;
       }
+
+      /* ── IMAGE UPLOAD ── */
+      .upload-zone {
+        border: 2px dashed rgba(255, 255, 255, 0.25);
+        border-radius: 14px;
+        padding: 32px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .upload-zone:hover,
+      .upload-zone.drag-over {
+        border-color: #d4a017;
+        background: rgba(212, 160, 23, 0.08);
+      }
+      .upload-icon {
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+      .upload-text {
+        font-size: 14px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 4px;
+      }
+      .upload-sub {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .preview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .preview-item {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 1;
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .preview-item .remove-btn {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+      .preview-item .main-badge {
+        position: absolute;
+        bottom: 4px;
+        left: 4px;
+        background: #d4a017;
+        color: #1a0a00;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+      .uploading-spinner {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        vertical-align: middle;
+        margin-right: 6px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
   <body>
@@ -826,15 +918,47 @@
         <div class="form-card">
           <h2>Gallery Images</h2>
           <div class="form-group">
-            <label>Image URLs <span class="required">*</span></label>
+            <label>Upload Photos <span class="required">*</span></label>
+            <!-- Upload zone -->
+            <div class="upload-zone" id="uploadZone">
+              <div class="upload-icon">📷</div>
+              <p class="upload-text">
+                Click to upload or drag & drop photos here
+              </p>
+              <p class="upload-sub">
+                JPG, PNG, WEBP · Max 5MB each · First image = main photo
+              </p>
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                multiple
+                style="display: none"
+              />
+            </div>
+            <!-- Preview grid -->
+            <div class="preview-grid" id="previewGrid"></div>
+            <!-- Hidden textarea stores final URLs -->
             <textarea
               name="gallery_images"
-              style="min-height: 120px"
-              placeholder="Paste one image URL per line.&#10;e.g. https://images.unsplash.com/photo-xxx"
+              id="galleryUrls"
+              style="display: none"
             ></textarea>
-            <p class="hint">
-              First image is used as the main photo. One URL per line.
+            <p class="hint" id="uploadHint">
+              No images uploaded yet. You can also paste URLs below.
             </p>
+            <!-- Fallback URL input -->
+            <div style="margin-top: 10px">
+              <label style="font-size: 11px; color: rgba(255, 255, 255, 0.4)"
+                >Or paste image URLs (one per line)</label
+              >
+              <textarea
+                id="urlFallback"
+                style="min-height: 80px; margin-top: 6px"
+                placeholder="https://example.com/image.jpg"
+                oninput="syncUrls()"
+              ></textarea>
+            </div>
           </div>
         </div>
 
@@ -851,6 +975,99 @@
       document
         .querySelectorAll(".yr")
         .forEach((e) => (e.textContent = new Date().getFullYear()));
+    </script>
+
+    <script>
+      var uploadedUrls = [];
+
+      var zone = document.getElementById('uploadZone');
+      var fileInput = document.getElementById('fileInput');
+
+      zone.addEventListener('click', function(){ fileInput.click(); });
+      zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('drag-over'); });
+      zone.addEventListener('dragleave', function(){ zone.classList.remove('drag-over'); });
+      zone.addEventListener('drop', function(e){
+        e.preventDefault(); zone.classList.remove('drag-over');
+        handleFiles(e.dataTransfer.files);
+      });
+      fileInput.addEventListener('change', function(){ handleFiles(this.files); });
+
+      function handleFiles(files) {
+        Array.from(files).forEach(function(file){
+          if (!file.type.match('image.*')) return;
+          uploadFile(file);
+        });
+      }
+
+      function uploadFile(file) {
+        // Show uploading placeholder
+        var grid = document.getElementById('previewGrid');
+        var placeholder = document.createElement('div');
+        placeholder.className = 'preview-item';
+        placeholder.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:11px;color:rgba(255,255,255,0.50);"><span class=\"uploading-spinner\"></span>Uploading...</div>';
+        grid.appendChild(placeholder);
+
+        var formData = new FormData();
+        formData.append('file', file);
+
+        fetch('/upload-image', { method:'POST', body:formData })
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            if (data.url) {
+              uploadedUrls.push(data.url);
+              updateGalleryField();
+              // Replace placeholder with preview
+              placeholder.innerHTML =
+                '<img src="' + data.url + '"/>' +
+                (uploadedUrls.length === 1 ? '<span class="main-badge">Main</span>' : '') +
+                '<button type="button" class="remove-btn" onclick="removeUrl('' + data.url + '', this.parentElement)">×</button>';
+              document.getElementById('uploadHint').textContent = uploadedUrls.length + ' image' + (uploadedUrls.length > 1 ? 's' : '') + ' ready.';
+            } else {
+              placeholder.innerHTML = '<div style="color:#f87171;font-size:10px;padding:4px;">Failed</div>';
+            }
+          })
+          .catch(function(){
+            placeholder.innerHTML = '<div style="color:#f87171;font-size:10px;padding:4px;">Error</div>';
+          });
+      }
+
+      function removeUrl(url, el) {
+        uploadedUrls = uploadedUrls.filter(function(u){ return u !== url; });
+        el.parentElement.removeChild(el);
+        updateGalleryField();
+        // Update main badge
+        var items = document.querySelectorAll('.preview-item');
+        document.querySelectorAll('.main-badge').forEach(function(b){ b.remove(); });
+        if (items.length > 0) {
+          var img = items[0].querySelector('img');
+          if (img) {
+            var badge = document.createElement('span');
+            badge.className = 'main-badge'; badge.textContent = 'Main';
+            items[0].appendChild(badge);
+          }
+        }
+      }
+
+      function updateGalleryField() {
+        var fallback = document.getElementById('urlFallback').value.trim();
+        var fallbackUrls = fallback ? fallback.split('\n').map(function(u){ return u.trim(); }).filter(Boolean) : [];
+        var all = uploadedUrls.concat(fallbackUrls);
+        document.getElementById('galleryUrls').value = all.join('\n');
+      }
+
+      function syncUrls() {
+        updateGalleryField();
+      }
+
+      // Form submit validation
+      document.querySelector('form').addEventListener('submit', function(e){
+        updateGalleryField();
+        var urls = document.getElementById('galleryUrls').value.trim();
+        if (!urls) {
+          e.preventDefault();
+          alert('Please upload at least one image or paste an image URL.');
+        }
+      });
     </script>
   </body>
 </html>
