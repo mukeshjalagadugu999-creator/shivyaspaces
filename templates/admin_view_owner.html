@@ -526,6 +526,7 @@
       </a>
       <div class="topbar-right">
         <span class="topbar-admin-name">{{ admin_name }}</span>
+        <a href="/admin/settings" class="topbar-btn">Settings</a>
         <form method="POST" action="/admin/logout" style="display: inline">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <button type="submit" class="topbar-btn topbar-btn-danger">
