@@ -80,15 +80,19 @@
         letter-spacing: 0.3px;
       }
       .topbar-badge {
-        font-size: 9px;
+        font-size: 8px;
         background: #8b1e3f;
         color: white;
-        padding: 2px 8px;
+        padding: 2px 7px;
         border-radius: 999px;
         font-weight: 700;
         letter-spacing: 0.5px;
-        margin-left: 6px;
-        vertical-align: middle;
+        display: inline-block;
+      }
+      .topbar-badge-line {
+        display: block;
+        margin: 1px 0;
+        line-height: 1;
       }
       .topbar-right {
         display: flex;
@@ -515,9 +519,9 @@
       <a href="/" class="topbar-logo">
         <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
         <div class="topbar-logo-text">
-          <span class="topbar-logo-name"
-            >SHIVYA<span>SPACES</span>
-            <span class="topbar-badge">ADMIN</span></span
+          <span class="topbar-logo-name">SHIVYA<span>SPACES</span></span>
+          <span class="topbar-badge-line"
+            ><span class="topbar-badge">ADMIN</span></span
           >
           <span class="topbar-logo-sub">Trusted Rental Lifecycle Platform</span>
         </div>
