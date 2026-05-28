@@ -52,7 +52,7 @@
         letter-spacing: 0.8px;
         line-height: 1;
       }
-      .topbar-logo-name > span:first-child {
+      .topbar-logo-name > .logo-accent {
         color: #d4a017;
       }
       .topbar-badge {
@@ -468,11 +468,12 @@
 
       /* DANGER ZONE */
       .danger-zone {
-        background: rgba(239, 68, 68, 0.05);
-        border: 1px solid rgba(239, 68, 68, 0.2);
+        background: rgba(239, 68, 68, 0.06);
+        border: 1px solid rgba(239, 68, 68, 0.25);
         border-radius: 18px;
         padding: 22px;
         margin-bottom: 20px;
+        backdrop-filter: blur(8px);
       }
       .danger-zone h2 {
         font-size: 14px;
@@ -485,8 +486,25 @@
         color: rgba(255, 255, 255, 0.45);
         margin-bottom: 16px;
       }
+      .btn-danger {
+        display: inline-block;
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1.5px solid rgba(239, 68, 68, 0.4);
+        padding: 11px 24px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        backdrop-filter: blur(8px);
+        transition: all 0.18s;
+      }
       .btn-danger:hover {
-        background: rgba(239, 68, 68, 0.28);
+        background: rgba(239, 68, 68, 0.3);
+        border-color: rgba(239, 68, 68, 0.7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
       }
 
       /* FOOTER */
@@ -517,7 +535,8 @@
         <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
         <div class="topbar-logo-text">
           <span class="topbar-logo-name"
-            >SHIVYA<span>SPACES</span>&nbsp;<span class="topbar-badge"
+            >SHIVYA<span class="logo-accent">SPACES</span>&nbsp;<span
+              class="topbar-badge"
               >ADMIN</span
             ></span
           >
