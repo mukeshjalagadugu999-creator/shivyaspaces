@@ -96,71 +96,12 @@
         color: white;
       }
 
-      /* ── HERO BANNER ── */
-      .hero {
-        margin-top: 64px;
-        height: 260px;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.7)),
-          url("https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600")
-            center/cover;
-        display: flex;
-        align-items: flex-end;
-      }
-      .hero-content {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 0 24px 28px;
-        width: 100%;
-      }
-      .status-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 5px 12px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 700;
-        margin-bottom: 10px;
-      }
-      .pill-Available {
-        background: rgba(34, 197, 94, 0.2);
-        border: 1px solid rgba(34, 197, 94, 0.5);
-        color: #86efac;
-      }
-      .pill-Rented {
-        background: rgba(239, 68, 68, 0.2);
-        border: 1px solid rgba(239, 68, 68, 0.5);
-        color: #fca5a5;
-      }
-      .pill-NotAvailable {
-        background: rgba(107, 114, 128, 0.2);
-        border: 1px solid rgba(107, 114, 128, 0.5);
-        color: #d1d5db;
-      }
-      .status-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: currentColor;
-      }
-      .hero-content h1 {
-        font-size: 28px;
-        font-weight: 800;
-        color: white;
-        margin-bottom: 4px;
-      }
-      .hero-content p {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.65);
-      }
-
       /* ── MAIN WRAPPER ── */
       .page-wrap {
         flex: 1;
         max-width: 1100px;
         margin: 0 auto;
-        padding: 24px 24px 60px;
+        padding: 20px 24px 60px;
         width: 100%;
       }
 
@@ -603,31 +544,62 @@
         .units-grid {
           grid-template-columns: 1fr;
         }
-        .hero-content h1 {
-          font-size: 22px;
+        .prop-title-info h1 {
+          font-size: 18px;
         }
       }
 
-      /* Back button - top right of content */
-      .page-back {
+      /* ── PROPERTY TITLE BAR ── */
+      .prop-title-bar {
+        margin-top: 64px;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 24px;
+      }
+      .prop-title-bar-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .prop-title-bar-left {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+      }
+      .back-btn-bar {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 600;
         color: rgba(255, 255, 255, 0.7);
         text-decoration: none;
         padding: 7px 14px;
         border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         background: rgba(255, 255, 255, 0.08);
         transition: all 0.18s;
-        float: right;
-        margin-bottom: 16px;
+        white-space: nowrap;
+        margin-top: 4px;
+        flex-shrink: 0;
       }
-      .page-back:hover {
+      .back-btn-bar:hover {
         background: rgba(255, 255, 255, 0.15);
         color: white;
+      }
+      .prop-title-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .prop-title-info h1 {
+        font-size: 22px;
+        font-weight: 800;
+        color: white;
+        line-height: 1.2;
+      }
+      .prop-title-info p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
       }
     </style>
   </head>
@@ -643,23 +615,24 @@
       </a>
     </nav>
 
-    <!-- HERO BANNER -->
-    <div class="hero">
-      <div class="hero-content">
-        <div class="status-pill pill-{{ prop.status | replace(' ','') }}">
-          <div class="status-dot"></div>
-          {{ prop.status }}
+    <!-- PROPERTY TITLE BAR (replaces hero) -->
+    <div class="prop-title-bar">
+      <div class="prop-title-bar-inner">
+        <div class="prop-title-bar-left">
+          <a href="javascript:history.back()" class="back-btn-bar">← Back</a>
+          <div class="prop-title-info">
+            <span class="status-pill pill-{{ prop.status | replace(' ','') }}">
+              <span class="status-dot"></span>{{ prop.status }}
+            </span>
+            <h1>{{ prop.title }}</h1>
+            <p>📍 {{ prop.location }}</p>
+          </div>
         </div>
-        <h1>{{ prop.title }}</h1>
-        <p>{{ prop.location }}</p>
       </div>
     </div>
 
     <!-- PAGE WRAP -->
     <div class="page-wrap">
-      <a href="javascript:history.back()" class="page-back">Back</a>
-      <div style="clear: both"></div>
-
       <!-- PROPERTY CARD -->
       <div class="property-card">
         <!-- Header -->
