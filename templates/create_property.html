@@ -656,6 +656,8 @@
         cursor: pointer;
         transition: all 0.2s;
         background: rgba(255, 255, 255, 0.04);
+        position: relative;
+        display: block;
       }
       .upload-zone:hover,
       .upload-zone.drag-over {
@@ -919,22 +921,28 @@
           <div class="form-group">
             <label>Upload Photos <span class="required">*</span></label>
             <!-- Upload zone -->
-            <div class="upload-zone" id="uploadZone">
+            <label class="upload-zone" id="uploadZone" for="fileInput">
               <div class="upload-icon">📷</div>
-              <p class="upload-text">
-                Click to upload or drag & drop photos here
-              </p>
+              <p class="upload-text">Click to upload photos</p>
               <p class="upload-sub">
                 JPG, PNG, WEBP · Max 5MB each · First image = main photo
               </p>
               <input
                 type="file"
                 id="fileInput"
-                accept="image/*"
+                name="fileInputField"
+                accept="image/jpeg,image/png,image/webp,image/gif"
                 multiple
-                style="display: none"
+                style="
+                  position: absolute;
+                  inset: 0;
+                  width: 100%;
+                  height: 100%;
+                  opacity: 0;
+                  cursor: pointer;
+                "
               />
-            </div>
+            </label>
             <!-- Preview grid -->
             <div class="preview-grid" id="previewGrid"></div>
             <!-- Hidden textarea stores final URLs -->
