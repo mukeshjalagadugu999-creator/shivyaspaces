@@ -164,6 +164,28 @@
         .page-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.75);text-decoration:none;padding:7px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.20);background:rgba(255,255,255,0.08);transition:all 0.18s;float:right;margin-bottom:16px;}
         .page-back:hover{background:rgba(255,255,255,0.15);color:white;}
         .page-back-wrap{overflow:hidden;margin-bottom:4px;}
+
+        /* ── intl-tel-input POPUP FIX — force white dropdown ── */
+        .iti { width:100%; }
+        .iti__country-list {
+          background:#ffffff !important;
+          color:#111827 !important;
+          border:1px solid #e5e7eb !important;
+          box-shadow:0 4px 16px rgba(0,0,0,0.15) !important;
+          z-index:9999 !important;
+        }
+        .iti__country { padding:8px 12px !important; color:#111827 !important; }
+        .iti__country.iti__highlight { background:#f3f4f6 !important; }
+        .iti__country-name { color:#111827 !important; }
+        .iti__dial-code { color:#6b7280 !important; }
+        .iti__selected-flag { background:rgba(255,255,255,0.15) !important; }
+        .iti__arrow { border-top-color:#6b7280 !important; }
+        .iti__search-input {
+          background:#ffffff !important;
+          color:#111827 !important;
+          border-bottom:1px solid #e5e7eb !important;
+          padding:8px 12px !important;
+        }
     </style>
   </head>
   <body>
