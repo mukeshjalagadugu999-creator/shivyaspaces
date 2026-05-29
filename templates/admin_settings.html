@@ -275,6 +275,86 @@
           <button type="submit" class="btn-save">Save Settings</button>
         </div>
       </form>
+
+      <!-- ── CHANGE PASSWORD SECTION ── -->
+      <div class="form-card" style="margin-top: 24px; position: relative">
+        <h2
+          style="
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          "
+        >
+          🔐 Change Admin Password
+        </h2>
+        <p
+          style="
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+          "
+        >
+          You must enter your current password to set a new one.
+        </p>
+        <form method="POST" action="/admin/change-password" id="pwForm">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Current Password</label>
+              <input
+                type="password"
+                name="current_password"
+                placeholder="Enter your current password"
+                required
+                autocomplete="current-password"
+              />
+            </div>
+            <div class="form-group">
+              <label>New Password</label>
+              <input
+                type="password"
+                name="new_password"
+                id="newPw"
+                placeholder="Min 8 characters"
+                required
+                autocomplete="new-password"
+              />
+            </div>
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <input
+                type="password"
+                name="confirm_password"
+                id="confirmPw"
+                placeholder="Repeat new password"
+                required
+                autocomplete="new-password"
+              />
+            </div>
+          </div>
+          <p
+            id="pwMatchError"
+            style="
+              color: #f87171;
+              font-size: 12px;
+              margin-bottom: 12px;
+              display: none;
+            "
+          >
+            Passwords do not match.
+          </p>
+          <button
+            type="submit"
+            class="btn-save"
+            style="background: #8b1e3f !important"
+          >
+            Change Password
+          </button>
+        </form>
+      </div>
     </div>
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
@@ -283,6 +363,19 @@
       document
         .querySelectorAll(".yr")
         .forEach((e) => (e.textContent = new Date().getFullYear()));
+      document
+        .getElementById("pwForm")
+        .addEventListener("submit", function (e) {
+          var np = document.getElementById("newPw").value;
+          var cp = document.getElementById("confirmPw").value;
+          var err = document.getElementById("pwMatchError");
+          if (np !== cp) {
+            e.preventDefault();
+            err.style.display = "block";
+          } else {
+            err.style.display = "none";
+          }
+        });
     </script>
   </body>
 </html>

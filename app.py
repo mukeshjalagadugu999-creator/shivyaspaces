@@ -1021,6 +1021,47 @@ def admin_settings():
                            admin_whatsapp=admin_whatsapp)
 
 
+
+@app.route("/admin/change-password", methods=["POST"])
+@admin_required
+@csrf.exempt
+def admin_change_password():
+    current  = request.form.get("current_password", "").strip()
+    new_pw   = request.form.get("new_password", "").strip()
+    confirm  = request.form.get("confirm_password", "").strip()
+
+    if not current or not new_pw or not confirm:
+        flash("All three fields are required.", "danger")
+        return redirect(url_for("admin_settings"))
+
+    if new_pw != confirm:
+        flash("New password and confirmation do not match.", "danger")
+        return redirect(url_for("admin_settings"))
+
+    if len(new_pw) < 8:
+        flash("New password must be at least 8 characters.", "danger")
+        return redirect(url_for("admin_settings"))
+
+    # Verify current password
+    conn  = get_db()
+    admin = conn.execute("SELECT * FROM admins WHERE id=1").fetchone()
+    conn.close()
+
+    if not admin or not check_password_hash(admin["password"], current):
+        flash("Current password is incorrect.", "danger")
+        return redirect(url_for("admin_settings"))
+
+    # Update password
+    conn = get_db()
+    conn.execute("UPDATE admins SET password=? WHERE id=1",
+                 (generate_password_hash(new_pw),))
+    conn.commit()
+    conn.close()
+
+    flash("Password changed successfully!", "success")
+    return redirect(url_for("admin_settings"))
+
+
 @app.route("/owner-signup", methods=["GET", "POST"])
 @csrf.exempt
 def owner_signup():
