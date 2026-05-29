@@ -675,16 +675,17 @@
       }
       .preview-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 8px;
-        margin-top: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+        margin-top: 14px;
       }
       .preview-item {
         position: relative;
-        border-radius: 8px;
+        border-radius: 10px;
         overflow: hidden;
-        aspect-ratio: 1;
+        aspect-ratio: 4/3;
         background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
       .preview-item img {
         width: 100%;
@@ -926,18 +927,12 @@
 {{ prop.gallery_images_str }}</textarea
             >
             <p class="hint" id="uploadHint">
-              Existing images shown below. Upload new ones or edit URLs.
+              Your current images are shown below. Upload new ones or remove
+              existing.
             </p>
             <div style="margin-top: 10px">
               <label style="font-size: 11px; color: rgba(255, 255, 255, 0.4)"
                 >Current / additional image URLs (one per line)</label
-              >
-              <textarea
-                id="urlFallback"
-                style="min-height: 80px; margin-top: 6px"
-                oninput="syncUrls()"
-              >
-{{ prop.gallery_images_str }}</textarea
               >
             </div>
             <p class="hint">
@@ -980,7 +975,7 @@
         var grid = document.getElementById("previewGrid");
         var hint = document.getElementById("uploadHint");
         var hiddenField = document.getElementById("galleryUrls");
-        var fallback = document.getElementById("urlFallback");
+        var fallback = null;
 
         // ── Open file picker on click ──────────────────────────────────────────
         zone.addEventListener("click", function (e) {
@@ -1118,27 +1113,9 @@
           updateHint();
         };
 
-        // ── Sync fallback URL textarea ─────────────────────────────────────────
-        if (fallback) {
-          fallback.addEventListener("input", updateHiddenField);
-        }
-
         // ── Update hidden field ────────────────────────────────────────────────
         function updateHiddenField() {
-          var manual = fallback
-            ? fallback.value
-                .trim()
-                .split("\n")
-                .map(function (u) {
-                  return u.trim();
-                })
-                .filter(Boolean)
-            : [];
-          var all = uploadedUrls.slice();
-          manual.forEach(function (u) {
-            if (all.indexOf(u) < 0) all.push(u);
-          });
-          hiddenField.value = all.join("\n");
+          hiddenField.value = uploadedUrls.join("\n");
         }
 
         // ── Update hint text ───────────────────────────────────────────────────
