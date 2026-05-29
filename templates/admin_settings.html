@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Settings — Admin</title>
     <link
@@ -156,6 +161,15 @@
         .page-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.75);text-decoration:none;padding:7px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.20);background:rgba(255,255,255,0.08);transition:all 0.18s;float:right;margin-bottom:16px;}
         .page-back:hover{background:rgba(255,255,255,0.15);color:white;}
         .page-back-wrap{overflow:hidden;margin-bottom:4px;}
+
+        .iti { width:100%; }
+        #waInput { width:100%; padding:11px 14px; border:1.5px solid rgba(255,255,255,0.18); border-radius:10px; font-size:14px; font-family:'Inter',sans-serif; color:white; background:rgba(255,255,255,0.08); outline:none; transition:border-color 0.18s; }
+        #waInput:focus { border-color:#D4A017; }
+        .iti__flag-container { z-index:10; }
+        .iti__country-list { background:#1a1008; color:white; border:1px solid rgba(255,255,255,0.15); max-height:200px; overflow-y:auto; }
+        .iti__country.iti__highlight { background:rgba(255,255,255,0.10); }
+        .iti__dial-code { color:rgba(255,255,255,0.60); }
+        .iti__selected-flag { background:rgba(255,255,255,0.08); border-radius:8px 0 0 8px; }
     </style>
   </head>
   <body>
@@ -366,6 +380,27 @@
       document
         .querySelectorAll(".yr")
         .forEach((e) => (e.textContent = new Date().getFullYear()));
+
+      // WhatsApp phone picker
+      var waIti = window.intlTelInput(document.getElementById("waInput"), {
+        initialCountry: "in",
+        preferredCountries: ["in", "ae", "gb", "us", "au", "sg", "ca"],
+        separateDialCode: true,
+        utilsScript:
+          "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
+      });
+
+      // Pre-fill existing number
+      var existing = document.getElementById("waHidden").value;
+      if (existing) waIti.setNumber(existing);
+
+      // On settings form submit, write full number to hidden field
+      var settingsForm = document.querySelector("form");
+      if (settingsForm) {
+        settingsForm.addEventListener("submit", function () {
+          document.getElementById("waHidden").value = waIti.getNumber();
+        });
+      }
       document
         .getElementById("pwForm")
         .addEventListener("submit", function (e) {

@@ -12,7 +12,7 @@
     <script src="/static/theme.js"></script>
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.min.css"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
     <style>
@@ -316,17 +316,7 @@
     <script>
       var iti = window.intlTelInput(document.getElementById("phoneInput"), {
         initialCountry: "in",
-        preferredCountries: [
-          "in",
-          "ae",
-          "gb",
-          "us",
-          "au",
-          "sg",
-          "pk",
-          "lk",
-          "bd",
-        ],
+        preferredCountries: ["in", "ae", "gb", "us", "au", "sg", "ca"],
         separateDialCode: true,
         utilsScript:
           "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
@@ -342,9 +332,7 @@
             return;
           }
           err.style.display = "none";
-          document.getElementById("phoneHidden").value = iti.getNumber(
-            intlTelInputUtils.numberFormat.INTERNATIONAL,
-          );
+          document.getElementById("phoneHidden").value = iti.getNumber();
         });
 
       function updateSlug(value) {
