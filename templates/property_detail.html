@@ -552,54 +552,89 @@
       /* ── PROPERTY TITLE BAR ── */
       .prop-title-bar {
         margin-top: 64px;
-        background: rgba(0, 0, 0, 0.55);
-        backdrop-filter: blur(16px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 16px 24px;
+        padding: 20px 24px;
       }
       .prop-title-bar-inner {
         max-width: 1100px;
         margin: 0 auto;
-      }
-      .prop-title-bar-left {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1.5px solid rgba(255, 255, 255, 0.14);
+        border-radius: 18px;
+        backdrop-filter: blur(12px);
+        padding: 20px 24px;
         display: flex;
-        align-items: flex-start;
-        gap: 20px;
-      }
-      .back-btn-bar {
-        display: inline-flex;
         align-items: center;
-        font-size: 12px;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.7);
-        text-decoration: none;
-        padding: 7px 14px;
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.08);
-        transition: all 0.18s;
-        white-space: nowrap;
-        margin-top: 4px;
-        flex-shrink: 0;
-      }
-      .back-btn-bar:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
+        justify-content: space-between;
+        gap: 16px;
       }
       .prop-title-info {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 6px;
       }
       .prop-title-info h1 {
         font-size: 22px;
         font-weight: 800;
         color: white;
         line-height: 1.2;
+        margin: 0;
       }
       .prop-title-info p {
         font-size: 13px;
         color: rgba(255, 255, 255, 0.55);
+        margin: 0;
+      }
+      .back-btn-bar {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.18s;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .back-btn-bar:hover {
+        background: rgba(255, 255, 255, 0.18);
+        color: white;
+      }
+      /* Status pills — proper coloured badges */
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .pill-Available {
+        background: rgba(34, 197, 94, 0.18);
+        border: 1px solid rgba(34, 197, 94, 0.45);
+        color: #86efac;
+      }
+      .pill-Rented {
+        background: rgba(239, 68, 68, 0.18);
+        border: 1px solid rgba(239, 68, 68, 0.45);
+        color: #fca5a5;
+      }
+      .pill-NotAvailable {
+        background: rgba(107, 114, 128, 0.18);
+        border: 1px solid rgba(107, 114, 128, 0.45);
+        color: #d1d5db;
+      }
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+        flex-shrink: 0;
       }
     </style>
   </head>
@@ -615,19 +650,17 @@
       </a>
     </nav>
 
-    <!-- PROPERTY TITLE BAR (replaces hero) -->
+    <!-- PROPERTY TITLE BAR -->
     <div class="prop-title-bar">
       <div class="prop-title-bar-inner">
-        <div class="prop-title-bar-left">
-          <a href="javascript:history.back()" class="back-btn-bar">← Back</a>
-          <div class="prop-title-info">
-            <span class="status-pill pill-{{ prop.status | replace(' ','') }}">
-              <span class="status-dot"></span>{{ prop.status }}
-            </span>
-            <h1>{{ prop.title }}</h1>
-            <p>📍 {{ prop.location }}</p>
-          </div>
+        <div class="prop-title-info">
+          <span class="status-pill pill-{{ prop.status | replace(' ','') }}">
+            <span class="status-dot"></span>{{ prop.status }}
+          </span>
+          <h1>{{ prop.title }}</h1>
+          <p>📍 {{ prop.location }}</p>
         </div>
+        <a href="javascript:history.back()" class="back-btn-bar">← Back</a>
       </div>
     </div>
 
