@@ -509,41 +509,19 @@
         color: rgba(255, 255, 255, 0.35);
       }
 
-      /* ── intl-tel-input POPUP FIX — force white dropdown ── */
+      /* intl-tel-input: ensure dropdown is a floating popup */
       .iti {
         width: 100%;
+        position: relative;
       }
       .iti__country-list {
-        background: #ffffff !important;
-        color: #111827 !important;
-        border: 1px solid #e5e7eb !important;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
-        z-index: 9999 !important;
-      }
-      .iti__country {
-        padding: 8px 12px !important;
-        color: #111827 !important;
-      }
-      .iti__country.iti__highlight {
-        background: #f3f4f6 !important;
-      }
-      .iti__country-name {
-        color: #111827 !important;
-      }
-      .iti__dial-code {
-        color: #6b7280 !important;
-      }
-      .iti__selected-flag {
-        background: rgba(255, 255, 255, 0.15) !important;
-      }
-      .iti__arrow {
-        border-top-color: #6b7280 !important;
-      }
-      .iti__search-input {
-        background: #ffffff !important;
-        color: #111827 !important;
-        border-bottom: 1px solid #e5e7eb !important;
-        padding: 8px 12px !important;
+        position: absolute !important;
+        z-index: 99999 !important;
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid #ccc !important;
+        max-height: 200px;
+        overflow-y: auto !important;
       }
     </style>
   </head>
