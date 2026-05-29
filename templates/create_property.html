@@ -722,16 +722,15 @@
         padding: 2px 6px;
         border-radius: 4px;
       }
-      .uploading-spinner {
-        display: inline-block;
-        width: 14px;
-        height: 14px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-top-color: white;
-        border-radius: 50%;
-        animation: spin 0.6s linear infinite;
-        vertical-align: middle;
-        margin-right: 6px;
+      .upload-progress {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+        padding: 8px;
+        text-align: center;
       }
       @keyframes spin {
         to {
@@ -980,92 +979,105 @@
     <script>
       var uploadedUrls = [];
 
-      var zone = document.getElementById('uploadZone');
-      var fileInput = document.getElementById('fileInput');
+      var zone  = document.getElementById('uploadZone');
+      var input = document.getElementById('fileInput');
 
-      zone.addEventListener('click', function(){ fileInput.click(); });
-      zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('drag-over'); });
-      zone.addEventListener('dragleave', function(){ zone.classList.remove('drag-over'); });
-      zone.addEventListener('drop', function(e){
-        e.preventDefault(); zone.classList.remove('drag-over');
+      // Click to open file picker
+      zone.onclick = function(){ input.click(); };
+
+      // Drag and drop
+      zone.ondragover  = function(e){ e.preventDefault(); zone.style.borderColor='#D4A017'; };
+      zone.ondragleave = function(){ zone.style.borderColor='rgba(255,255,255,0.25)'; };
+      zone.ondrop = function(e){
+        e.preventDefault();
+        zone.style.borderColor='rgba(255,255,255,0.25)';
         handleFiles(e.dataTransfer.files);
-      });
-      fileInput.addEventListener('change', function(){ handleFiles(this.files); });
+      };
 
-      function handleFiles(files) {
-        Array.from(files).forEach(function(file){
-          if (!file.type.match('image.*')) return;
-          uploadFile(file);
+      // File picker change
+      input.onchange = function(){ handleFiles(this.files); this.value=''; };
+
+      function handleFiles(files){
+        if(!files || !files.length) return;
+        Array.from(files).forEach(function(f){
+          if(!f.type.match('image.*')){ alert(f.name + ' is not an image.'); return; }
+          if(f.size > 5*1024*1024){ alert(f.name + ' is too large (max 5MB).'); return; }
+          doUpload(f);
         });
       }
 
-      function uploadFile(file) {
-        // Show uploading placeholder
-        var grid = document.getElementById('previewGrid');
-        var placeholder = document.createElement('div');
-        placeholder.className = 'preview-item';
-        placeholder.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:11px;color:rgba(255,255,255,0.50);"><span class=\"uploading-spinner\"></span>Uploading...</div>';
-        grid.appendChild(placeholder);
+      function doUpload(file){
+        // Add uploading card
+        var grid  = document.getElementById('previewGrid');
+        var card  = document.createElement('div');
+        card.className = 'preview-item';
+        card.innerHTML = '<div class="upload-progress">Uploading...</div>';
+        grid.appendChild(card);
 
-        var formData = new FormData();
-        formData.append('file', file);
+        var fd = new FormData();
+        fd.append('file', file);
 
-        fetch('/upload-image', { method:'POST', body:formData })
-          .then(function(r){ return r.json(); })
-          .then(function(data){
-            if (data.url) {
-              uploadedUrls.push(data.url);
-              updateGalleryField();
-              // Replace placeholder with preview
-              placeholder.innerHTML =
-                '<img src="' + data.url + '"/>' +
-                (uploadedUrls.length === 1 ? '<span class="main-badge">Main</span>' : '') +
-                '<button type="button" class="remove-btn" onclick="removeUrl('' + data.url + '', this.parentElement)">×</button>';
-              document.getElementById('uploadHint').textContent = uploadedUrls.length + ' image' + (uploadedUrls.length > 1 ? 's' : '') + ' ready.';
-            } else {
-              placeholder.innerHTML = '<div style="color:#f87171;font-size:10px;padding:4px;">Failed</div>';
-            }
-          })
-          .catch(function(){
-            placeholder.innerHTML = '<div style="color:#f87171;font-size:10px;padding:4px;">Error</div>';
-          });
+        fetch('/upload-image', {
+          method: 'POST',
+          body: fd,
+          credentials: 'include'
+        })
+        .then(function(r){
+          if(!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function(data){
+          if(data.error) throw new Error(data.error);
+          uploadedUrls.push(data.url);
+          updateField();
+          var isFirst = uploadedUrls.length === 1;
+          card.innerHTML =
+            '<img src="' + data.url + '" style="width:100%;height:100%;object-fit:cover;"/>' +
+            (isFirst ? '<span class="main-badge">Main</span>' : '') +
+            '<button type="button" class="remove-btn" onclick="removeImg('' + data.url + '',this.parentNode)">×</button>';
+          document.getElementById('uploadHint').textContent =
+            uploadedUrls.length + ' image' + (uploadedUrls.length>1?'s':'') + ' uploaded.';
+        })
+        .catch(function(err){
+          card.innerHTML = '<div class="upload-progress" style="color:#f87171;">Failed:<br>' + err.message + '</div>';
+        });
       }
 
-      function removeUrl(url, el) {
-        uploadedUrls = uploadedUrls.filter(function(u){ return u !== url; });
-        el.parentElement.removeChild(el);
-        updateGalleryField();
-        // Update main badge
-        var items = document.querySelectorAll('.preview-item');
+      function removeImg(url, el){
+        uploadedUrls = uploadedUrls.filter(function(u){ return u!==url; });
+        el.parentNode.removeChild(el);
+        updateField();
+        // Re-badge first item
+        var items = document.querySelectorAll('#previewGrid .preview-item');
         document.querySelectorAll('.main-badge').forEach(function(b){ b.remove(); });
-        if (items.length > 0) {
-          var img = items[0].querySelector('img');
-          if (img) {
-            var badge = document.createElement('span');
-            badge.className = 'main-badge'; badge.textContent = 'Main';
-            items[0].appendChild(badge);
-          }
+        if(items.length > 0 && items[0].querySelector('img')){
+          var b = document.createElement('span');
+          b.className='main-badge'; b.textContent='Main';
+          items[0].appendChild(b);
         }
+        document.getElementById('uploadHint').textContent =
+          uploadedUrls.length + ' image' + (uploadedUrls.length>1?'s':'') + ' uploaded.';
       }
 
-      function updateGalleryField() {
-        var fallback = document.getElementById('urlFallback').value.trim();
-        var fallbackUrls = fallback ? fallback.split('\n').map(function(u){ return u.trim(); }).filter(Boolean) : [];
-        var all = uploadedUrls.concat(fallbackUrls);
+      function syncUrls(){
+        var manual = document.getElementById('urlFallback').value.trim();
+        var manualList = manual ? manual.split('\n').map(function(u){return u.trim();}).filter(Boolean) : [];
+        var all = uploadedUrls.concat(manualList.filter(function(u){ return uploadedUrls.indexOf(u)<0; }));
         document.getElementById('galleryUrls').value = all.join('\n');
       }
 
-      function syncUrls() {
-        updateGalleryField();
+      function updateField(){
+        var manual = document.getElementById('urlFallback').value.trim();
+        var manualList = manual ? manual.split('\n').map(function(u){return u.trim();}).filter(Boolean) : [];
+        var all = uploadedUrls.concat(manualList.filter(function(u){ return uploadedUrls.indexOf(u)<0; }));
+        document.getElementById('galleryUrls').value = all.join('\n');
       }
 
-      // Form submit validation
       document.querySelector('form').addEventListener('submit', function(e){
-        updateGalleryField();
-        var urls = document.getElementById('galleryUrls').value.trim();
-        if (!urls) {
+        updateField();
+        if(!document.getElementById('galleryUrls').value.trim()){
           e.preventDefault();
-          alert('Please upload at least one image or paste an image URL.');
+          alert('Please upload at least one photo or paste an image URL.');
         }
       });
     </script>

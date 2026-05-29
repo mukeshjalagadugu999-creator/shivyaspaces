@@ -41,8 +41,25 @@ app.config["MAIL_DEFAULT_SENDER"] = ("ShivyaSpaces", "hello@shivyaspaces.com")
 # -----------------------------------------------
 # SITE URL — change this after hosting
 # -----------------------------------------------
-SITE_URL = "http://127.0.0.1:5000"
+SITE_URL = os.environ.get("SITE_URL", "https://www.shivyaspaces.com")
 mail = Mail(app)
+
+# ── Cloudinary config (optional - set env vars to enable) ──
+if CLOUDINARY_AVAILABLE:
+    import cloudinary
+    import cloudinary.uploader
+    cloudinary.config(
+        cloud_name = os.environ.get("CLOUDINARY_CLOUD_NAME", ""),
+        api_key    = os.environ.get("CLOUDINARY_API_KEY", ""),
+        api_secret = os.environ.get("CLOUDINARY_API_SECRET", ""),
+        secure     = True
+    )
+
+# ── Upload folder for local image storage (fallback) ──
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "static", "uploads")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "gif"}
+MAX_UPLOAD_SIZE = 5 * 1024 * 1024  # 5MB
 
 
 # -----------------------------------------------
@@ -1094,41 +1111,50 @@ def termsandconditions():
 @login_required
 @csrf.exempt
 def upload_image():
-    """Upload image to Cloudinary and return URL."""
-    if not CLOUDINARY_AVAILABLE:
-        return jsonify({"error": "Image upload not configured"}), 500
-
+    """Upload image — uses Cloudinary if configured, else local static/uploads."""
     if "file" not in request.files:
         return jsonify({"error": "No file provided"}), 400
 
     file = request.files["file"]
-    if file.filename == "":
+    if not file or file.filename == "":
         return jsonify({"error": "No file selected"}), 400
 
-    # Validate file type
-    allowed = {"jpg", "jpeg", "png", "webp", "gif"}
+    # Validate extension
     ext = file.filename.rsplit(".", 1)[-1].lower() if "." in file.filename else ""
-    if ext not in allowed:
+    if ext not in ALLOWED_EXTENSIONS:
         return jsonify({"error": "Only JPG, PNG, WEBP images allowed"}), 400
 
-    # Validate file size (max 5MB)
+    # Validate size
     file.seek(0, 2)
     size = file.tell()
     file.seek(0)
-    if size > 5 * 1024 * 1024:
+    if size > MAX_UPLOAD_SIZE:
         return jsonify({"error": "Image must be under 5MB"}), 400
 
+    # Try Cloudinary first
+    cloud_name = os.environ.get("CLOUDINARY_CLOUD_NAME", "")
+    if CLOUDINARY_AVAILABLE and cloud_name:
+        try:
+            result = cloudinary.uploader.upload(
+                file,
+                folder="shivyaspaces",
+                transformation=[{"width": 1200, "height": 800, "crop": "limit", "quality": "auto"}]
+            )
+            return jsonify({"url": result["secure_url"]}), 200
+        except Exception as e:
+            pass  # Fall through to local storage
+
+    # Local storage fallback
     try:
-        result = cloudinary.uploader.upload(
-            file,
-            folder="shivyaspaces",
-            transformation=[
-                {"width": 1200, "height": 800, "crop": "limit", "quality": "auto"},
-            ]
-        )
-        return jsonify({"url": result["secure_url"]}), 200
+        import uuid
+        filename = f"{uuid.uuid4().hex}.{ext}"
+        save_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.seek(0)
+        file.save(save_path)
+        url = f"/static/uploads/{filename}"
+        return jsonify({"url": url}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"Upload failed: {str(e)}"}), 500
 
 
 if __name__ == "__main__":

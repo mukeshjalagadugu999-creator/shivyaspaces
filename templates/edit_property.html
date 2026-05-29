@@ -1000,23 +1000,28 @@
 
       var zone = document.getElementById("uploadZone");
       var fileInput = document.getElementById("fileInput");
-      zone.addEventListener("click", function () {
+      zone.style.pointerEvents = "all";
+      zone.onclick = function (e) {
+        e.stopPropagation();
         fileInput.click();
-      });
+      };
       zone.addEventListener("dragover", function (e) {
         e.preventDefault();
+        e.stopPropagation();
         zone.classList.add("drag-over");
       });
-      zone.addEventListener("dragleave", function () {
+      zone.addEventListener("dragleave", function (e) {
+        e.preventDefault();
         zone.classList.remove("drag-over");
       });
       zone.addEventListener("drop", function (e) {
         e.preventDefault();
+        e.stopPropagation();
         zone.classList.remove("drag-over");
         handleFiles(e.dataTransfer.files);
       });
       fileInput.addEventListener("change", function () {
-        handleFiles(this.files);
+        if (this.files.length) handleFiles(this.files);
       });
 
       function handleFiles(files) {
@@ -1034,7 +1039,11 @@
         grid.appendChild(placeholder);
         var fd = new FormData();
         fd.append("file", file);
-        fetch("/upload-image", { method: "POST", body: fd })
+        fetch("/upload-image", {
+          method: "POST",
+          body: fd,
+          credentials: "include",
+        })
           .then(function (r) {
             return r.json();
           })
