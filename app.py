@@ -71,8 +71,8 @@ except Exception:
     os.makedirs(_tmp_uploads, exist_ok=True)
     UPLOAD_FOLDER = _tmp_uploads
     UPLOAD_URL_BASE = "/tmp-uploads"
-ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "gif"}
-MAX_UPLOAD_SIZE = 5 * 1024 * 1024  # 5MB
+ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "gif", "bmp", "tiff", "tif", "heic", "heif", "avif", "svg"}
+MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 
 
 # -----------------------------------------------
@@ -1144,10 +1144,13 @@ def upload_image():
     if not file or file.filename == "":
         return jsonify({"error": "No file selected"}), 400
 
-    # Validate extension
-    ext = file.filename.rsplit(".", 1)[-1].lower() if "." in file.filename else ""
-    if ext not in ALLOWED_EXTENSIONS:
-        return jsonify({"error": "Only JPG, PNG, WEBP images allowed"}), 400
+    # Validate - accept any image type
+    ext = file.filename.rsplit(".", 1)[-1].lower() if "." in file.filename else "jpg"
+    mime = file.content_type or ""
+    if not mime.startswith("image/") and ext not in ALLOWED_EXTENSIONS:
+        return jsonify({"error": "Please upload an image file (JPG, PNG, WEBP, etc)"}), 400
+    if not ext:
+        ext = "jpg"
 
     # Validate size
     file.seek(0, 2)

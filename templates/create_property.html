@@ -656,8 +656,7 @@
         cursor: pointer;
         transition: all 0.2s;
         background: rgba(255, 255, 255, 0.04);
-        position: relative;
-        display: block;
+        user-select: none;
       }
       .upload-zone:hover,
       .upload-zone.drag-over {
@@ -724,15 +723,15 @@
         padding: 2px 6px;
         border-radius: 4px;
       }
-      .upload-progress {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.6);
-        padding: 8px;
-        text-align: center;
+
+      .spin {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-top-color: rgba(255, 255, 255, 0.75);
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        flex-shrink: 0;
       }
       @keyframes spin {
         to {
@@ -921,28 +920,21 @@
           <div class="form-group">
             <label>Upload Photos <span class="required">*</span></label>
             <!-- Upload zone -->
-            <label class="upload-zone" id="uploadZone" for="fileInput">
+            <div class="upload-zone" id="uploadZone">
               <div class="upload-icon">📷</div>
               <p class="upload-text">Click to upload photos</p>
               <p class="upload-sub">
-                JPG, PNG, WEBP · Max 5MB each · First image = main photo
+                JPG, PNG, WEBP, GIF, BMP, HEIC · Max 10MB each · First = main
+                photo
               </p>
-              <input
-                type="file"
-                id="fileInput"
-                name="fileInputField"
-                accept="image/jpeg,image/png,image/webp,image/gif"
-                multiple
-                style="
-                  position: absolute;
-                  inset: 0;
-                  width: 100%;
-                  height: 100%;
-                  opacity: 0;
-                  cursor: pointer;
-                "
-              />
-            </label>
+            </div>
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*"
+              multiple
+              style="display: none"
+            />
             <!-- Preview grid -->
             <div class="preview-grid" id="previewGrid"></div>
             <!-- Hidden textarea stores final URLs -->
@@ -985,178 +977,230 @@
     </script>
 
     <script>
-      var uploadedUrls = [];
-
-      var zone = document.getElementById("uploadZone");
-      var input = document.getElementById("fileInput");
-
-      // Click to open file picker
-      zone.onclick = function () {
-        input.click();
-      };
-
-      // Drag and drop
-      zone.ondragover = function (e) {
-        e.preventDefault();
-        zone.style.borderColor = "#D4A017";
-      };
-      zone.ondragleave = function () {
-        zone.style.borderColor = "rgba(255,255,255,0.25)";
-      };
-      zone.ondrop = function (e) {
-        e.preventDefault();
-        zone.style.borderColor = "rgba(255,255,255,0.25)";
-        handleFiles(e.dataTransfer.files);
-      };
-
-      // File picker change
-      input.onchange = function () {
-        handleFiles(this.files);
-        this.value = "";
-      };
-
-      function handleFiles(files) {
-        if (!files || !files.length) return;
-        Array.from(files).forEach(function (f) {
-          if (!f.type.match("image.*")) {
-            alert(f.name + " is not an image.");
-            return;
-          }
-          if (f.size > 5 * 1024 * 1024) {
-            alert(f.name + " is too large (max 5MB).");
-            return;
-          }
-          doUpload(f);
-        });
-      }
-
-      function doUpload(file) {
-        // Add uploading card
+      (function () {
+        var uploadedUrls = [];
+        var uploading = false;
+        var zone = document.getElementById("uploadZone");
+        var input = document.getElementById("fileInput");
         var grid = document.getElementById("previewGrid");
-        var card = document.createElement("div");
-        card.className = "preview-item";
-        card.innerHTML = '<div class="upload-progress">Uploading...</div>';
-        grid.appendChild(card);
+        var hint = document.getElementById("uploadHint");
+        var hiddenField = document.getElementById("galleryUrls");
+        var fallback = document.getElementById("urlFallback");
 
-        var fd = new FormData();
-        fd.append("file", file);
+        // ── Open file picker on click ──────────────────────────────────────────
+        zone.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          input.click();
+        });
 
-        fetch("/upload-image", {
-          method: "POST",
-          body: fd,
-          credentials: "include",
-        })
-          .then(function (r) {
-            if (!r.ok)
-              throw new Error(
-                "Server error " + r.status + " - try pasting URL instead",
-              );
-            return r.json();
-          })
-          .then(function (data) {
-            if (data.error) throw new Error(data.error);
-            uploadedUrls.push(data.url);
-            updateField();
-            var isFirst = uploadedUrls.length === 1;
-            card.innerHTML =
-              '<img src="' +
-              data.url +
-              '" style="width:100%;height:100%;object-fit:cover;" data-url="' +
-              data.url +
-              '"/>' +
-              (isFirst ? '<span class="main-badge">Main</span>' : "") +
-              '<button type="button" class="remove-btn" onclick="removeImg(this)">×</button>';
-            document.getElementById("uploadHint").textContent =
-              uploadedUrls.length +
-              " image" +
-              (uploadedUrls.length > 1 ? "s" : "") +
-              " uploaded.";
-          })
-          .catch(function (err) {
-            card.innerHTML =
-              '<div class="upload-progress" style="color:#f87171;">Failed: ' +
-              err.message +
-              "</div>";
-            alert(
-              "Upload failed: " +
-                err.message +
-                "\nPlease paste image URL in the field below instead.",
-            );
+        // ── Drag and drop ──────────────────────────────────────────────────────
+        zone.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          zone.style.borderColor = "#D4A017";
+          zone.style.background = "rgba(212,160,23,0.08)";
+        });
+        zone.addEventListener("dragleave", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          zone.style.borderColor = "rgba(255,255,255,0.25)";
+          zone.style.background = "rgba(255,255,255,0.04)";
+        });
+        zone.addEventListener("drop", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          zone.style.borderColor = "rgba(255,255,255,0.25)";
+          zone.style.background = "rgba(255,255,255,0.04)";
+          processFiles(e.dataTransfer.files);
+        });
+
+        // ── File input change ──────────────────────────────────────────────────
+        input.addEventListener("change", function () {
+          if (this.files && this.files.length) processFiles(this.files);
+          this.value = ""; // reset so same file can be re-selected
+        });
+
+        // ── Process selected files ─────────────────────────────────────────────
+        function processFiles(files) {
+          Array.from(files).forEach(function (file) {
+            // Accept all image types
+            if (!file.type.startsWith("image/")) {
+              showError(file.name + " is not a recognised image type.");
+              return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+              showError(file.name + " is too large (max 10MB).");
+              return;
+            }
+            uploadFile(file);
           });
-      }
-
-      function removeImg(btn) {
-        var el = btn.parentNode;
-        var img = el.querySelector("img");
-        var url = img ? img.getAttribute("data-url") : "";
-        uploadedUrls = uploadedUrls.filter(function (u) {
-          return u !== url;
-        });
-        el.parentNode.removeChild(el);
-        updateField();
-        // Re-badge first item
-        var items = document.querySelectorAll("#previewGrid .preview-item");
-        document.querySelectorAll(".main-badge").forEach(function (b) {
-          b.remove();
-        });
-        if (items.length > 0 && items[0].querySelector("img")) {
-          var b = document.createElement("span");
-          b.className = "main-badge";
-          b.textContent = "Main";
-          items[0].appendChild(b);
         }
-        document.getElementById("uploadHint").textContent =
-          uploadedUrls.length +
-          " image" +
-          (uploadedUrls.length > 1 ? "s" : "") +
-          " uploaded.";
-      }
 
-      function syncUrls() {
-        var manual = document.getElementById("urlFallback").value.trim();
-        var manualList = manual
-          ? manual
-              .split("\n")
-              .map(function (u) {
-                return u.trim();
-              })
-              .filter(Boolean)
-          : [];
-        var all = uploadedUrls.concat(
-          manualList.filter(function (u) {
-            return uploadedUrls.indexOf(u) < 0;
-          }),
-        );
-        document.getElementById("galleryUrls").value = all.join("\n");
-      }
+        // ── Upload single file ─────────────────────────────────────────────────
+        function uploadFile(file) {
+          // Create placeholder card
+          var card = document.createElement("div");
+          card.className = "preview-item";
+          card.innerHTML =
+            '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+            'height:100%;gap:6px;padding:8px;">' +
+            '<div class="spin"></div>' +
+            '<span style="font-size:10px;color:rgba(255,255,255,0.55);">Uploading…</span>' +
+            "</div>";
+          grid.appendChild(card);
+          updateHint();
 
-      function updateField() {
-        var manual = document.getElementById("urlFallback").value.trim();
-        var manualList = manual
-          ? manual
-              .split("\n")
-              .map(function (u) {
-                return u.trim();
-              })
-              .filter(Boolean)
-          : [];
-        var all = uploadedUrls.concat(
-          manualList.filter(function (u) {
-            return uploadedUrls.indexOf(u) < 0;
-          }),
-        );
-        document.getElementById("galleryUrls").value = all.join("\n");
-      }
+          var fd = new FormData();
+          fd.append("file", file);
 
-      document
-        .getElementById("propertyForm")
-        .addEventListener("submit", function (e) {
-          updateField();
-          if (!document.getElementById("galleryUrls").value.trim()) {
-            e.preventDefault();
-            alert("Please upload at least one photo or paste an image URL.");
+          fetch("/upload-image", {
+            method: "POST",
+            body: fd,
+            credentials: "include",
+          })
+            .then(function (r) {
+              if (!r.ok) throw new Error("Server returned " + r.status);
+              return r.json();
+            })
+            .then(function (data) {
+              if (data.error) throw new Error(data.error);
+              // Success
+              uploadedUrls.push(data.url);
+              updateHiddenField();
+              var idx = uploadedUrls.length - 1;
+              card.innerHTML =
+                '<img src="' +
+                escHtml(data.url) +
+                '" ' +
+                'data-url="' +
+                escHtml(data.url) +
+                '" ' +
+                'style="width:100%;height:100%;object-fit:cover;border-radius:6px;display:block;"/>' +
+                (idx === 0 ? '<span class="main-badge">Main</span>' : "") +
+                '<button type="button" class="remove-btn" ' +
+                'data-url="' +
+                escHtml(data.url) +
+                '" ' +
+                'onclick="window._removeUpload(this)">×</button>';
+              updateHint();
+            })
+            .catch(function (err) {
+              // Show error inline in card — no alert() to avoid refocus issues
+              card.innerHTML =
+                '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+                'height:100%;gap:4px;padding:8px;text-align:center;">' +
+                '<span style="font-size:18px;">⚠️</span>' +
+                '<span style="font-size:10px;color:#f87171;word-break:break-word;">' +
+                escHtml(err.message) +
+                "</span>" +
+                '<button type="button" onclick="this.parentNode.parentNode.remove()" ' +
+                'style="font-size:10px;color:rgba(255,255,255,0.50);background:none;border:none;cursor:pointer;margin-top:2px;">Dismiss</button>' +
+                "</div>";
+              updateHint();
+            });
+        }
+
+        // ── Remove uploaded image ──────────────────────────────────────────────
+        window._removeUpload = function (btn) {
+          var url = btn.getAttribute("data-url");
+          uploadedUrls = uploadedUrls.filter(function (u) {
+            return u !== url;
+          });
+          btn.closest(".preview-item").remove();
+          updateHiddenField();
+          // Re-badge first remaining item
+          var first = grid.querySelector(".preview-item img");
+          grid.querySelectorAll(".main-badge").forEach(function (b) {
+            b.remove();
+          });
+          if (first) {
+            var b = document.createElement("span");
+            b.className = "main-badge";
+            b.textContent = "Main";
+            first.parentNode.appendChild(b);
           }
-        });
+          updateHint();
+        };
+
+        // ── Sync fallback URL textarea ─────────────────────────────────────────
+        if (fallback) {
+          fallback.addEventListener("input", updateHiddenField);
+        }
+
+        // ── Update hidden field ────────────────────────────────────────────────
+        function updateHiddenField() {
+          var manual = fallback
+            ? fallback.value
+                .trim()
+                .split("\n")
+                .map(function (u) {
+                  return u.trim();
+                })
+                .filter(Boolean)
+            : [];
+          var all = uploadedUrls.slice();
+          manual.forEach(function (u) {
+            if (all.indexOf(u) < 0) all.push(u);
+          });
+          hiddenField.value = all.join("\n");
+        }
+
+        // ── Update hint text ───────────────────────────────────────────────────
+        function updateHint() {
+          var pending = grid.querySelectorAll(".preview-item .spin").length;
+          var done = uploadedUrls.length;
+          if (pending > 0)
+            hint.textContent =
+              "Uploading " +
+              pending +
+              " image" +
+              (pending > 1 ? "s" : "") +
+              "…";
+          else if (done > 0)
+            hint.textContent =
+              done + " image" + (done > 1 ? "s" : "") + " ready.";
+          else
+            hint.textContent =
+              "No images yet. Upload above or paste URLs below.";
+        }
+
+        // ── Show inline error message under zone ──────────────────────────────
+        function showError(msg) {
+          var e = document.createElement("p");
+          e.style.cssText = "color:#f87171;font-size:12px;margin-top:6px;";
+          e.textContent = msg;
+          zone.parentNode.insertBefore(e, zone.nextSibling);
+          setTimeout(function () {
+            if (e.parentNode) e.parentNode.removeChild(e);
+          }, 4000);
+        }
+
+        // ── HTML escape ────────────────────────────────────────────────────────
+        function escHtml(s) {
+          return s
+            .replace(/&/g, "&amp;")
+            .replace(/"/g, "&quot;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+        }
+
+        // ── Form submit guard ──────────────────────────────────────────────────
+        var form =
+          document.getElementById("propertyForm") ||
+          document.querySelector("form");
+        if (form) {
+          form.addEventListener("submit", function (e) {
+            updateHiddenField();
+            if (!hiddenField.value.trim()) {
+              e.preventDefault();
+              showError(
+                "Please upload at least one photo, or paste an image URL below.",
+              );
+            }
+          });
+        }
+      })();
     </script>
   </body>
 </html>
