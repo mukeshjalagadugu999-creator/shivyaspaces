@@ -752,7 +752,7 @@
       <div class="flash {{ category }}">{{ message }}</div>
       {% endfor %} {% endwith %}
 
-      <form method="POST" action="/create">
+      <form method="POST" action="/create" id="propertyForm">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
         <div class="form-card">
@@ -987,108 +987,176 @@
     <script>
       var uploadedUrls = [];
 
-      var zone  = document.getElementById('uploadZone');
-      var input = document.getElementById('fileInput');
+      var zone = document.getElementById("uploadZone");
+      var input = document.getElementById("fileInput");
 
       // Click to open file picker
-      zone.onclick = function(){ input.click(); };
+      zone.onclick = function () {
+        input.click();
+      };
 
       // Drag and drop
-      zone.ondragover  = function(e){ e.preventDefault(); zone.style.borderColor='#D4A017'; };
-      zone.ondragleave = function(){ zone.style.borderColor='rgba(255,255,255,0.25)'; };
-      zone.ondrop = function(e){
+      zone.ondragover = function (e) {
         e.preventDefault();
-        zone.style.borderColor='rgba(255,255,255,0.25)';
+        zone.style.borderColor = "#D4A017";
+      };
+      zone.ondragleave = function () {
+        zone.style.borderColor = "rgba(255,255,255,0.25)";
+      };
+      zone.ondrop = function (e) {
+        e.preventDefault();
+        zone.style.borderColor = "rgba(255,255,255,0.25)";
         handleFiles(e.dataTransfer.files);
       };
 
       // File picker change
-      input.onchange = function(){ handleFiles(this.files); this.value=''; };
+      input.onchange = function () {
+        handleFiles(this.files);
+        this.value = "";
+      };
 
-      function handleFiles(files){
-        if(!files || !files.length) return;
-        Array.from(files).forEach(function(f){
-          if(!f.type.match('image.*')){ alert(f.name + ' is not an image.'); return; }
-          if(f.size > 5*1024*1024){ alert(f.name + ' is too large (max 5MB).'); return; }
+      function handleFiles(files) {
+        if (!files || !files.length) return;
+        Array.from(files).forEach(function (f) {
+          if (!f.type.match("image.*")) {
+            alert(f.name + " is not an image.");
+            return;
+          }
+          if (f.size > 5 * 1024 * 1024) {
+            alert(f.name + " is too large (max 5MB).");
+            return;
+          }
           doUpload(f);
         });
       }
 
-      function doUpload(file){
+      function doUpload(file) {
         // Add uploading card
-        var grid  = document.getElementById('previewGrid');
-        var card  = document.createElement('div');
-        card.className = 'preview-item';
+        var grid = document.getElementById("previewGrid");
+        var card = document.createElement("div");
+        card.className = "preview-item";
         card.innerHTML = '<div class="upload-progress">Uploading...</div>';
         grid.appendChild(card);
 
         var fd = new FormData();
-        fd.append('file', file);
+        fd.append("file", file);
 
-        fetch('/upload-image', {
-          method: 'POST',
+        fetch("/upload-image", {
+          method: "POST",
           body: fd,
-          credentials: 'include'
+          credentials: "include",
         })
-        .then(function(r){
-          if(!r.ok) throw new Error('Server error ' + r.status + ' - try pasting URL instead');
-          return r.json();
-        })
-        .then(function(data){
-          if(data.error) throw new Error(data.error);
-          uploadedUrls.push(data.url);
-          updateField();
-          var isFirst = uploadedUrls.length === 1;
-          card.innerHTML =
-            '<img src="' + data.url + '" style="width:100%;height:100%;object-fit:cover;"/>' +
-            (isFirst ? '<span class="main-badge">Main</span>' : '') +
-            '<button type="button" class="remove-btn" onclick="removeImg('' + data.url + '',this.parentNode)">×</button>';
-          document.getElementById('uploadHint').textContent =
-            uploadedUrls.length + ' image' + (uploadedUrls.length>1?'s':'') + ' uploaded.';
-        })
-        .catch(function(err){
-          card.innerHTML = '<div class="upload-progress" style="color:#f87171;">Failed: ' + err.message + '</div>';
-          alert('Upload failed: ' + err.message + '\nPlease paste image URL in the field below instead.');
-        });
+          .then(function (r) {
+            if (!r.ok)
+              throw new Error(
+                "Server error " + r.status + " - try pasting URL instead",
+              );
+            return r.json();
+          })
+          .then(function (data) {
+            if (data.error) throw new Error(data.error);
+            uploadedUrls.push(data.url);
+            updateField();
+            var isFirst = uploadedUrls.length === 1;
+            card.innerHTML =
+              '<img src="' +
+              data.url +
+              '" style="width:100%;height:100%;object-fit:cover;" data-url="' +
+              data.url +
+              '"/>' +
+              (isFirst ? '<span class="main-badge">Main</span>' : "") +
+              '<button type="button" class="remove-btn" onclick="removeImg(this)">×</button>';
+            document.getElementById("uploadHint").textContent =
+              uploadedUrls.length +
+              " image" +
+              (uploadedUrls.length > 1 ? "s" : "") +
+              " uploaded.";
+          })
+          .catch(function (err) {
+            card.innerHTML =
+              '<div class="upload-progress" style="color:#f87171;">Failed: ' +
+              err.message +
+              "</div>";
+            alert(
+              "Upload failed: " +
+                err.message +
+                "\nPlease paste image URL in the field below instead.",
+            );
+          });
       }
 
-      function removeImg(url, el){
-        uploadedUrls = uploadedUrls.filter(function(u){ return u!==url; });
+      function removeImg(btn) {
+        var el = btn.parentNode;
+        var img = el.querySelector("img");
+        var url = img ? img.getAttribute("data-url") : "";
+        uploadedUrls = uploadedUrls.filter(function (u) {
+          return u !== url;
+        });
         el.parentNode.removeChild(el);
         updateField();
         // Re-badge first item
-        var items = document.querySelectorAll('#previewGrid .preview-item');
-        document.querySelectorAll('.main-badge').forEach(function(b){ b.remove(); });
-        if(items.length > 0 && items[0].querySelector('img')){
-          var b = document.createElement('span');
-          b.className='main-badge'; b.textContent='Main';
+        var items = document.querySelectorAll("#previewGrid .preview-item");
+        document.querySelectorAll(".main-badge").forEach(function (b) {
+          b.remove();
+        });
+        if (items.length > 0 && items[0].querySelector("img")) {
+          var b = document.createElement("span");
+          b.className = "main-badge";
+          b.textContent = "Main";
           items[0].appendChild(b);
         }
-        document.getElementById('uploadHint').textContent =
-          uploadedUrls.length + ' image' + (uploadedUrls.length>1?'s':'') + ' uploaded.';
+        document.getElementById("uploadHint").textContent =
+          uploadedUrls.length +
+          " image" +
+          (uploadedUrls.length > 1 ? "s" : "") +
+          " uploaded.";
       }
 
-      function syncUrls(){
-        var manual = document.getElementById('urlFallback').value.trim();
-        var manualList = manual ? manual.split('\n').map(function(u){return u.trim();}).filter(Boolean) : [];
-        var all = uploadedUrls.concat(manualList.filter(function(u){ return uploadedUrls.indexOf(u)<0; }));
-        document.getElementById('galleryUrls').value = all.join('\n');
+      function syncUrls() {
+        var manual = document.getElementById("urlFallback").value.trim();
+        var manualList = manual
+          ? manual
+              .split("\n")
+              .map(function (u) {
+                return u.trim();
+              })
+              .filter(Boolean)
+          : [];
+        var all = uploadedUrls.concat(
+          manualList.filter(function (u) {
+            return uploadedUrls.indexOf(u) < 0;
+          }),
+        );
+        document.getElementById("galleryUrls").value = all.join("\n");
       }
 
-      function updateField(){
-        var manual = document.getElementById('urlFallback').value.trim();
-        var manualList = manual ? manual.split('\n').map(function(u){return u.trim();}).filter(Boolean) : [];
-        var all = uploadedUrls.concat(manualList.filter(function(u){ return uploadedUrls.indexOf(u)<0; }));
-        document.getElementById('galleryUrls').value = all.join('\n');
+      function updateField() {
+        var manual = document.getElementById("urlFallback").value.trim();
+        var manualList = manual
+          ? manual
+              .split("\n")
+              .map(function (u) {
+                return u.trim();
+              })
+              .filter(Boolean)
+          : [];
+        var all = uploadedUrls.concat(
+          manualList.filter(function (u) {
+            return uploadedUrls.indexOf(u) < 0;
+          }),
+        );
+        document.getElementById("galleryUrls").value = all.join("\n");
       }
 
-      document.querySelector('form').addEventListener('submit', function(e){
-        updateField();
-        if(!document.getElementById('galleryUrls').value.trim()){
-          e.preventDefault();
-          alert('Please upload at least one photo or paste an image URL.');
-        }
-      });
+      document
+        .getElementById("propertyForm")
+        .addEventListener("submit", function (e) {
+          updateField();
+          if (!document.getElementById("galleryUrls").value.trim()) {
+            e.preventDefault();
+            alert("Please upload at least one photo or paste an image URL.");
+          }
+        });
     </script>
   </body>
 </html>
