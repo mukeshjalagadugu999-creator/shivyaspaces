@@ -1131,9 +1131,7 @@
           else if (done > 0)
             hint.textContent =
               done + " image" + (done > 1 ? "s" : "") + " ready.";
-          else
-            hint.textContent =
-              "No images yet. Upload above or paste URLs below.";
+          else hint.textContent = "No images yet. Click above to upload.";
         }
 
         // ── Show inline error message under zone ──────────────────────────────
@@ -1165,9 +1163,7 @@
             updateHiddenField();
             if (!hiddenField.value.trim()) {
               e.preventDefault();
-              showError(
-                "Please upload at least one photo, or paste an image URL below.",
-              );
+              showError("Please upload at least one photo.");
             }
           });
         }
