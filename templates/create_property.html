@@ -1031,7 +1031,7 @@
           credentials: 'include'
         })
         .then(function(r){
-          if(!r.ok) throw new Error('HTTP ' + r.status);
+          if(!r.ok) throw new Error('Server error ' + r.status + ' - try pasting URL instead');
           return r.json();
         })
         .then(function(data){
@@ -1047,7 +1047,8 @@
             uploadedUrls.length + ' image' + (uploadedUrls.length>1?'s':'') + ' uploaded.';
         })
         .catch(function(err){
-          card.innerHTML = '<div class="upload-progress" style="color:#f87171;">Failed:<br>' + err.message + '</div>';
+          card.innerHTML = '<div class="upload-progress" style="color:#f87171;">Failed: ' + err.message + '</div>';
+          alert('Upload failed: ' + err.message + '\nPlease paste image URL in the field below instead.');
         });
       }
 

@@ -56,8 +56,21 @@ if CLOUDINARY_AVAILABLE:
     )
 
 # ── Upload folder for local image storage (fallback) ──
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "static", "uploads")
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# Use /tmp for Railway (persistent static dir may not be writable)
+_static_uploads = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads")
+_tmp_uploads = "/tmp/shivyaspaces_uploads"
+try:
+    os.makedirs(_static_uploads, exist_ok=True)
+    # Test write
+    _test = os.path.join(_static_uploads, ".test")
+    open(_test, "w").close()
+    os.remove(_test)
+    UPLOAD_FOLDER = _static_uploads
+    UPLOAD_URL_BASE = "/static/uploads"
+except Exception:
+    os.makedirs(_tmp_uploads, exist_ok=True)
+    UPLOAD_FOLDER = _tmp_uploads
+    UPLOAD_URL_BASE = "/tmp-uploads"
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "gif"}
 MAX_UPLOAD_SIZE = 5 * 1024 * 1024  # 5MB
 
@@ -1107,8 +1120,20 @@ def termsandconditions():
 
 
 
+
+@app.route("/tmp-uploads/<filename>")
+def serve_tmp_upload(filename):
+    """Serve uploaded files from /tmp if static/uploads not writable."""
+    from flask import send_from_directory
+    import re as _re
+    # Security: only allow safe filenames
+    if not _re.match(r'^[a-f0-9]{32}\.(jpg|jpeg|png|webp|gif)$', filename):
+        from flask import abort
+        abort(404)
+    return send_from_directory(_tmp_uploads, filename)
+
+
 @app.route("/upload-image", methods=["POST"])
-@login_required
 @csrf.exempt
 def upload_image():
     """Upload image — uses Cloudinary if configured, else local static/uploads."""
@@ -1151,7 +1176,7 @@ def upload_image():
         save_path = os.path.join(UPLOAD_FOLDER, filename)
         file.seek(0)
         file.save(save_path)
-        url = f"/static/uploads/{filename}"
+        url = f"{UPLOAD_URL_BASE}/{filename}"
         return jsonify({"url": url}), 200
     except Exception as e:
         return jsonify({"error": f"Upload failed: {str(e)}"}), 500
