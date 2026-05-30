@@ -20,13 +20,6 @@ app = Flask(__name__)
 app.secret_key = "shivya_secret_key_2024"
 app.config["WTF_CSRF_TIME_LIMIT"] = None
 csrf = CSRFProtect(app)
-@app.errorhandler(500)
-def internal_error(e):
-    import traceback
-    tb = traceback.format_exc()
-    return f"<pre style='padding:20px;background:#111;color:#f87171;font-size:12px;'><b>500 Error — Debug Info:</b>\n\n{tb}</pre>", 500
-
-
 limiter = Limiter(
     get_remote_address,
     app=app,
