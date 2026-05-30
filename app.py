@@ -564,43 +564,100 @@ def dashboard():
 @login_required
 def create_property():
     if request.method == "POST":
-        amenities_raw  = request.form.get("amenities", "")
+        is_complex     = request.form.get("is_complex") == "1"
         gallery_raw    = request.form.get("gallery_images", "")
-        amenities      = json.dumps([a.strip() for a in amenities_raw.split(",") if a.strip()])
         gallery_images = json.dumps([g.strip() for g in gallery_raw.splitlines() if g.strip()])
         images_list    = [g.strip() for g in gallery_raw.splitlines() if g.strip()]
         first_image    = images_list[0] if images_list else ""
 
         conn = get_db()
-        conn.execute("""INSERT INTO properties
-            (owner_id, title, location, rent, status, beds, baths, sqft, image,
-             property_type, security_deposit, facing, maintenance, floor, built,
-             description, amenities, gallery_images, is_complex)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", (
-            session["owner_id"],
-            request.form.get("title"),
-            request.form.get("location"),
-            request.form.get("rent"),
-            request.form.get("status"),
-            request.form.get("beds") or 0,
-            request.form.get("baths") or 0,
-            request.form.get("sqft") or 0,
-            first_image,
-            request.form.get("property_type"),
-            request.form.get("security_deposit"),
-            request.form.get("facing"),
-            request.form.get("maintenance"),
-            request.form.get("floor"),
-            request.form.get("built"),
-            request.form.get("description"),
-            amenities,
-            gallery_images,
-            1 if request.form.get('is_complex') == '1' else 0
-        ))
-        conn.commit()
-        conn.close()
-        flash(f"'{request.form.get('title')}' created successfully!", "success")
-        return redirect(url_for("dashboard"))
+
+        if is_complex:
+            # Complex: minimal fields, no rent/beds/baths
+            amenities = json.dumps([])
+            conn.execute("""INSERT INTO properties
+                (owner_id, title, location, rent, status, beds, baths, sqft, image,
+                 property_type, security_deposit, facing, maintenance, floor, built,
+                 description, amenities, gallery_images, is_complex)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)""", (
+                session["owner_id"],
+                request.form.get("title"),
+                request.form.get("location"),
+                "", "Available", 0, 0, 0, first_image,
+                request.form.get("property_type"),
+                "", request.form.get("facing"), "", "",
+                request.form.get("built"),
+                request.form.get("description"),
+                amenities, gallery_images
+            ))
+            complex_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+
+            # Save inline units submitted with complex form
+            unit_names   = request.form.getlist("unit_title[]")
+            unit_rents   = request.form.getlist("unit_rent[]")
+            unit_beds    = request.form.getlist("unit_beds[]")
+            unit_baths   = request.form.getlist("unit_baths[]")
+            unit_sqfts   = request.form.getlist("unit_sqft[]")
+            unit_statuses= request.form.getlist("unit_status[]")
+            unit_floors  = request.form.getlist("unit_floor[]")
+
+            for i, name in enumerate(unit_names):
+                if not name.strip():
+                    continue
+                conn.execute("""INSERT INTO properties
+                    (owner_id, parent_id, title, location, rent, status, beds, baths,
+                     sqft, image, property_type, floor, description, amenities,
+                     gallery_images, is_complex)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""", (
+                    session["owner_id"], complex_id,
+                    name.strip(),
+                    request.form.get("location"),
+                    unit_rents[i] if i < len(unit_rents) else "",
+                    unit_statuses[i] if i < len(unit_statuses) else "Available",
+                    int(unit_beds[i]) if i < len(unit_beds) and unit_beds[i] else 0,
+                    int(unit_baths[i]) if i < len(unit_baths) and unit_baths[i] else 0,
+                    int(unit_sqfts[i]) if i < len(unit_sqfts) and unit_sqfts[i] else 0,
+                    first_image, request.form.get("property_type"),
+                    unit_floors[i] if i < len(unit_floors) else "",
+                    "", json.dumps([]), json.dumps([])
+                ))
+
+            conn.commit()
+            conn.close()
+            flash(f"Complex '{request.form.get('title')}' created with {len([n for n in unit_names if n.strip()])} units!", "success")
+            return redirect(url_for("dashboard"))
+
+        else:
+            # Single property — all fields
+            amenities_raw  = request.form.get("amenities", "")
+            amenities      = json.dumps([a.strip() for a in amenities_raw.split(",") if a.strip()])
+            conn.execute("""INSERT INTO properties
+                (owner_id, title, location, rent, status, beds, baths, sqft, image,
+                 property_type, security_deposit, facing, maintenance, floor, built,
+                 description, amenities, gallery_images, is_complex)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""", (
+                session["owner_id"],
+                request.form.get("title"),
+                request.form.get("location"),
+                request.form.get("rent"),
+                request.form.get("status"),
+                request.form.get("beds") or 0,
+                request.form.get("baths") or 0,
+                request.form.get("sqft") or 0,
+                first_image,
+                request.form.get("property_type"),
+                request.form.get("security_deposit"),
+                request.form.get("facing"),
+                request.form.get("maintenance"),
+                request.form.get("floor"),
+                request.form.get("built"),
+                request.form.get("description"),
+                amenities, gallery_images
+            ))
+            conn.commit()
+            conn.close()
+            flash(f"'{request.form.get('title')}' created successfully!", "success")
+            return redirect(url_for("dashboard"))
 
     return render_template("create_property.html", brand_name=session["brand_name"])
 
