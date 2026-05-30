@@ -307,12 +307,11 @@ def search_results():
 
     query = """
         SELECT p.*,
-               o.slug, o.name as owner_name, o.brand_name as owner_brand,
-               parent.title as parent_title
+               o.slug, o.name as owner_name, o.brand_name as owner_brand
         FROM properties p
         JOIN owners o ON p.owner_id = o.id
-        LEFT JOIN properties parent ON p.parent_id = parent.id
         WHERE o.is_active = 1
+        AND (p.parent_id IS NULL OR p.parent_id = 0)
     """
     params = []
 
@@ -332,21 +331,38 @@ def search_results():
     rows = conn.execute(query, params).fetchall()
     conn.close()
 
+    conn2 = get_db()
     properties = []
     for r in rows:
         p = parse_property(r)
-        # Add display title: "Parent — Child" for sub-units
-        if p.get("parent_id") and p.get("parent_title"):
-            p["display_title"] = f"{p['parent_title']} — {p['title']}"
+        p["display_title"] = p["title"]
+        # For complexes, load sub-unit summary
+        if p.get("is_complex"):
+            units = conn2.execute(
+                "SELECT title, beds, status FROM properties WHERE parent_id=? ORDER BY id",
+                (p["id"],)
+            ).fetchall()
+            p["unit_count"] = len(units)
+            p["unit_available"] = sum(1 for u in units if u["status"] == "Available")
+            # Build summary: "1BHK, 2BHK, Shop"
+            labels = []
+            for u in units:
+                b = int(u["beds"] or 0)
+                if b > 0:
+                    labels.append(f"{b}BHK")
+                else:
+                    # Use first word of title as label
+                    labels.append(u["title"].split()[0] if u["title"] else "Unit")
+            p["unit_labels"] = ", ".join(dict.fromkeys(labels))  # dedupe
         else:
-            p["display_title"] = p["title"]
-        if min_rent or max_rent:
-            rent_num = int("".join(filter(str.isdigit, p["rent"] or "0")))
-            if min_rent and rent_num < int(min_rent):
-                continue
-            if max_rent and rent_num > int(max_rent):
-                continue
+            if min_rent or max_rent:
+                rent_num = int("".join(filter(str.isdigit, p["rent"] or "0")))
+                if min_rent and rent_num < int(min_rent):
+                    continue
+                if max_rent and rent_num > int(max_rent):
+                    continue
         properties.append(p)
+    conn2.close()
 
     grouped = {}
     if group_by == "type":
@@ -579,7 +595,7 @@ def create_property():
             request.form.get("description"),
             amenities,
             gallery_images,
-            0
+            1 if request.form.get('is_complex') == '1' else 0
         ))
         conn.commit()
         conn.close()
@@ -587,6 +603,65 @@ def create_property():
         return redirect(url_for("dashboard"))
 
     return render_template("create_property.html", brand_name=session["brand_name"])
+
+
+
+@app.route("/add-unit/<int:complex_id>", methods=["GET", "POST"])
+@login_required
+def add_unit(complex_id):
+    """Add a unit to an existing complex property."""
+    conn = get_db()
+    parent = parse_property(conn.execute(
+        "SELECT * FROM properties WHERE id=? AND owner_id=? AND is_complex=1",
+        (complex_id, session["owner_id"])
+    ).fetchone())
+
+    if not parent:
+        flash("Complex not found.", "danger")
+        conn.close()
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        gallery_raw    = request.form.get("gallery_images", "")
+        amenities_raw  = request.form.get("amenities", "")
+        gallery_images = json.dumps([g.strip() for g in gallery_raw.splitlines() if g.strip()])
+        amenities      = json.dumps([a.strip() for a in amenities_raw.split(",") if a.strip()])
+        images_list    = [g.strip() for g in gallery_raw.splitlines() if g.strip()]
+        first_image    = images_list[0] if images_list else parent.get("image", "")
+
+        conn.execute("""INSERT INTO properties
+            (owner_id, parent_id, title, location, rent, status, beds, baths, sqft,
+             image, property_type, security_deposit, facing, maintenance, floor,
+             description, amenities, gallery_images, is_complex)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""", (
+            session["owner_id"],
+            complex_id,
+            request.form.get("title"),
+            parent["location"],   # inherit parent location
+            request.form.get("rent"),
+            request.form.get("status", "Available"),
+            request.form.get("beds") or 0,
+            request.form.get("baths") or 0,
+            request.form.get("sqft") or 0,
+            first_image,
+            request.form.get("property_type") or parent.get("property_type"),
+            request.form.get("security_deposit"),
+            request.form.get("facing"),
+            request.form.get("maintenance"),
+            request.form.get("floor"),
+            request.form.get("description"),
+            amenities,
+            gallery_images
+        ))
+        conn.commit()
+        conn.close()
+        flash(f"Unit added to {parent['title']}!", "success")
+        return redirect(url_for("dashboard"))
+
+    conn.close()
+    return render_template("add_unit.html",
+                           parent=parent,
+                           brand_name=session["brand_name"])
 
 
 @app.route("/edit/<int:prop_id>", methods=["GET", "POST"])

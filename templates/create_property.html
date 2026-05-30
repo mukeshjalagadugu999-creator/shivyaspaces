@@ -739,6 +739,54 @@
           transform: rotate(360deg);
         }
       }
+
+      /* Complex toggle */
+      .type-toggle {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .type-toggle-btn {
+        flex: 1;
+        padding: 16px;
+        border-radius: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.06);
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.18s;
+        font-family: "Inter", sans-serif;
+      }
+      .type-toggle-btn:hover {
+        border-color: rgba(212, 160, 23, 0.4);
+      }
+      .type-toggle-btn.active {
+        border-color: #d4a017;
+        background: rgba(212, 160, 23, 0.12);
+      }
+      .type-toggle-btn .ttitle {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 4px;
+      }
+      .type-toggle-btn .tdesc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .type-toggle-btn.active .ttitle {
+        color: #d4a017;
+      }
+      .complex-note {
+        background: rgba(139, 92, 246, 0.12);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 20px;
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -829,6 +877,36 @@
             </div>
           </div>
         </div>
+
+        <!-- Property Type Toggle -->
+        <div class="type-toggle">
+          <div
+            class="type-toggle-btn active"
+            id="btnSingle"
+            onclick="setType('single')"
+          >
+            <div class="ttitle">🏠 Single Property</div>
+            <div class="tdesc">
+              Apartment, villa, house or shop — one unit with one price
+            </div>
+          </div>
+          <div
+            class="type-toggle-btn"
+            id="btnComplex"
+            onclick="setType('complex')"
+          >
+            <div class="ttitle">🏢 Multi-Unit Complex</div>
+            <div class="tdesc">
+              Building or apartment with multiple units inside
+            </div>
+          </div>
+        </div>
+        <div class="complex-note" id="complexNote">
+          ℹ️ Create the complex first (name, photos, description). After saving,
+          you can add individual units (1BHK, 2BHK, Shop etc) from your
+          dashboard.
+        </div>
+        <input type="hidden" name="is_complex" id="isComplex" value="0" />
 
         <div class="form-card">
           <h2>Property Details</h2>
@@ -1168,6 +1246,28 @@
           });
         }
       })();
+    </script>
+
+    <script>
+      function setType(type) {
+        var isComplex = type === "complex";
+        document.getElementById("isComplex").value = isComplex ? "1" : "0";
+        document
+          .getElementById("btnSingle")
+          .classList.toggle("active", !isComplex);
+        document
+          .getElementById("btnComplex")
+          .classList.toggle("active", isComplex);
+        document.getElementById("complexNote").style.display = isComplex
+          ? "block"
+          : "none";
+        // For complex — rent/beds/baths not needed
+        var sizeCard = document.getElementById("sizePricingTitle");
+        if (sizeCard) {
+          var card = sizeCard.closest(".form-card");
+          if (card) card.style.opacity = isComplex ? "0.50" : "1";
+        }
+      }
     </script>
   </body>
 </html>

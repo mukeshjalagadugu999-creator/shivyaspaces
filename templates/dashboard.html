@@ -441,6 +441,47 @@
           flex-direction: column;
         }
       }
+
+      .prop-type-badge {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 999px;
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+      .badge-complex-tag {
+        background: rgba(139, 92, 246, 0.2);
+        color: #c4b5fd;
+        border: 1px solid rgba(139, 92, 246, 0.35);
+      }
+      .btn-add-unit {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 7px;
+        text-decoration: none;
+        background: rgba(139, 92, 246, 0.15);
+        color: #c4b5fd;
+        border: 1px solid rgba(139, 92, 246, 0.35);
+        transition: all 0.18s;
+      }
+      .btn-add-unit:hover {
+        background: rgba(139, 92, 246, 0.28);
+      }
+      .unit-row {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .unit-row td {
+        padding: 10px 16px 10px 32px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .unit-row td:first-child::before {
+        content: "↳ ";
+        color: rgba(255, 255, 255, 0.25);
+      }
     </style>
   </head>
   <body>
@@ -519,7 +560,19 @@
             {% for prop in properties %}
             <tr>
               <td>
-                <p class="prop-title">{{ prop.title }}</p>
+                <p class="prop-title">
+                  {{ prop.title }} {% if prop.is_complex %}<span
+                    class="prop-type-badge badge-complex-tag"
+                    >Complex</span
+                  >{% endif %} {% if prop.parent_id %}<span
+                    class="prop-type-badge"
+                    style="
+                      background: rgba(255, 255, 255, 0.08);
+                      color: rgba(255, 255, 255, 0.45);
+                    "
+                    >Unit</span
+                  >{% endif %}
+                </p>
                 <p class="prop-location">{{ prop.location }}</p>
               </td>
               <td>
@@ -542,6 +595,11 @@
                     class="btn-view"
                     >View</a
                   >
+                  {% if prop.is_complex %}<a
+                    href="/add-unit/{{ prop.id }}"
+                    class="btn-add-unit"
+                    >+ Add Unit</a
+                  >{% endif %}
                   <button
                     class="btn-delete"
                     onclick="openDeleteModal('{{ prop.id }}','{{ prop.title }}')"

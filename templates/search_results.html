@@ -378,6 +378,31 @@
         color: rgba(255, 255, 255, 0.3);
       }
 
+      .badge-complex {
+        background: rgba(139, 92, 246, 0.85);
+        color: white;
+      }
+      .complex-summary {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .complex-chip {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.75);
+      }
+      .complex-chip.available {
+        background: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+      }
+      .complex-chip.types {
+        background: rgba(212, 160, 23, 0.15);
+        color: #d4a017;
+      }
       @media (max-width: 600px) {
         .navbar {
           padding: 0 16px;
@@ -506,23 +531,45 @@
           {% for item in items %}
           <a href="/{{ item.slug }}/property/{{ item.id }}" class="prop-card">
             <div class="prop-img-wrap">
-              <img src="{{ item.image }}" alt="{{ item.display_title }}" />
+              <img src="{{ item.image }}" alt="{{ item.title }}" />
+              {% if item.is_complex %}
+              <span class="prop-badge badge-complex">Complex</span>
+              {% else %}
               <span class="prop-badge badge-{{ item.status | replace(' ','') }}"
                 >{{ item.status }}</span
               >
+              {% endif %}
             </div>
             <div class="prop-info">
+              {% if item.is_complex %}
+              <div class="prop-title">{{ item.title }}</div>
+              <div class="prop-loc">📍 {{ item.location }}</div>
+              <div class="complex-summary">
+                <span class="complex-chip"
+                  >{{ item.unit_count }} unit{{ 's' if item.unit_count != 1 else
+                  '' }}</span
+                >
+                <span class="complex-chip available"
+                  >{{ item.unit_available }} available</span
+                >
+                {% if item.unit_labels %}<span class="complex-chip types"
+                  >{{ item.unit_labels }}</span
+                >{% endif %}
+              </div>
+              {% else %}
               <div class="prop-price">{{ item.rent }}<span> / month</span></div>
-              <div class="prop-title">{{ item.display_title }}</div>
+              <div class="prop-title">{{ item.title }}</div>
               <div class="prop-loc">{{ item.location }}</div>
               <div class="prop-meta">
                 {% if item.beds and item.beds > 0 %}<span class="prop-meta-chip"
                   >{{ item.beds }} Beds</span
                 >{% endif %} {% if item.baths %}<span class="prop-meta-chip"
                   >{{ item.baths }} Baths</span
+                >{% endif %} {% if item.sqft %}<span class="prop-meta-chip"
+                  >{{ item.sqft }} Sq Ft</span
                 >{% endif %}
-                <span class="prop-meta-chip">{{ item.sqft }} Sq Ft</span>
               </div>
+              {% endif %}
             </div>
           </a>
           {% endfor %}

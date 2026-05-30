@@ -636,6 +636,109 @@
         background: currentColor;
         flex-shrink: 0;
       }
+
+      /* ── COMPLEX LAYOUT ── */
+      .complex-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid #f0e8d0;
+      }
+      .complex-header h1 {
+        font-size: 22px;
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 4px;
+      }
+      .complex-header .loc {
+        font-size: 13px;
+        color: #6b7280;
+      }
+      .units-section {
+        padding: 24px 28px;
+        border-bottom: 1px solid #f0e8d0;
+      }
+      .units-section h2 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 16px;
+      }
+      .units-grid-pub {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 14px;
+      }
+      .unit-pub-card {
+        background: #fafafa;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 18px;
+        text-decoration: none;
+        transition: all 0.18s;
+        display: block;
+      }
+      .unit-pub-card:hover {
+        border-color: #d4a017;
+        box-shadow: 0 4px 16px rgba(212, 160, 23, 0.15);
+        transform: translateY(-2px);
+      }
+      .unit-pub-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 4px;
+      }
+      .unit-pub-price {
+        font-size: 20px;
+        font-weight: 800;
+        color: #1a0a00;
+        margin-bottom: 10px;
+      }
+      .unit-pub-price span {
+        font-size: 12px;
+        font-weight: 400;
+        color: #6b7280;
+      }
+      .unit-pub-meta {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+      .unit-pub-chip {
+        font-size: 11px;
+        background: #f3f4f6;
+        color: #4b5563;
+        padding: 3px 9px;
+        border-radius: 999px;
+      }
+      .unit-pub-status {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .status-Available {
+        background: rgba(34, 197, 94, 0.12);
+        color: #166534;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+      }
+      .status-Rented {
+        background: rgba(239, 68, 68, 0.12);
+        color: #991b1b;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+      .view-unit-btn {
+        display: block;
+        text-align: center;
+        background: #d4a017;
+        color: #1a0a00;
+        padding: 9px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        margin-top: 12px;
+      }
     </style>
   </head>
   <body>
@@ -668,16 +771,13 @@
     <div class="page-wrap">
       <!-- PROPERTY CARD -->
       <div class="property-card">
-        <!-- Header -->
-        <div class="prop-header">
-          <div>
-            <h1>{{ prop.title }}</h1>
-            <p class="location">📍 {{ prop.location }}</p>
-          </div>
-          <div class="prop-price">{{ prop.rent }}<span> / month</span></div>
+        {% if prop.is_complex %}
+        <!-- ═══ COMPLEX LAYOUT ═══ -->
+        <div class="complex-header">
+          <h1>{{ prop.title }}</h1>
+          <p class="loc">📍 {{ prop.location }}</p>
         </div>
 
-        <!-- Gallery -->
         {% if prop.gallery_images %}
         <div class="gallery">
           <img
@@ -700,22 +800,106 @@
         </div>
         {% endif %}
 
-        <!-- Info stats -->
+        <!-- About -->
+        <div class="prop-left" style="border: none; padding: 24px 28px">
+          {% if prop.description %}
+          <p class="section-title">About This Property</p>
+          <p class="section-body">{{ prop.description }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Units -->
+        {% if sub_units %}
+        <div class="units-section">
+          <h2>Available Units</h2>
+          <div class="units-grid-pub">
+            {% for unit in sub_units %}
+            <a href="/{{ slug }}/property/{{ unit.id }}" class="unit-pub-card">
+              <div class="unit-pub-name">{{ unit.title }}</div>
+              <div class="unit-pub-price">
+                {{ unit.rent }}<span> / month</span>
+              </div>
+              <div class="unit-pub-meta">
+                {% if unit.beds and unit.beds > 0 %}<span class="unit-pub-chip"
+                  >{{ unit.beds }} Bed</span
+                >{% endif %} {% if unit.baths %}<span class="unit-pub-chip"
+                  >{{ unit.baths }} Bath</span
+                >{% endif %} {% if unit.sqft %}<span class="unit-pub-chip"
+                  >{{ unit.sqft }} Sq Ft</span
+                >{% endif %}
+              </div>
+              <span
+                class="unit-pub-status status-{{ unit.status | replace(' ','') }}"
+                >{{ unit.status }}</span
+              >
+              <span class="view-unit-btn">View Details →</span>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Property Overview -->
+        <div class="prop-left" style="border: none; padding: 0 28px 24px">
+          <p class="section-title">Property Overview</p>
+          <div class="overview-grid">
+            <div class="ov-item">
+              <span>Property Type</span
+              ><strong>{{ prop.property_type or 'N/A' }}</strong>
+            </div>
+            <div class="ov-item">
+              <span>Location</span><strong>{{ prop.location }}</strong>
+            </div>
+            {% if prop.built %}
+            <div class="ov-item">
+              <span>Built</span><strong>{{ prop.built }}</strong>
+            </div>
+            {% endif %} {% if prop.amenities %}
+            <div class="ov-item" style="grid-column: 1/-1">
+              <span>Amenities</span>
+              <div class="features" style="margin-top: 6px">
+                {% for a in prop.amenities %}<span class="feature-tag"
+                  >{{ a }}</span
+                >{% endfor %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        {% else %}
+        <!-- ═══ SINGLE PROPERTY LAYOUT ═══ -->
+        <div class="prop-header">
+          <div>
+            <h1>{{ prop.title }}</h1>
+            <p class="location">📍 {{ prop.location }}</p>
+          </div>
+          <div class="prop-price">{{ prop.rent }}<span> / month</span></div>
+        </div>
+
+        {% if prop.gallery_images %}
+        <div class="gallery">
+          <img
+            id="mainImg"
+            class="main-img"
+            src="{{ prop.gallery_images[0] }}"
+            alt="{{ prop.title }}"
+          />
+          {% if prop.gallery_images | length > 1 %}
+          <div class="thumb-row">
+            {% for img in prop.gallery_images %}
+            <img
+              class="thumb {% if loop.first %}active{% endif %}"
+              src="{{ img }}"
+              onclick="changeImg(this)"
+            />
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
         <div class="info-grid">
-          {% if prop.is_complex %}
-          <div class="info-cell">
-            <strong>{{ prop.sqft }}</strong><span>Max Sq Ft</span>
-          </div>
-          <div class="info-cell">
-            <strong>24/7</strong><span>Security</span>
-          </div>
-          <div class="info-cell">
-            <strong>{{ prop.built or 'N/A' }}</strong><span>Built</span>
-          </div>
-          <div class="info-cell">
-            <strong>{{ sub_units|length }}</strong><span>Unit Types</span>
-          </div>
-          {% else %}
           <div class="info-cell">
             <strong>{{ prop.beds }}</strong><span>Bedrooms</span>
           </div>
@@ -728,15 +912,12 @@
           <div class="info-cell">
             <strong>{{ prop.floor or 'N/A' }}</strong><span>Floor</span>
           </div>
-          {% endif %}
         </div>
 
-        <!-- Layout -->
         <div class="prop-layout">
           <div class="prop-left">
             <p class="section-title">About This Property</p>
             <p class="section-body">{{ prop.description }}</p>
-
             <p class="section-title">Property Overview</p>
             <div class="overview-grid">
               <div class="ov-item">
@@ -761,38 +942,15 @@
                 <span>Location</span><strong>{{ prop.location }}</strong>
               </div>
             </div>
-
             {% if prop.amenities %}
-            <p class="section-title">Features & Amenities</p>
+            <p class="section-title">Features &amp; Amenities</p>
             <div class="features">
               {% for a in prop.amenities %}<span class="feature-tag"
                 >{{ a }}</span
               >{% endfor %}
             </div>
-            {% endif %} {% if sub_units %}
-            <p class="section-title">Available Units</p>
-            <div class="units-grid">
-              {% for unit in sub_units %}
-              <div class="unit-card">
-                <h3>{{ unit.title }}</h3>
-                <p class="unit-price">{{ unit.rent }}<span> / mo</span></p>
-                <div class="unit-meta">
-                  {% if unit.beds > 0 %}
-                  <div>{{ unit.beds }} Bed</div>
-                  {% endif %}
-                  <div>{{ unit.baths }} Bath</div>
-                  <div>{{ unit.sqft }} Sq Ft</div>
-                </div>
-                <a href="/{{ slug }}/property/{{ unit.id }}" class="unit-btn"
-                  >View Details</a
-                >
-              </div>
-              {% endfor %}
-            </div>
             {% endif %}
           </div>
-
-          <!-- RIGHT PANEL -->
           <div class="prop-right">
             <div class="contact-box">
               <h3>Interested?</h3>
@@ -800,7 +958,6 @@
                 Contact <strong>{{ owner.name }}</strong> directly about this
                 property.
               </p>
-
               {% if prop.status == 'Available' %} {% if whatsapp_phone %}
               <a
                 class="wa-btn"
@@ -830,7 +987,6 @@
               </div>
               <a href="/results" class="browse-btn">Browse Other Properties</a>
               {% endif %}
-
               <div class="summary">
                 <p class="summary-label">Summary</p>
                 <div class="summary-row">
@@ -848,6 +1004,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
 
