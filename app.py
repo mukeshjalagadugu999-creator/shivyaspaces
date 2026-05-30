@@ -529,10 +529,26 @@ def dashboard():
     session["owner_slug"] = owner["slug"]
     session["owner_name"] = owner["name"]
 
-    properties = [parse_property(r) for r in conn.execute(
+    all_props = [parse_property(r) for r in conn.execute(
         "SELECT * FROM properties WHERE owner_id=? ORDER BY id DESC",
         (session["owner_id"],)
     ).fetchall()]
+
+    # For complexes, attach unit summary
+    for p in all_props:
+        if p.get("is_complex"):
+            units = conn.execute(
+                "SELECT title, beds, status FROM properties WHERE parent_id=? ORDER BY id",
+                (p["id"],)
+            ).fetchall()
+            p["unit_count"] = len(units)
+            p["unit_available"] = sum(1 for u in units if u["status"] == "Available")
+            names = [u["title"] for u in units if u["title"]]
+            p["unit_names"] = " · ".join(names[:5]) + ("..." if len(names) > 5 else "")
+        else:
+            p["unit_count"] = 0
+
+    properties = all_props
 
     enquiries = {}
     for row in conn.execute(
@@ -724,6 +740,55 @@ def add_unit(complex_id):
                            brand_name=session["brand_name"])
 
 
+
+@app.route("/edit-complex/<int:prop_id>", methods=["GET", "POST"])
+@login_required
+def edit_complex(prop_id):
+    conn = get_db()
+    prop = parse_property(conn.execute(
+        "SELECT * FROM properties WHERE id=? AND owner_id=? AND is_complex=1",
+        (prop_id, session["owner_id"])
+    ).fetchone())
+
+    if not prop:
+        flash("Complex not found.", "danger")
+        conn.close()
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        gallery_raw    = request.form.get("gallery_images", "")
+        gallery_images = json.dumps([g.strip() for g in gallery_raw.splitlines() if g.strip()])
+        images_list    = [g.strip() for g in gallery_raw.splitlines() if g.strip()]
+        first_image    = images_list[0] if images_list else prop.get("image", "")
+
+        conn.execute("""UPDATE properties SET
+            title=?, location=?, property_type=?, facing=?, built=?,
+            description=?, image=?, gallery_images=?
+            WHERE id=? AND owner_id=?""", (
+            request.form.get("title"),
+            request.form.get("location"),
+            request.form.get("property_type"),
+            request.form.get("facing"),
+            request.form.get("built"),
+            request.form.get("description"),
+            first_image, gallery_images,
+            prop_id, session["owner_id"]
+        ))
+        conn.commit()
+        conn.close()
+        flash(f"'{request.form.get('title')}' updated!", "success")
+        return redirect(url_for("dashboard"))
+
+    sub_units = [parse_property(r) for r in conn.execute(
+        "SELECT * FROM properties WHERE parent_id=? ORDER BY id",
+        (prop_id,)
+    ).fetchall()]
+    conn.close()
+    prop["gallery_images_str"] = "\n".join(prop["gallery_images"])
+    return render_template("edit_complex.html", prop=prop, sub_units=sub_units,
+                           brand_name=session["brand_name"])
+
+
 @app.route("/edit/<int:prop_id>", methods=["GET", "POST"])
 @login_required
 def edit_property(prop_id):
@@ -737,6 +802,14 @@ def edit_property(prop_id):
         flash("Property not found.", "danger")
         conn.close()
         return redirect(url_for("dashboard"))
+
+    # Units go to edit_unit, complexes go to edit_complex
+    if prop.get("parent_id"):
+        conn.close()
+        return redirect(url_for("edit_unit", unit_id=prop_id))
+    if prop.get("is_complex"):
+        conn.close()
+        return redirect(url_for("edit_complex", prop_id=prop_id))
 
     if request.method == "POST":
         amenities_raw  = request.form.get("amenities", "")

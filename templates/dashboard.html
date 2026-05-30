@@ -558,48 +558,98 @@
           </thead>
           <tbody>
             {% for prop in properties %}
-            <tr>
-              <td>
+            <tr
+              {%
+              if
+              prop.parent_id
+              %}style="background:rgba(255,255,255,0.02);"
+              {%
+              endif
+              %}
+            >
+              <td {% if prop.parent_id %}style="padding-left:32px;" {% endif %}>
                 <p class="prop-title">
-                  {{ prop.title }} {% if prop.is_complex %}<span
+                  {% if prop.parent_id %}<span
+                    style="color: rgba(255, 255, 255, 0.25); margin-right: 4px"
+                    >↳</span
+                  >{% endif %} {{ prop.title }} {% if prop.is_complex %}<span
                     class="prop-type-badge badge-complex-tag"
                     >Complex</span
-                  >{% endif %} {% if prop.parent_id %}<span
-                    class="prop-type-badge"
-                    style="
-                      background: rgba(255, 255, 255, 0.08);
-                      color: rgba(255, 255, 255, 0.45);
-                    "
-                    >Unit</span
                   >{% endif %}
                 </p>
                 <p class="prop-location">{{ prop.location }}</p>
               </td>
               <td>
-                {{ prop.rent }}<br /><small
+                {% if prop.is_complex %}
+                <p style="font-size: 13px; font-weight: 600; color: white">
+                  {{ prop.unit_count }} unit{{ 's' if prop.unit_count != 1 else
+                  '' }}
+                </p>
+                {% if prop.unit_names %}
+                <p
+                  style="
+                    font-size: 11px;
+                    color: rgba(255, 255, 255, 0.4);
+                    margin-top: 2px;
+                  "
+                >
+                  {{ prop.unit_names }}
+                </p>
+                {% endif %} {% else %} {{ prop.rent }}<br /><small
                   style="color: rgba(255, 255, 255, 0.4)"
                   >/ month</small
                 >
+                {% endif %}
               </td>
               <td>
+                {% if prop.is_complex %}
+                <span
+                  class="status-badge"
+                  style="
+                    background: rgba(139, 92, 246, 0.15);
+                    color: #c4b5fd;
+                    border: 1px solid rgba(139, 92, 246, 0.3);
+                  "
+                  >Complex</span
+                >
+                {% else %}
                 <span
                   class="status-badge status-{{ prop.status | replace(' ','') }}"
                   >{{ prop.status }}</span
                 >
+                {% endif %}
               </td>
               <td>
                 <div class="action-links">
+                  {% if prop.is_complex %}
+                  <a href="/edit-complex/{{ prop.id }}" class="btn-edit"
+                    >Edit Complex</a
+                  >
+                  <a
+                    href="/{{ owner_slug }}/property/{{ prop.id }}"
+                    class="btn-view"
+                    >View</a
+                  >
+                  <a href="/add-unit/{{ prop.id }}" class="btn-add-unit"
+                    >+ Add Unit</a
+                  >
+                  {% elif prop.parent_id %}
+                  <a href="/edit-unit/{{ prop.id }}" class="btn-edit"
+                    >Edit Unit</a
+                  >
+                  <a
+                    href="/{{ owner_slug }}/property/{{ prop.id }}"
+                    class="btn-view"
+                    >View</a
+                  >
+                  {% else %}
                   <a href="/edit/{{ prop.id }}" class="btn-edit">Edit</a>
                   <a
                     href="/{{ owner_slug }}/property/{{ prop.id }}"
                     class="btn-view"
                     >View</a
                   >
-                  {% if prop.is_complex %}<a
-                    href="/add-unit/{{ prop.id }}"
-                    class="btn-add-unit"
-                    >+ Add Unit</a
-                  >{% endif %}
+                  {% endif %}
                   <button
                     class="btn-delete"
                     onclick="openDeleteModal('{{ prop.id }}','{{ prop.title }}')"
