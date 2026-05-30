@@ -344,16 +344,12 @@ def search_results():
             ).fetchall()
             p["unit_count"] = len(units)
             p["unit_available"] = sum(1 for u in units if u["status"] == "Available")
-            # Build summary: "1BHK, 2BHK, Shop"
-            labels = []
-            for u in units:
-                b = int(u["beds"] or 0)
-                if b > 0:
-                    labels.append(f"{b}BHK")
-                else:
-                    # Use first word of title as label
-                    labels.append(u["title"].split()[0] if u["title"] else "Unit")
-            p["unit_labels"] = ", ".join(dict.fromkeys(labels))  # dedupe
+            # Show unit names (up to 5 then ...)
+            names = [u["title"] for u in units if u["title"]]
+            if len(names) <= 5:
+                p["unit_labels"] = ", ".join(names)
+            else:
+                p["unit_labels"] = ", ".join(names[:5]) + "..."
         else:
             if min_rent or max_rent:
                 rent_num = int("".join(filter(str.isdigit, p["rent"] or "0")))
@@ -593,17 +589,24 @@ def create_property():
             complex_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
 
             # Save inline units submitted with complex form
-            unit_names   = request.form.getlist("unit_title[]")
-            unit_rents   = request.form.getlist("unit_rent[]")
-            unit_beds    = request.form.getlist("unit_beds[]")
-            unit_baths   = request.form.getlist("unit_baths[]")
-            unit_sqfts   = request.form.getlist("unit_sqft[]")
-            unit_statuses= request.form.getlist("unit_status[]")
-            unit_floors  = request.form.getlist("unit_floor[]")
+            unit_names    = request.form.getlist("unit_title[]")
+            unit_rents    = request.form.getlist("unit_rent[]")
+            unit_beds     = request.form.getlist("unit_beds[]")
+            unit_baths    = request.form.getlist("unit_baths[]")
+            unit_sqfts    = request.form.getlist("unit_sqft[]")
+            unit_statuses = request.form.getlist("unit_status[]")
+            unit_floors   = request.form.getlist("unit_floor[]")
+            unit_galleries= request.form.getlist("unit_gallery_images[]")
 
             for i, name in enumerate(unit_names):
                 if not name.strip():
                     continue
+                # Parse unit gallery images
+                ugallery_raw = unit_galleries[i] if i < len(unit_galleries) else ""
+                ugallery_list = [g.strip() for g in ugallery_raw.splitlines() if g.strip()]
+                ugallery_json = json.dumps(ugallery_list)
+                ufirst_image = ugallery_list[0] if ugallery_list else first_image
+
                 conn.execute("""INSERT INTO properties
                     (owner_id, parent_id, title, location, rent, status, beds, baths,
                      sqft, image, property_type, floor, description, amenities,
@@ -617,9 +620,9 @@ def create_property():
                     int(unit_beds[i]) if i < len(unit_beds) and unit_beds[i] else 0,
                     int(unit_baths[i]) if i < len(unit_baths) and unit_baths[i] else 0,
                     int(unit_sqfts[i]) if i < len(unit_sqfts) and unit_sqfts[i] else 0,
-                    first_image, request.form.get("property_type"),
+                    ufirst_image, request.form.get("property_type"),
                     unit_floors[i] if i < len(unit_floors) else "",
-                    "", json.dumps([]), json.dumps([])
+                    "", json.dumps([]), ugallery_json
                 ))
 
             conn.commit()
@@ -773,10 +776,79 @@ def edit_property(prop_id):
         flash(f"'{request.form.get('title')}' updated successfully!", "success")
         return redirect(url_for("dashboard"))
 
+    sub_units = []
+    if prop.get("is_complex"):
+        sub_units = [parse_property(r) for r in conn.execute(
+            "SELECT * FROM properties WHERE parent_id=? ORDER BY id",
+            (prop_id,)
+        ).fetchall()]
+        for u in sub_units:
+            u["gallery_images_str"] = "\n".join(u["gallery_images"])
+
     conn.close()
     prop["amenities_str"]      = ", ".join(prop["amenities"])
     prop["gallery_images_str"] = "\n".join(prop["gallery_images"])
-    return render_template("edit_property.html", prop=prop, brand_name=session["brand_name"])
+    return render_template("edit_property.html", prop=prop, sub_units=sub_units,
+                           brand_name=session["brand_name"])
+
+
+
+@app.route("/edit-unit/<int:unit_id>", methods=["GET", "POST"])
+@login_required
+def edit_unit(unit_id):
+    conn = get_db()
+    unit = parse_property(conn.execute(
+        "SELECT * FROM properties WHERE id=? AND owner_id=? AND parent_id IS NOT NULL AND parent_id != 0",
+        (unit_id, session["owner_id"])
+    ).fetchone())
+
+    if not unit:
+        flash("Unit not found.", "danger")
+        conn.close()
+        return redirect(url_for("dashboard"))
+
+    parent = parse_property(conn.execute(
+        "SELECT * FROM properties WHERE id=?", (unit["parent_id"],)
+    ).fetchone())
+
+    if request.method == "POST":
+        gallery_raw    = request.form.get("gallery_images", "")
+        amenities_raw  = request.form.get("amenities", "")
+        gallery_images = json.dumps([g.strip() for g in gallery_raw.splitlines() if g.strip()])
+        amenities      = json.dumps([a.strip() for a in amenities_raw.split(",") if a.strip()])
+        images_list    = [g.strip() for g in gallery_raw.splitlines() if g.strip()]
+        first_image    = images_list[0] if images_list else unit.get("image", "")
+
+        conn.execute("""UPDATE properties SET
+            title=?, rent=?, status=?, beds=?, baths=?, sqft=?, image=?,
+            floor=?, facing=?, security_deposit=?, maintenance=?,
+            description=?, amenities=?, gallery_images=?
+            WHERE id=? AND owner_id=?""", (
+            request.form.get("title"),
+            request.form.get("rent"),
+            request.form.get("status"),
+            request.form.get("beds") or 0,
+            request.form.get("baths") or 0,
+            request.form.get("sqft") or 0,
+            first_image,
+            request.form.get("floor"),
+            request.form.get("facing"),
+            request.form.get("security_deposit"),
+            request.form.get("maintenance"),
+            request.form.get("description"),
+            amenities, gallery_images,
+            unit_id, session["owner_id"]
+        ))
+        conn.commit()
+        conn.close()
+        flash(f"Unit updated!", "success")
+        return redirect(url_for("edit_property", prop_id=unit["parent_id"]))
+
+    conn.close()
+    unit["gallery_images_str"] = "\n".join(unit["gallery_images"])
+    unit["amenities_str"] = ", ".join(unit["amenities"])
+    return render_template("edit_unit.html", unit=unit, parent=parent,
+                           brand_name=session["brand_name"])
 
 
 @app.route("/delete/<int:prop_id>", methods=["POST"])

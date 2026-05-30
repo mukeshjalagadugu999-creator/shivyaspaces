@@ -803,14 +803,15 @@
 
       function addUnit() {
         unitCount++;
-        var id = "unit_" + unitCount;
+        var n = unitCount;
+        var id = "unit_" + n;
         var div = document.createElement("div");
         div.className = "unit-card-builder";
         div.id = id;
         div.innerHTML =
           '<div class="unit-card-header">' +
           "<h3>Unit " +
-          unitCount +
+          n +
           "</h3>" +
           '<button type="button" class="unit-remove-btn" onclick="removeUnit(\'' +
           id +
@@ -849,9 +850,94 @@
           '<option value="Not Available">Not Available</option>' +
           "</select>" +
           "</div>" +
+          '<div class="form-group full">' +
+          "<label>Unit Photos</label>" +
+          '<div class="upload-zone" style="padding:16px;" onclick="triggerUnitUpload(' +
+          n +
+          ')">' +
+          '<div style="font-size:20px;margin-bottom:4px;">📷</div>' +
+          '<p style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.75);">Click to upload photos for this unit</p>' +
+          "</div>" +
+          '<input type="file" id="unitFile_' +
+          n +
+          '" accept="image/*" multiple style="display:none;" onchange="handleUnitFiles(' +
+          n +
+          ', this.files)"/>' +
+          '<input type="hidden" name="unit_gallery_images[]" id="unitGallery_' +
+          n +
+          '" value=""/>' +
+          '<div class="preview-grid" id="unitGrid_' +
+          n +
+          '" style="margin-top:8px;"></div>' +
+          "</div>" +
           "</div>";
         document.getElementById("unitsBuilder").appendChild(div);
         renumberUnits();
+      }
+
+      function triggerUnitUpload(n) {
+        document.getElementById("unitFile_" + n).click();
+      }
+
+      function handleUnitFiles(n, files) {
+        Array.from(files).forEach(function (f) {
+          if (!f.type.startsWith("image/")) return;
+          uploadUnitFile(n, f);
+        });
+      }
+
+      var unitUrls = {};
+
+      function uploadUnitFile(n, file) {
+        if (!unitUrls[n]) unitUrls[n] = [];
+        var grid = document.getElementById("unitGrid_" + n);
+        var card = document.createElement("div");
+        card.className = "preview-item";
+        card.innerHTML =
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;"><div class="spin"></div></div>';
+        grid.appendChild(card);
+        var fd = new FormData();
+        fd.append("file", file);
+        fetch("/upload-image", {
+          method: "POST",
+          body: fd,
+          credentials: "include",
+        })
+          .then(function (r) {
+            return r.json();
+          })
+          .then(function (data) {
+            if (data.url) {
+              unitUrls[n].push(data.url);
+              document.getElementById("unitGallery_" + n).value =
+                unitUrls[n].join("\n");
+              var idx = unitUrls[n].length - 1;
+              card.innerHTML =
+                '<img src="' +
+                data.url +
+                '" style="width:100%;height:100%;object-fit:cover;"/>' +
+                (idx === 0 ? '<span class="main-badge">Main</span>' : "") +
+                '<button type="button" class="remove-btn" onclick="removeUnitImg(' +
+                n +
+                ",'" +
+                data.url +
+                "',this.closest('.preview-item'))\">×</button>";
+            } else {
+              card.remove();
+            }
+          })
+          .catch(function () {
+            card.remove();
+          });
+      }
+
+      function removeUnitImg(n, url, el) {
+        unitUrls[n] = (unitUrls[n] || []).filter(function (u) {
+          return u !== url;
+        });
+        document.getElementById("unitGallery_" + n).value =
+          unitUrls[n].join("\n");
+        el.remove();
       }
 
       function removeUnit(id) {
