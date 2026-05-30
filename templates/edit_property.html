@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Property — {{ prop.title }}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Edit Property</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -111,11 +111,11 @@
         padding: 88px 24px 60px;
         width: 100%;
       }
-      .page-back-wrap {
+      .back-wrap {
         margin-bottom: 16px;
         text-align: right;
       }
-      .page-back {
+      .back-btn {
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -129,20 +129,20 @@
         background: rgba(255, 255, 255, 0.08);
         transition: all 0.18s;
       }
-      .page-back:hover {
+      .back-btn:hover {
         background: rgba(255, 255, 255, 0.15);
         color: white;
       }
-      .page-header {
+      .page-hdr {
         margin-bottom: 24px;
       }
-      .page-header h1 {
+      .page-hdr h1 {
         font-size: 24px;
         font-weight: 800;
         color: white;
         margin-bottom: 4px;
       }
-      .page-header p {
+      .page-hdr p {
         font-size: 14px;
         color: rgba(255, 255, 255, 0.5);
       }
@@ -150,7 +150,7 @@
         padding: 12px 16px;
         border-radius: 10px;
         font-size: 13px;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
         font-weight: 500;
       }
       .flash.success {
@@ -168,14 +168,14 @@
         border: 1px solid rgba(59, 130, 246, 0.3);
         color: #93c5fd;
       }
-      .form-card {
+      .card {
         background: rgba(255, 255, 255, 0.07);
         border: 1px solid rgba(255, 255, 255, 0.14);
         border-radius: 20px;
         padding: 28px;
         margin-bottom: 20px;
       }
-      .form-card h2 {
+      .card h2 {
         font-size: 15px;
         font-weight: 700;
         margin-bottom: 20px;
@@ -183,17 +183,17 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         color: white;
       }
-      .form-grid {
+      .grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 16px;
       }
-      .form-group {
+      .fg {
         display: flex;
         flex-direction: column;
         gap: 6px;
       }
-      .form-group.full {
+      .fg.full {
         grid-column: 1/-1;
       }
       label {
@@ -208,7 +208,8 @@
         color: rgba(255, 255, 255, 0.4);
         margin-top: 2px;
       }
-      input,
+      input[type="text"],
+      input[type="number"],
       select,
       textarea {
         padding: 11px 14px;
@@ -222,14 +223,15 @@
         width: 100%;
         transition: border-color 0.18s;
       }
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(255, 255, 255, 0.35);
-      }
-      input:focus,
+      input[type="text"]:focus,
+      input[type="number"]:focus,
       select:focus,
       textarea:focus {
         border-color: #d4a017;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.35);
       }
       select {
         appearance: none;
@@ -262,27 +264,13 @@
         border-color: #d4a017;
         background: rgba(212, 160, 23, 0.08);
       }
-      .upload-icon {
-        font-size: 26px;
-        margin-bottom: 6px;
-      }
-      .upload-text {
-        font-size: 13px;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.75);
-      }
-      .upload-sub {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.4);
-        margin-top: 3px;
-      }
-      .preview-grid {
+      .prev-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
         gap: 10px;
         margin-top: 12px;
       }
-      .preview-item {
+      .prev-item {
         position: relative;
         border-radius: 10px;
         overflow: hidden;
@@ -290,13 +278,13 @@
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
-      .preview-item img {
+      .prev-item img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
       }
-      .preview-item .remove-btn {
+      .rm-btn {
         position: absolute;
         top: 4px;
         right: 4px;
@@ -312,7 +300,7 @@
         align-items: center;
         justify-content: center;
       }
-      .main-badge {
+      .mb {
         position: absolute;
         bottom: 4px;
         left: 4px;
@@ -336,7 +324,7 @@
           transform: rotate(360deg);
         }
       }
-      .form-actions {
+      .actions {
         display: flex;
         gap: 12px;
         margin-top: 8px;
@@ -351,7 +339,6 @@
         font-weight: 700;
         cursor: pointer;
         font-family: "Inter", sans-serif;
-        transition: background 0.18s;
       }
       .btn-save:hover {
         background: #c49010;
@@ -386,10 +373,10 @@
         .content {
           padding: 80px 16px 40px;
         }
-        .form-grid {
+        .grid {
           grid-template-columns: 1fr;
         }
-        .form-group.full {
+        .fg.full {
           grid-column: 1;
         }
       }
@@ -398,7 +385,7 @@
   <body>
     <div class="topbar">
       <a href="/" class="topbar-logo">
-        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+        <img src="/static/Shivya_Logo.jpeg" alt="" />
         <div class="topbar-logo-text">
           <span class="topbar-logo-name">SHIVYA<span>SPACES</span></span>
           <span class="topbar-logo-sub">Trusted Rental Lifecycle Platform</span>
@@ -413,440 +400,267 @@
         </form>
       </div>
     </div>
-
     <div class="content">
-      <div class="page-back-wrap">
-        <a href="/dashboard" class="page-back">Back</a>
+      <div class="back-wrap">
+        <a href="/dashboard" class="back-btn">Back</a>
       </div>
-      <div class="page-header">
+      <div class="page-hdr">
         <h1>Edit Property</h1>
         <p>{{ prop.title }}</p>
       </div>
-
       {% with messages = get_flashed_messages(with_categories=true) %} {% for
       category, message in messages %}
       <div class="flash {{ category }}">{{ message }}</div>
       {% endfor %} {% endwith %}
-
-      <form method="POST" action="/edit/{{ prop.id }}" id="editForm">
+      <form method="POST" action="/edit/{{ prop.id }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <input type="hidden" name="gallery_images" id="galleryUrls" />
-
-        <div class="form-card">
+        <div class="card">
           <h2>Basic Information</h2>
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Property Name</label>
-              <input
+          <div class="grid">
+            <div class="fg">
+              <label>Property Name</label
+              ><input
                 type="text"
                 name="title"
                 value="{{ prop.title }}"
                 required
               />
             </div>
-            <div class="form-group">
-              <label>Location</label>
-              <input
+            <div class="fg">
+              <label>Location</label
+              ><input
                 type="text"
                 name="location"
                 value="{{ prop.location }}"
                 required
               />
             </div>
-            <div class="form-group">
+            <div class="fg">
               <label>Property Type</label>
               <select name="property_type">
-                <option value="">Select type</option>
+                <option value="">Select</option>
+                {% for pt in ['Apartment','Villa','Independent House','Studio
+                Apartment','Commercial Retail','Office Space','Mixed Use
+                Property'] %}
                 <option
-                  value="Apartment"
+                  value="{{ pt }}"
                   {%
                   if
                   prop.property_type=""
-                  ="Apartment"
+                  ="pt"
                   %}selected{%
                   endif
                   %}
                 >
-                  Apartment
+                  {{ pt }}
                 </option>
-                <option
-                  value="Villa"
-                  {%
-                  if
-                  prop.property_type=""
-                  ="Villa"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Villa
-                </option>
-                <option
-                  value="Independent House"
-                  {%
-                  if
-                  prop.property_type=""
-                  ="Independent House"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Independent House
-                </option>
-                <option
-                  value="Studio Apartment"
-                  {%
-                  if
-                  prop.property_type=""
-                  ="Studio Apartment"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Studio Apartment
-                </option>
-                <option
-                  value="Commercial Retail"
-                  {%
-                  if
-                  prop.property_type=""
-                  ="Commercial Retail"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Commercial Retail
-                </option>
-                <option
-                  value="Office Space"
-                  {%
-                  if
-                  prop.property_type=""
-                  ="Office Space"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Office Space
-                </option>
-                <option
-                  value="Mixed Use Property"
-                  {%
-                  if
-                  prop.property_type=""
-                  ="Mixed Use Property"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Mixed Use Property
-                </option>
+                {% endfor %}
               </select>
             </div>
-            <div class="form-group">
+            <div class="fg">
               <label>Status</label>
               <select name="status">
+                {% for s in ['Available','Rented','Not Available'] %}
                 <option
-                  value="Available"
+                  value="{{ s }}"
                   {%
                   if
                   prop.status=""
-                  ="Available"
+                  ="s"
                   %}selected{%
                   endif
                   %}
                 >
-                  Available
+                  {{ s }}
                 </option>
-                <option
-                  value="Rented"
-                  {%
-                  if
-                  prop.status=""
-                  ="Rented"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Rented
-                </option>
-                <option
-                  value="Not Available"
-                  {%
-                  if
-                  prop.status=""
-                  ="Not Available"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Not Available
-                </option>
+                {% endfor %}
               </select>
             </div>
-            <div class="form-group full">
-              <label>Description</label>
-              <textarea name="description">{{ prop.description }}</textarea>
+            <div class="fg full">
+              <label>Description</label
+              ><textarea name="description">{{ prop.description }}</textarea>
             </div>
           </div>
         </div>
-
-        <div class="form-card">
+        <div class="card">
           <h2>Property Details</h2>
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Monthly Rent</label>
-              <input type="text" name="rent" value="{{ prop.rent }}" />
+          <div class="grid">
+            <div class="fg">
+              <label>Monthly Rent</label
+              ><input type="text" name="rent" value="{{ prop.rent }}" />
             </div>
-            <div class="form-group">
-              <label>Security Deposit</label>
-              <input
+            <div class="fg">
+              <label>Security Deposit</label
+              ><input
                 type="text"
                 name="security_deposit"
                 value="{{ prop.security_deposit }}"
               />
             </div>
-            <div class="form-group">
-              <label>Bedrooms</label>
-              <input
+            <div class="fg">
+              <label>Bedrooms</label
+              ><input
                 type="number"
                 name="beds"
                 value="{{ prop.beds }}"
                 min="0"
               />
             </div>
-            <div class="form-group">
-              <label>Bathrooms</label>
-              <input
+            <div class="fg">
+              <label>Bathrooms</label
+              ><input
                 type="number"
                 name="baths"
                 value="{{ prop.baths }}"
                 min="0"
               />
             </div>
-            <div class="form-group">
-              <label>Area (Sq Ft)</label>
-              <input
+            <div class="fg">
+              <label>Area (Sq Ft)</label
+              ><input
                 type="number"
                 name="sqft"
                 value="{{ prop.sqft }}"
                 min="0"
               />
             </div>
-            <div class="form-group">
-              <label>Floor</label>
-              <input type="text" name="floor" value="{{ prop.floor }}" />
+            <div class="fg">
+              <label>Floor</label
+              ><input type="text" name="floor" value="{{ prop.floor }}" />
             </div>
-            <div class="form-group">
+            <div class="fg">
               <label>Facing</label>
               <select name="facing">
-                <option value="">Select facing</option>
+                <option value="">Select</option>
+                {% for f in
+                ['East','West','North','South','North-East','North-West','South-East','South-West']
+                %}
                 <option
-                  value="East"
+                  value="{{ f }}"
                   {%
                   if
                   prop.facing=""
-                  ="East"
+                  ="f"
                   %}selected{%
                   endif
                   %}
                 >
-                  East
+                  {{ f }}
                 </option>
-                <option
-                  value="West"
-                  {%
-                  if
-                  prop.facing=""
-                  ="West"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  West
-                </option>
-                <option
-                  value="North"
-                  {%
-                  if
-                  prop.facing=""
-                  ="North"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  North
-                </option>
-                <option
-                  value="South"
-                  {%
-                  if
-                  prop.facing=""
-                  ="South"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  South
-                </option>
-                <option
-                  value="North-East"
-                  {%
-                  if
-                  prop.facing=""
-                  ="North-East"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  North-East
-                </option>
-                <option
-                  value="North-West"
-                  {%
-                  if
-                  prop.facing=""
-                  ="North-West"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  North-West
-                </option>
-                <option
-                  value="South-East"
-                  {%
-                  if
-                  prop.facing=""
-                  ="South-East"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  South-East
-                </option>
-                <option
-                  value="South-West"
-                  {%
-                  if
-                  prop.facing=""
-                  ="South-West"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  South-West
-                </option>
+                {% endfor %}
               </select>
             </div>
-            <div class="form-group">
-              <label>Maintenance</label>
-              <input
+            <div class="fg">
+              <label>Maintenance</label
+              ><input
                 type="text"
                 name="maintenance"
                 value="{{ prop.maintenance }}"
                 placeholder="e.g. Included / Rs. 2,000/month"
               />
             </div>
-            <div class="form-group">
-              <label>Year Built</label>
-              <input type="text" name="built" value="{{ prop.built }}" />
+            <div class="fg">
+              <label>Year Built</label
+              ><input type="text" name="built" value="{{ prop.built }}" />
             </div>
-            <div class="form-group full">
-              <label>Amenities</label>
-              <input
+            <div class="fg full">
+              <label>Amenities</label
+              ><input
                 type="text"
                 name="amenities"
                 value="{{ prop.amenities_str }}"
-                placeholder="Swimming Pool, Gym, 24/7 Security"
+                placeholder="Pool, Gym, Security"
               />
               <p class="hint">Separate with commas.</p>
             </div>
           </div>
         </div>
-
-        <div class="form-card">
+        <div class="card">
           <h2>Photos</h2>
-          <div class="upload-zone" id="uploadZone">
-            <div class="upload-icon">📷</div>
-            <p class="upload-text">Click to upload photos</p>
-            <p class="upload-sub">JPG, PNG, WEBP · Max 10MB each</p>
+          <div
+            class="upload-zone"
+            id="uz"
+            onclick="document.getElementById('fi').click()"
+          >
+            <div style="font-size: 26px; margin-bottom: 6px">📷</div>
+            <p
+              style="
+                font-size: 13px;
+                font-weight: 600;
+                color: rgba(255, 255, 255, 0.75);
+              "
+            >
+              Click to upload photos
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.4);
+                margin-top: 3px;
+              "
+            >
+              JPG, PNG, WEBP · Max 10MB
+            </p>
           </div>
           <input
             type="file"
-            id="fileInput"
+            id="fi"
             accept="image/*"
             multiple
             style="display: none"
           />
-          <div class="preview-grid" id="previewGrid"></div>
-          <p class="hint" id="uploadHint" style="margin-top: 10px">
-            {% if prop.gallery_images %}{{ prop.gallery_images|length }}
-            existing photo{{ 's' if prop.gallery_images|length != 1 else ''
-            }}.{% else %}No photos yet.{% endif %}
+          <div class="prev-grid" id="pg"></div>
+          <p class="hint" id="uh" style="margin-top: 10px">
+            {{ prop.gallery_images|length }} existing photo{{ 's' if
+            prop.gallery_images|length != 1 else '' }}.
           </p>
         </div>
-
-        <div class="form-actions">
+        <div class="actions">
           <button type="submit" class="btn-save">Save Changes</button>
           <a href="/dashboard" class="btn-cancel">Cancel</a>
         </div>
       </form>
     </div>
-
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>
-
     <script>
       document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
-      var uploadedUrls = {{ prop.gallery_images | tojson }};
-      var grid = document.getElementById('previewGrid');
-      uploadedUrls.forEach(function(url,i){
-        var c=document.createElement('div');c.className='preview-item';
-        c.innerHTML='<img src="'+url+'" data-url="'+url+'" style="width:100%;height:100%;object-fit:cover;"/>'+
-          (i===0?'<span class="main-badge">Main</span>':'')+
-          '<button type="button" class="remove-btn" data-url="'+url+'" onclick="removeImg(this)">×</button>';
-        grid.appendChild(c);
+      var urls={{ prop.gallery_images|tojson }},pg=document.getElementById('pg');
+      urls.forEach(function(u,i){
+        var c=document.createElement('div');c.className='prev-item';
+        c.innerHTML='<img src="'+u+'" data-url="'+u+'"/>'+(i===0?'<span class="mb">Main</span>':'')+
+          '<button type="button" class="rm-btn" onclick="rm(this,\''+u+'\')">×</button>';
+        pg.appendChild(c);
       });
-      updateField();
-      var zone=document.getElementById('uploadZone'),input=document.getElementById('fileInput');
-      zone.onclick=function(){input.click();};
-      zone.ondragover=function(e){e.preventDefault();zone.style.borderColor='#D4A017';};
-      zone.ondragleave=function(){zone.style.borderColor='rgba(255,255,255,0.25)';};
-      zone.ondrop=function(e){e.preventDefault();zone.style.borderColor='rgba(255,255,255,0.25)';processFiles(e.dataTransfer.files);};
-      input.onchange=function(){processFiles(this.files);this.value='';};
-      function processFiles(files){Array.from(files).forEach(function(f){if(f.type.startsWith('image/')&&f.size<=10*1024*1024)uploadFile(f);});}
-      function uploadFile(file){
-        var c=document.createElement('div');c.className='preview-item';
+      sync();
+      var uz=document.getElementById('uz'),fi=document.getElementById('fi');
+      uz.ondragover=function(e){e.preventDefault();uz.style.borderColor='#D4A017';};
+      uz.ondragleave=function(){uz.style.borderColor='rgba(255,255,255,0.25)';};
+      uz.ondrop=function(e){e.preventDefault();uz.style.borderColor='rgba(255,255,255,0.25)';go(e.dataTransfer.files);};
+      fi.onchange=function(){go(this.files);this.value='';};
+      function go(files){Array.from(files).forEach(function(f){if(f.type.startsWith('image/')&&f.size<=10485760)up(f);});}
+      function up(file){
+        var c=document.createElement('div');c.className='prev-item';
         c.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;"><div class="spin"></div></div>';
-        grid.appendChild(c);
+        pg.appendChild(c);
         var fd=new FormData();fd.append('file',file);
         fetch('/upload-image',{method:'POST',body:fd,credentials:'include'})
           .then(function(r){return r.json();})
-          .then(function(data){
-            if(data.url){
-              uploadedUrls.push(data.url);updateField();
-              var idx=uploadedUrls.length-1;
-              c.innerHTML='<img src="'+data.url+'" data-url="'+data.url+'" style="width:100%;height:100%;object-fit:cover;"/>'+
-                (idx===0?'<span class="main-badge">Main</span>':'')+
-                '<button type="button" class="remove-btn" data-url="'+data.url+'" onclick="removeImg(this)">×</button>';
-              updateHint();
-            }else{c.remove();}
+          .then(function(d){
+            if(d.url){urls.push(d.url);sync();var i=urls.length-1;c.innerHTML='<img src="'+d.url+'" data-url="'+d.url+'"/>'+(i===0?'<span class="mb">Main</span>':'')+
+              '<button type="button" class="rm-btn" onclick="rm(this,\''+d.url+'\')">×</button>';upH();}else c.remove();
           }).catch(function(){c.remove();});
       }
-      function removeImg(btn){
-        var url=btn.getAttribute('data-url');
-        uploadedUrls=uploadedUrls.filter(function(u){return u!==url;});
-        btn.closest('.preview-item').remove();
-        updateField();
-        var first=grid.querySelector('img');
-        grid.querySelectorAll('.main-badge').forEach(function(b){b.remove();});
-        if(first){var b=document.createElement('span');b.className='main-badge';b.textContent='Main';first.parentNode.appendChild(b);}
-        updateHint();
+      function rm(btn,url){
+        urls=urls.filter(function(u){return u!==url;});btn.closest('.prev-item').remove();sync();
+        pg.querySelectorAll('.mb').forEach(function(b){b.remove();});
+        var f=pg.querySelector('img');if(f){var b=document.createElement('span');b.className='mb';b.textContent='Main';f.parentNode.appendChild(b);}
+        upH();
       }
-      function updateField(){document.getElementById('galleryUrls').value=uploadedUrls.join('\n');}
-      function updateHint(){document.getElementById('uploadHint').textContent=uploadedUrls.length+' photo'+(uploadedUrls.length!==1?'s':'')+'.';}
+      function sync(){document.getElementById('galleryUrls').value=urls.join('\n');}
+      function upH(){document.getElementById('uh').textContent=urls.length+' photo'+(urls.length!==1?'s':'')+'.';}
     </script>
   </body>
 </html>
