@@ -1505,5 +1505,16 @@ def upload_image():
         return jsonify({"error": f"Upload failed: {str(e)}"}), 500
 
 
+@app.route("/debug_db_path")
+def debug_db_path():
+    import os
+
+    return {
+        "cwd": os.getcwd(),
+        "db_exists": os.path.exists("properties.db"),
+        "db_path": os.path.abspath("properties.db"),
+        "db_size": os.path.getsize("properties.db") if os.path.exists("properties.db") else 0
+    }
+
 if __name__ == "__main__":
     app.run(debug=True)
