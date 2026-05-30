@@ -612,7 +612,8 @@ def create_property():
             unit_sqfts    = request.form.getlist("unit_sqft[]")
             unit_statuses = request.form.getlist("unit_status[]")
             unit_floors   = request.form.getlist("unit_floor[]")
-            unit_galleries= request.form.getlist("unit_gallery_images[]")
+            unit_galleries       = request.form.getlist("unit_gallery_images[]")
+            unit_sec_deposits    = request.form.getlist("unit_security_deposit[]")
 
             for i, name in enumerate(unit_names):
                 if not name.strip():
@@ -625,9 +626,9 @@ def create_property():
 
                 conn.execute("""INSERT INTO properties
                     (owner_id, parent_id, title, location, rent, status, beds, baths,
-                     sqft, image, property_type, floor, description, amenities,
-                     gallery_images, is_complex)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""", (
+                     sqft, image, property_type, floor, security_deposit, description,
+                     amenities, gallery_images, is_complex)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""", (
                     session["owner_id"], complex_id,
                     name.strip(),
                     request.form.get("location"),
@@ -638,6 +639,7 @@ def create_property():
                     int(unit_sqfts[i]) if i < len(unit_sqfts) and unit_sqfts[i] else 0,
                     ufirst_image, request.form.get("property_type"),
                     unit_floors[i] if i < len(unit_floors) else "",
+                    unit_sec_deposits[i] if i < len(unit_sec_deposits) else "",
                     "", json.dumps([]), ugallery_json
                 ))
 
@@ -915,7 +917,7 @@ def edit_unit(unit_id):
         conn.commit()
         conn.close()
         flash(f"Unit updated!", "success")
-        return redirect(url_for("edit_property", prop_id=unit["parent_id"]))
+        return redirect(url_for("edit_complex", prop_id=unit["parent_id"]))
 
     conn.close()
     unit["gallery_images_str"] = "\n".join(unit["gallery_images"])
