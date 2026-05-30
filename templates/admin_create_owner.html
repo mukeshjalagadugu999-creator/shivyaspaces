@@ -205,7 +205,6 @@
         border-radius: 20px;
         padding: 28px;
         margin-bottom: 20px;
-        backdrop-filter: blur(10px);
       }
       .form-card h2 {
         font-size: 15px;
@@ -451,6 +450,31 @@
         .form-group.full {
           grid-column: 1;
         }
+      }
+      /* Force iti dropdown to be visible */
+      .iti__country-list {
+        background: #ffffff !important;
+        color: #111827 !important;
+        border: 1px solid #d1d5db !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+        z-index: 99999 !important;
+        position: absolute !important;
+      }
+      .iti__country {
+        color: #111827 !important;
+      }
+      .iti__country-name {
+        color: #111827 !important;
+      }
+      .iti__dial-code {
+        color: #6b7280 !important;
+      }
+      .iti__country.iti__highlight {
+        background: #f3f4f6 !important;
+      }
+      .iti__search-input {
+        color: #111827 !important;
+        background: #ffffff !important;
       }
     </style>
   </head>
