@@ -167,8 +167,16 @@ def parse_property(row):
     if row is None:
         return None
     p = dict(row)
-    p["amenities"]      = json.loads(p["amenities"])      if p["amenities"]      else []
-    p["gallery_images"] = json.loads(p["gallery_images"]) if p["gallery_images"] else []
+    p["amenities"]      = json.loads(p["amenities"])      if p.get("amenities")      else []
+    p["gallery_images"] = json.loads(p["gallery_images"]) if p.get("gallery_images") else []
+    # Safe defaults for optional fields
+    for field in ["title","location","rent","status","description","property_type",
+                  "facing","maintenance","floor","built","security_deposit","image"]:
+        if field not in p or p[field] is None:
+            p[field] = ""
+    for field in ["beds","baths","sqft","is_complex","parent_id"]:
+        if field not in p or p[field] is None:
+            p[field] = 0
     return p
 
 
@@ -614,6 +622,7 @@ def create_property():
             unit_floors   = request.form.getlist("unit_floor[]")
             unit_galleries       = request.form.getlist("unit_gallery_images[]")
             unit_sec_deposits    = request.form.getlist("unit_security_deposit[]")
+            unit_maintenances    = request.form.getlist("unit_maintenance[]")
 
             for i, name in enumerate(unit_names):
                 if not name.strip():
@@ -626,9 +635,9 @@ def create_property():
 
                 conn.execute("""INSERT INTO properties
                     (owner_id, parent_id, title, location, rent, status, beds, baths,
-                     sqft, image, property_type, floor, security_deposit, description,
-                     amenities, gallery_images, is_complex)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""", (
+                     sqft, image, property_type, floor, security_deposit, maintenance,
+                     description, amenities, gallery_images, is_complex)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""", (
                     session["owner_id"], complex_id,
                     name.strip(),
                     request.form.get("location"),
@@ -640,6 +649,7 @@ def create_property():
                     ufirst_image, request.form.get("property_type"),
                     unit_floors[i] if i < len(unit_floors) else "",
                     unit_sec_deposits[i] if i < len(unit_sec_deposits) else "",
+                    unit_maintenances[i] if i < len(unit_maintenances) else "",
                     "", json.dumps([]), ugallery_json
                 ))
 
@@ -1504,17 +1514,6 @@ def upload_image():
     except Exception as e:
         return jsonify({"error": f"Upload failed: {str(e)}"}), 500
 
-
-@app.route("/debug_db_path")
-def debug_db_path():
-    import os
-
-    return {
-        "cwd": os.getcwd(),
-        "db_exists": os.path.exists("properties.db"),
-        "db_path": os.path.abspath("properties.db"),
-        "db_size": os.path.getsize("properties.db") if os.path.exists("properties.db") else 0
-    }
 
 if __name__ == "__main__":
     app.run(debug=True)
