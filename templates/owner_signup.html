@@ -12,7 +12,7 @@
     <script src="/static/theme.js"></script>
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
     <style>
@@ -512,16 +512,21 @@
       /* intl-tel-input: ensure dropdown is a floating popup */
       .iti {
         width: 100%;
-        position: relative;
       }
-      .iti__country-list {
-        position: absolute !important;
-        z-index: 99999 !important;
-        background: #fff !important;
-        color: #000 !important;
-        border: 1px solid #ccc !important;
-        max-height: 200px;
-        overflow-y: auto !important;
+      #phoneInput {
+        width: 100%;
+        height: 46px;
+        font-size: 14px;
+        font-family: "Inter", sans-serif;
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        transition: border-color 0.18s;
+      }
+      #phoneInput:focus {
+        outline: none;
+        border-color: #d4a017;
       }
     </style>
   </head>

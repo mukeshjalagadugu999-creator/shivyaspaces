@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Owner — ShivyaSpaces Admin</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
@@ -20,48 +20,33 @@
         padding: 0;
         box-sizing: border-box;
       }
-      :root {
-        --bg: #f8fafc;
-        --bg2: #ffffff;
-        --bg3: #f1f5f9;
-        --border: #e5e7eb;
-        --text: #111827;
-        --text2: #4b5563;
-        --text3: #9ca3af;
-        --accent: #8b1e3f;
-        --accent-hover: #7a1a37;
-        --input-bg: #ffffff;
-        --input-border: #e5e7eb;
-        --green-bg: #dcfce7;
-        --green-fg: #166534;
-        --red-bg: #fee2e2;
-        --red-fg: #991b1b;
-        --info-bg: #fef3c7;
-        --info-border: #fde68a;
-        --info-fg: #92400e;
-      }
       html,
       body {
         min-height: 100vh;
       }
       body {
         font-family: "Inter", sans-serif;
-        background: var(--bg);
-        color: var(--text);
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
+            center/cover fixed;
+        color: white;
+        display: flex;
+        flex-direction: column;
       }
       .topbar {
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 0 40px;
-        height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         z-index: 1000;
       }
       .topbar-logo {
@@ -143,9 +128,11 @@
         color: #f87171 !important;
       }
       .content {
+        flex: 1;
         max-width: 700px;
         margin: 0 auto;
         padding: 88px 24px 60px;
+        width: 100%;
       }
       .page-back-wrap {
         margin-bottom: 16px;
@@ -157,16 +144,17 @@
         gap: 6px;
         font-size: 13px;
         font-weight: 600;
-        color: var(--text2);
+        color: rgba(255, 255, 255, 0.75);
         text-decoration: none;
         padding: 7px 16px;
         border-radius: 8px;
-        border: 1px solid var(--border);
-        background: var(--bg3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
         transition: all 0.18s;
       }
       .page-back:hover {
-        background: var(--border);
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
       }
       .page-header {
         margin-bottom: 24px;
@@ -175,11 +163,11 @@
         font-size: 26px;
         font-weight: 800;
         margin-bottom: 4px;
-        color: var(--text);
+        color: white;
       }
       .page-header p {
         font-size: 14px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.5);
       }
       .flash {
         padding: 12px 16px;
@@ -189,40 +177,43 @@
         font-weight: 500;
       }
       .flash.success {
-        background: var(--green-bg);
-        color: var(--green-fg);
+        background: rgba(34, 197, 94, 0.15);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #86efac;
       }
       .flash.danger {
-        background: var(--red-bg);
-        color: var(--red-fg);
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #fca5a5;
       }
       .info-box {
-        background: var(--info-bg);
-        border: 1px solid var(--info-border);
+        background: rgba(212, 160, 23, 0.1);
+        border: 1px solid rgba(212, 160, 23, 0.25);
         border-radius: 12px;
         padding: 16px;
         margin-bottom: 24px;
         font-size: 13px;
-        color: var(--info-fg);
+        color: rgba(255, 255, 255, 0.75);
         line-height: 1.7;
       }
       .info-box strong {
-        color: var(--text);
+        color: #d4a017;
       }
       .form-card {
-        background: var(--bg2);
-        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.14);
         border-radius: 20px;
         padding: 28px;
         margin-bottom: 20px;
+        backdrop-filter: blur(10px);
       }
       .form-card h2 {
         font-size: 15px;
         font-weight: 700;
         margin-bottom: 20px;
         padding-bottom: 12px;
-        border-bottom: 1px solid var(--border);
-        color: var(--text);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
       }
       .form-grid {
         display: grid;
@@ -240,7 +231,7 @@
       label {
         font-size: 11px;
         font-weight: 600;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.5);
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
@@ -249,12 +240,12 @@
       }
       .hint {
         font-size: 11px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.4);
         margin-top: 2px;
       }
       .slug-preview {
         font-size: 12px;
-        color: var(--accent);
+        color: #d4a017;
         margin-top: 4px;
         font-weight: 500;
       }
@@ -262,21 +253,46 @@
       input[type="email"],
       input[type="password"] {
         padding: 11px 14px;
-        border: 1.5px solid var(--input-border);
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
         border-radius: 10px;
         font-size: 14px;
         font-family: "Inter", sans-serif;
-        color: var(--text);
-        background: var(--input-bg);
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
         outline: none;
         width: 100%;
         transition: border-color 0.18s;
       }
       input[type="text"]:focus,
-      input[type="email"]:focus {
-        border-color: var(--accent);
+      input[type="email"]:focus,
+      input[type="password"]:focus {
+        border-color: #d4a017;
       }
-      /* Phone — only width, let library handle everything else */
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      select {
+        padding: 11px 14px;
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: "Inter", sans-serif;
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        outline: none;
+        width: 100%;
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23D4A017' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 36px;
+      }
+      select option {
+        background: #1a1008;
+        color: white;
+      }
+      /* Phone picker — ONLY these 2 rules */
       .iti {
         width: 100%;
       }
@@ -285,19 +301,19 @@
         height: 46px;
         font-size: 14px;
         font-family: "Inter", sans-serif;
-        border: 1.5px solid var(--input-border);
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
         border-radius: 10px;
-        background: var(--input-bg);
-        color: var(--text);
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
         transition: border-color 0.18s;
       }
       #phoneInput:focus {
         outline: none;
-        border-color: var(--accent);
+        border-color: #d4a017;
       }
       .phone-error {
         font-size: 12px;
-        color: var(--red-fg);
+        color: #fca5a5;
         margin-top: 4px;
         display: none;
         font-weight: 500;
@@ -308,7 +324,7 @@
         margin-top: 8px;
       }
       .btn-save {
-        background: var(--accent);
+        background: #8b1e3f;
         color: white;
         border: none;
         padding: 13px 28px;
@@ -320,12 +336,28 @@
         transition: background 0.18s;
       }
       .btn-save:hover {
-        background: var(--accent-hover);
+        background: #7a1a37;
+      }
+      .btn-submit {
+        background: #d4a017;
+        color: #1a0a00;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: background 0.18s;
+        width: 100%;
+      }
+      .btn-submit:hover {
+        background: #c49010;
       }
       .btn-cancel {
-        background: var(--bg3);
-        color: var(--text2);
-        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         padding: 13px 28px;
         border-radius: 12px;
         font-size: 14px;
@@ -336,31 +368,32 @@
         align-items: center;
       }
       .cred-box {
-        background: var(--bg3);
-        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 14px;
         padding: 20px;
         margin-top: 20px;
         display: none;
+        backdrop-filter: blur(8px);
       }
       .cred-box h3 {
         font-size: 14px;
         font-weight: 700;
         margin-bottom: 14px;
-        color: var(--text);
+        color: white;
       }
       .cred-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 10px 14px;
-        background: var(--bg2);
+        background: rgba(255, 255, 255, 0.06);
         border-radius: 10px;
         margin-bottom: 8px;
       }
       .cred-label {
         font-size: 11px;
-        color: var(--text3);
+        color: rgba(255, 255, 255, 0.45);
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -368,25 +401,25 @@
       .cred-value {
         font-size: 14px;
         font-weight: 600;
-        color: var(--text);
+        color: white;
         font-family: monospace;
       }
       .copy-btn {
-        background: var(--accent);
-        color: white;
+        background: #d4a017;
+        color: #1a0a00;
         border: none;
         padding: 6px 14px;
         border-radius: 8px;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
         font-family: "Inter", sans-serif;
       }
       .copy-all-btn {
         width: 100%;
-        background: var(--green-bg);
-        color: var(--green-fg);
-        border: none;
+        background: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.3);
         padding: 12px;
         border-radius: 10px;
         font-size: 13px;
@@ -394,6 +427,16 @@
         cursor: pointer;
         font-family: "Inter", sans-serif;
         margin-top: 8px;
+      }
+      .page-footer {
+        padding: 16px 40px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.45);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .page-footer p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.3);
       }
       @media (max-width: 600px) {
         .topbar {
@@ -454,13 +497,12 @@
       <div class="info-box">
         <strong>How this works:</strong> Fill in the details and set a password.
         Share the login URL, username and password with the owner. They log in
-        at <strong>/login</strong> and their public page will be live at
-        <strong>/[their-slug]</strong>.
+        at <strong>/login</strong> and their page will be at
+        <strong>/[slug]</strong>.
       </div>
 
       <form method="POST" action="/admin/create-owner" id="createForm">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
         <div class="form-card">
           <h2>Owner Details</h2>
           <div class="form-grid">
@@ -519,7 +561,6 @@
             </div>
           </div>
         </div>
-
         <div class="form-card">
           <h2>Branding &amp; Portal URL</h2>
           <div class="form-grid">
@@ -551,7 +592,6 @@
             </div>
           </div>
         </div>
-
         <div class="form-actions">
           <button type="submit" class="btn-save">Create Owner Account</button>
           <a href="/admin/dashboard" class="btn-cancel">Cancel</a>
@@ -598,7 +638,15 @@
       </div>
     </div>
 
+    <footer class="page-footer">
+      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+    </footer>
+
     <script>
+      document
+        .querySelectorAll(".yr")
+        .forEach((e) => (e.textContent = new Date().getFullYear()));
+
       var iti = window.intlTelInput(document.getElementById("phoneInput"), {
         initialCountry: "in",
         preferredCountries: [
@@ -642,51 +690,46 @@
           window.location.host + "/" + slug;
         updatePreview();
       }
-
       function updatePreview() {
-        var username = document.getElementById("f_username").value;
-        var password = document.getElementById("f_password").value;
-        var slug = document.getElementById("f_slug").value;
-        var host = window.location.host;
-        if (username || password || slug) {
+        var u = document.getElementById("f_username").value,
+          p = document.getElementById("f_password").value,
+          s = document.getElementById("f_slug").value,
+          h = window.location.host;
+        if (u || p || s) {
           document.getElementById("credBox").style.display = "block";
-          document.getElementById("c_url").textContent = host + "/login";
-          document.getElementById("c_username").textContent = username || "—";
-          document.getElementById("c_password").textContent = password || "—";
-          document.getElementById("c_page").textContent = slug
-            ? host + "/" + slug
-            : "—";
+          document.getElementById("c_url").textContent = h + "/login";
+          document.getElementById("c_username").textContent = u || "—";
+          document.getElementById("c_password").textContent = p || "—";
+          document.getElementById("c_page").textContent = s ? h + "/" + s : "—";
         }
       }
-
       function copyField(id) {
         navigator.clipboard
           .writeText(document.getElementById(id).textContent)
           .then(function () {
-            var btn = event.target;
-            btn.textContent = "Copied";
+            var b = event.target;
+            b.textContent = "Copied";
             setTimeout(function () {
-              btn.textContent = "Copy";
+              b.textContent = "Copy";
             }, 1500);
           });
       }
-
       function copyAll() {
-        var host = window.location.host;
-        var text =
+        var h = window.location.host;
+        var t =
           "Owner Login Details\n\nLogin URL: " +
-          host +
+          h +
           "/login\nUsername: " +
           document.getElementById("c_username").textContent +
           "\nPassword: " +
           document.getElementById("c_password").textContent +
           "\nYour Page: " +
           document.getElementById("c_page").textContent;
-        navigator.clipboard.writeText(text).then(function () {
-          var btn = document.querySelector(".copy-all-btn");
-          btn.textContent = "Copied!";
+        navigator.clipboard.writeText(t).then(function () {
+          var b = document.querySelector(".copy-all-btn");
+          b.textContent = "Copied!";
           setTimeout(function () {
-            btn.textContent = "Copy All Credentials";
+            b.textContent = "Copy All Credentials";
           }, 2000);
         });
       }
