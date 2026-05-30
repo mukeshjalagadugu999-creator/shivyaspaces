@@ -445,11 +445,7 @@
                 Property'] %}
                 <option
                   value="{{ pt }}"
-                  {%
-                  if
-                  prop.property_type=""
-                  ="pt"
-                  %}selected{%
+                  {% if prop.property_type == pt %}selected{%
                   endif
                   %}
                 >
@@ -464,11 +460,7 @@
                 {% for s in ['Available','Rented','Not Available'] %}
                 <option
                   value="{{ s }}"
-                  {%
-                  if
-                  prop.status=""
-                  ="s"
-                  %}selected{%
+                  {% if prop.status == s %}selected{%
                   endif
                   %}
                 >
@@ -538,11 +530,7 @@
                 %}
                 <option
                   value="{{ f }}"
-                  {%
-                  if
-                  prop.facing=""
-                  ="f"
-                  %}selected{%
+                  {% if prop.facing == f %}selected{%
                   endif
                   %}
                 >

@@ -448,11 +448,7 @@
                 {% for s in ['Available','Rented','Not Available'] %}
                 <option
                   value="{{ s }}"
-                  {%
-                  if
-                  unit.status=""
-                  ="s"
-                  %}selected{%
+                  {% if unit.status == s %}selected{%
                   endif
                   %}
                 >
@@ -501,11 +497,7 @@
                 %}
                 <option
                   value="{{ f }}"
-                  {%
-                  if
-                  unit.facing=""
-                  ="f"
-                  %}selected{%
+                  {% if unit.facing == f %}selected{%
                   endif
                   %}
                 >

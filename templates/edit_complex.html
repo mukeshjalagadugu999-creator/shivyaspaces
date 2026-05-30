@@ -489,11 +489,7 @@
                 Property','Commercial Retail','Office Space'] %}
                 <option
                   value="{{ pt }}"
-                  {%
-                  if
-                  prop.property_type=""
-                  ="pt"
-                  %}selected{%
+                  {% if prop.property_type == pt %}selected{%
                   endif
                   %}
                 >
@@ -511,11 +507,7 @@
                 %}
                 <option
                   value="{{ f }}"
-                  {%
-                  if
-                  prop.facing=""
-                  ="f"
-                  %}selected{%
+                  {% if prop.facing == f %}selected{%
                   endif
                   %}
                 >
