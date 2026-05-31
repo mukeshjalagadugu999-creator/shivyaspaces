@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Privacy &amp; Security — ShivyaSpaces</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
+      }
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 68px;
+        display: flex;
+        align-items: center;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 999;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .nav-logo img {
+        height: 38px;
+        width: 38px;
+        object-fit: contain;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+      }
+      .nav-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .nav-logo-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.5px;
+        line-height: 1;
+      }
+      .nav-accent {
+        color: #d4a017;
+      }
+      .nav-logo-tagline {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .content {
+        flex: 1;
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 100px 24px 60px;
+        width: 100%;
+      }
+      .page-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #d4a017;
+        margin-bottom: 12px;
+      }
+      .page-title {
+        font-family: "Playfair Display", serif;
+        font-size: 38px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 8px;
+      }
+      .page-meta {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 40px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .intro {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.85;
+        margin-bottom: 36px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 24px;
+        backdrop-filter: blur(8px);
+      }
+      .section {
+        margin-bottom: 28px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 24px;
+        backdrop-filter: blur(6px);
+      }
+      .section h2 {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .section p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+      .section p:last-child {
+        margin-bottom: 0;
+      }
+      .section ul {
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        margin-top: 8px;
+      }
+      .section ul li {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.7;
+      }
+      .contact-box {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 18px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.9;
+      }
+      .contact-box a {
+        color: #d4a017;
+        text-decoration: none;
+      }
+      .contact-box a:hover {
+        text-decoration: underline;
+      }
+      .page-footer {
+        padding: 20px 40px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.45);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        margin-top: auto;
+      }
+      .page-footer p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.28);
+      }
+      @media (max-width: 600px) {
+        .navbar {
+          padding: 0 20px;
+        }
+        .content {
+          padding: 90px 16px 40px;
+        }
+        .page-title {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="nav-logo">
+        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+        <div class="nav-logo-text">
+          <span class="nav-logo-name"
+            >SHIVYA<span class="nav-accent">SPACES</span></span
+          >
+          <span class="nav-logo-tagline"
+            >Trusted Rental Lifecycle Platform</span
+          >
+        </div>
+      </a>
+    </nav>
+
+    <div class="content">
+      <p class="page-label">Trust &amp; Security</p>
+      <h1 class="page-title">Data Privacy &amp; Security</h1>
+      <p class="page-meta">
+        Effective Date: June 2026 &nbsp;·&nbsp; Shivya Spaces
+      </p>
+
+      <div class="intro">
+        At Shivya Spaces, we understand that property information, tenant
+        records, rental documents, and owner data are sensitive and
+        confidential. Protecting your information is a core part of our platform
+        design and operating principles. We are committed to maintaining the
+        privacy, security, and integrity of the information entrusted to us.
+      </div>
+
+      <div class="section">
+        <h2>We Protect Property Data</h2>
+        <p>
+          Property information uploaded to Shivya Spaces remains under the
+          control of the property owner. We take reasonable measures to protect:
+        </p>
+        <ul>
+          <li>Property details</li>
+          <li>Rental information</li>
+          <li>Property images</li>
+          <li>Availability information</li>
+          <li>Rental documents and records</li>
+        </ul>
+        <p style="margin-top: 12px">
+          Only information intentionally published by the owner is made visible
+          to prospective tenants through the platform.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>We Protect Tenant Information</h2>
+        <p>
+          Tenant information is treated as confidential and is only accessible
+          to authorized parties involved in the rental process. This may
+          include:
+        </p>
+        <ul>
+          <li>Tenant profiles</li>
+          <li>Contact details</li>
+          <li>Rental applications</li>
+          <li>Onboarding information</li>
+          <li>Rental history records maintained within the platform</li>
+        </ul>
+        <p style="margin-top: 12px">
+          Tenant information is never publicly displayed beyond the purpose for
+          which it was provided.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>We Protect Owner Information</h2>
+        <p>
+          Owner information is safeguarded and is not shared publicly unless
+          specifically authorized by the owner. Protected information may
+          include:
+        </p>
+        <ul>
+          <li>Personal contact details</li>
+          <li>Property ownership records</li>
+          <li>Verification documents</li>
+          <li>Rental management information</li>
+          <li>Operational records and communications</li>
+        </ul>
+        <p style="margin-top: 12px">
+          Shivya Spaces does not sell owner information to third parties.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Cross-Owner Visibility Is Restricted</h2>
+        <p>
+          One of the core principles of Shivya Spaces is owner privacy. Property
+          owners cannot:
+        </p>
+        <ul>
+          <li>View other owners' dashboards</li>
+          <li>Access other owners' properties</li>
+          <li>View other owners' tenants</li>
+          <li>Access other owners' agreements or operational records</li>
+        </ul>
+        <p style="margin-top: 12px">
+          Each owner operates within their own dedicated and isolated workspace.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Secure Authentication</h2>
+        <p>
+          Access to Shivya Spaces requires authenticated user credentials. We
+          implement security measures designed to help protect user accounts and
+          prevent unauthorized access. Users are encouraged to:
+        </p>
+        <ul>
+          <li>Use strong passwords</li>
+          <li>Keep login credentials confidential</li>
+          <li>Report suspicious activity immediately</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Role-Based Access Controls</h2>
+        <p>
+          Access to information within Shivya Spaces is controlled based on
+          operational requirements. Access may be limited according to roles
+          such as:
+        </p>
+        <ul>
+          <li>Property Owner</li>
+          <li>Tenant</li>
+          <li>Platform Support</li>
+          <li>Verification Team</li>
+          <li>Platform Administrator</li>
+        </ul>
+        <p style="margin-top: 12px">
+          This helps ensure users only access information necessary for their
+          role and responsibilities.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Encrypted Communications</h2>
+        <p>
+          Shivya Spaces uses industry-standard encryption technologies to help
+          protect information transmitted between users and our platform. This
+          includes:
+        </p>
+        <ul>
+          <li>Secure HTTPS connections</li>
+          <li>SSL/TLS encryption</li>
+          <li>Protected data transmission channels</li>
+        </ul>
+        <p style="margin-top: 12px">
+          Encryption helps safeguard information from unauthorized interception
+          during transmission.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Administrative Access</h2>
+        <p>
+          As with most modern cloud platforms, authorized Shivya Spaces
+          administrators may access certain information when necessary for:
+        </p>
+        <ul>
+          <li>Customer support</li>
+          <li>Technical troubleshooting</li>
+          <li>Security monitoring</li>
+          <li>Verification processes</li>
+          <li>Legal or regulatory compliance</li>
+        </ul>
+        <p style="margin-top: 12px">
+          Such access is limited, controlled, and used only for legitimate
+          operational purposes.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Continuous Improvement</h2>
+        <p>
+          Security and privacy are ongoing commitments. As Shivya Spaces grows,
+          we will continue to enhance our platform through:
+        </p>
+        <ul>
+          <li>Improved security controls</li>
+          <li>Enhanced monitoring capabilities</li>
+          <li>Stronger access management practices</li>
+          <li>Additional privacy safeguards</li>
+          <li>Security best-practice adoption</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Our Commitment</h2>
+        <p>
+          Our goal is to provide NRI property owners and tenants with a trusted
+          digital platform where rental operations can be managed securely,
+          efficiently, and confidently. We are committed to maintaining the
+          confidentiality, integrity, and responsible use of the information
+          entrusted to us.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Contact Us</h2>
+        <div class="contact-box">
+          <p>
+            <strong style="color: white">Shivya Spaces</strong> — Trusted Rental
+            Lifecycle Platform<br />
+            🌐 <a href="https://www.shivyaspaces.com">www.shivyaspaces.com</a
+            ><br />
+            📧
+            <a href="mailto:support@shivyaspaces.com"
+              >support@shivyaspaces.com</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+    </footer>
+    <script>
+      document.querySelectorAll(".yr").forEach(function (e) {
+        e.textContent = new Date().getFullYear();
+      });
+    </script>
+  </body>
+</html>

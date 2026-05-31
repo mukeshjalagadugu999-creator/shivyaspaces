@@ -1685,6 +1685,11 @@ def termsandconditions():
     return render_template("termsandconditions.html")
 
 
+@app.route("/data-privacy")
+def data_privacy():
+    return render_template("data_privacy.html")
+
+
 
 
 @app.route("/tmp-uploads/<filename>")
