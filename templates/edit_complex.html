@@ -198,6 +198,11 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
+      .hint {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 2px;
+      }
       input[type="text"],
       select,
       textarea {
@@ -396,11 +401,6 @@
         display: inline-flex;
         align-items: center;
       }
-      .hint {
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.4);
-        margin-top: 2px;
-      }
       .page-footer {
         padding: 16px 40px;
         text-align: center;
@@ -464,8 +464,8 @@
           <h2>Basic Information</h2>
           <div class="grid">
             <div class="fg">
-              <label>Complex Name</label
-              ><input
+              <label>Complex Name</label>
+              <input
                 type="text"
                 name="title"
                 value="{{ prop.title }}"
@@ -473,8 +473,8 @@
               />
             </div>
             <div class="fg">
-              <label>Location</label
-              ><input
+              <label>Location</label>
+              <input
                 type="text"
                 name="location"
                 value="{{ prop.location }}"
@@ -483,54 +483,19 @@
             </div>
             <div class="fg">
               <label>Property Type</label>
-              <select name="property_type">
-                <option value="">Select</option>
-                {% for pt in ['Apartment','Villa','Independent House','Mixed Use
-                Property','Commercial Retail','Office Space'] %}
-                <option
-                  value="{{ pt }}"
-                  {%
-                  if
-                  prop.property_type=""
-                  ="pt"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  {{ pt }}
-                </option>
-                {% endfor %}
-              </select>
+              <select name="property_type" id="sel_ptype"></select>
             </div>
             <div class="fg">
               <label>Facing</label>
-              <select name="facing">
-                <option value="">Select</option>
-                {% for f in
-                ['East','West','North','South','North-East','North-West','South-East','South-West']
-                %}
-                <option
-                  value="{{ f }}"
-                  {%
-                  if
-                  prop.facing=""
-                  ="f"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  {{ f }}
-                </option>
-                {% endfor %}
-              </select>
+              <select name="facing" id="sel_facing"></select>
             </div>
             <div class="fg">
-              <label>Year Built</label
-              ><input type="text" name="built" value="{{ prop.built }}" />
+              <label>Year Built</label>
+              <input type="text" name="built" value="{{ prop.built }}" />
             </div>
             <div class="fg full">
-              <label>Description</label
-              ><textarea name="description">{{ prop.description }}</textarea>
+              <label>Description</label>
+              <textarea name="description">{{ prop.description }}</textarea>
             </div>
           </div>
         </div>
@@ -615,8 +580,41 @@
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>
     <script>
-      document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
-      var urls={{ prop.gallery_images|tojson }},pg=document.getElementById('pg');
+      document.querySelectorAll('.yr').forEach(function(e){e.textContent=new Date().getFullYear();});
+
+      var currentPtype  = "{{ prop.property_type }}";
+      var currentFacing = "{{ prop.facing }}";
+
+      function buildSelect(id, opts, current){
+        var s = document.getElementById(id);
+        opts.forEach(function(o){
+          var el = document.createElement('option');
+          el.value = o.v; el.textContent = o.l;
+          if(o.v === current) el.selected = true;
+          s.appendChild(el);
+        });
+      }
+
+      buildSelect('sel_ptype', [
+        {v:'',l:'Select type'},
+        {v:'Apartment',l:'Apartment'},
+        {v:'Villa',l:'Villa'},
+        {v:'Independent House',l:'Independent House'},
+        {v:'Mixed Use Property',l:'Mixed Use Property'},
+        {v:'Commercial Retail',l:'Commercial Retail'},
+        {v:'Office Space',l:'Office Space'}
+      ], currentPtype);
+
+      buildSelect('sel_facing', [
+        {v:'',l:'Select facing'},
+        {v:'East',l:'East'},{v:'West',l:'West'},
+        {v:'North',l:'North'},{v:'South',l:'South'},
+        {v:'North-East',l:'North-East'},{v:'North-West',l:'North-West'},
+        {v:'South-East',l:'South-East'},{v:'South-West',l:'South-West'}
+      ], currentFacing);
+
+      var urls = {{ prop.gallery_images|tojson }};
+      var pg = document.getElementById('pg');
       urls.forEach(function(u,i){
         var c=document.createElement('div');c.className='prev-item';
         c.innerHTML='<img src="'+u+'" data-url="'+u+'"/>'+(i===0?'<span class="mb">Main</span>':'')+
@@ -624,6 +622,7 @@
         pg.appendChild(c);
       });
       sync();
+
       var uz=document.getElementById('uz'),fi=document.getElementById('fi');
       uz.ondragover=function(e){e.preventDefault();uz.style.borderColor='#D4A017';};
       uz.ondragleave=function(){uz.style.borderColor='rgba(255,255,255,0.25)';};
@@ -638,8 +637,10 @@
         fetch('/upload-image',{method:'POST',body:fd,credentials:'include'})
           .then(function(r){return r.json();})
           .then(function(d){
-            if(d.url){urls.push(d.url);sync();var i=urls.length-1;c.innerHTML='<img src="'+d.url+'" data-url="'+d.url+'"/>'+(i===0?'<span class="mb">Main</span>':'')+
-              '<button type="button" class="rm-btn" onclick="rm(this,\''+d.url+'\')">×</button>';upH();}else c.remove();
+            if(d.url){urls.push(d.url);sync();var i=urls.length-1;
+              c.innerHTML='<img src="'+d.url+'" data-url="'+d.url+'"/>'+(i===0?'<span class="mb">Main</span>':'')+
+                '<button type="button" class="rm-btn" onclick="rm(this,\''+d.url+'\')">×</button>';upH();}
+            else c.remove();
           }).catch(function(){c.remove();});
       }
       function rm(btn,url){

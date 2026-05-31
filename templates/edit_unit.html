@@ -427,15 +427,18 @@
       category, message in messages %}
       <div class="flash {{ category }}">{{ message }}</div>
       {% endfor %} {% endwith %}
-      <form method="POST" action="/edit-unit/{{ unit.id }}">
+      <form
+        method="POST"
+        action="/edit-unit/{{ unit.id }}?from={{ request.args.get('from', '') }}"
+      >
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <input type="hidden" name="gallery_images" id="galleryUrls" />
         <div class="card">
           <h2>Unit Details</h2>
           <div class="grid">
             <div class="fg full">
-              <label>Unit Name</label
-              ><input
+              <label>Unit Name</label>
+              <input
                 type="text"
                 name="title"
                 value="{{ unit.title }}"
@@ -443,31 +446,16 @@
               />
             </div>
             <div class="fg">
-              <label>Monthly Rent</label
-              ><input type="text" name="rent" value="{{ unit.rent }}" />
+              <label>Monthly Rent</label>
+              <input type="text" name="rent" value="{{ unit.rent }}" />
             </div>
             <div class="fg">
               <label>Status</label>
-              <select name="status">
-                {% for s in ['Available','Rented','Not Available'] %}
-                <option
-                  value="{{ s }}"
-                  {%
-                  if
-                  unit.status=""
-                  ="s"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  {{ s }}
-                </option>
-                {% endfor %}
-              </select>
+              <select name="status" id="sel_status"></select>
             </div>
             <div class="fg">
-              <label>Bedrooms (0 for commercial)</label
-              ><input
+              <label>Bedrooms (0 for commercial)</label>
+              <input
                 type="number"
                 name="beds"
                 value="{{ unit.beds }}"
@@ -475,8 +463,8 @@
               />
             </div>
             <div class="fg">
-              <label>Bathrooms</label
-              ><input
+              <label>Bathrooms</label>
+              <input
                 type="number"
                 name="baths"
                 value="{{ unit.baths }}"
@@ -484,8 +472,8 @@
               />
             </div>
             <div class="fg">
-              <label>Area (Sq Ft)</label
-              ><input
+              <label>Area (Sq Ft)</label>
+              <input
                 type="number"
                 name="sqft"
                 value="{{ unit.sqft }}"
@@ -493,42 +481,24 @@
               />
             </div>
             <div class="fg">
-              <label>Floor</label
-              ><input type="text" name="floor" value="{{ unit.floor }}" />
+              <label>Floor</label>
+              <input type="text" name="floor" value="{{ unit.floor }}" />
             </div>
             <div class="fg">
               <label>Facing</label>
-              <select name="facing">
-                <option value="">Select</option>
-                {% for f in
-                ['East','West','North','South','North-East','North-West','South-East','South-West']
-                %}
-                <option
-                  value="{{ f }}"
-                  {%
-                  if
-                  unit.facing=""
-                  ="f"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  {{ f }}
-                </option>
-                {% endfor %}
-              </select>
+              <select name="facing" id="sel_facing"></select>
             </div>
             <div class="fg">
-              <label>Security Deposit</label
-              ><input
+              <label>Security Deposit</label>
+              <input
                 type="text"
                 name="security_deposit"
                 value="{{ unit.security_deposit }}"
               />
             </div>
             <div class="fg">
-              <label>Maintenance</label
-              ><input
+              <label>Maintenance</label>
+              <input
                 type="text"
                 name="maintenance"
                 value="{{ unit.maintenance }}"
@@ -536,12 +506,12 @@
               />
             </div>
             <div class="fg full">
-              <label>Description</label
-              ><textarea name="description">{{ unit.description }}</textarea>
+              <label>Description</label>
+              <textarea name="description">{{ unit.description }}</textarea>
             </div>
             <div class="fg full">
-              <label>Amenities</label
-              ><input
+              <label>Amenities</label>
+              <input
                 type="text"
                 name="amenities"
                 value="{{ unit.amenities_str }}"
@@ -605,16 +575,44 @@
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>
     <script>
-      document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
-      var urls={{ unit.gallery_images|tojson }},pg=document.getElementById('pg');
+      document.querySelectorAll('.yr').forEach(function(e){e.textContent=new Date().getFullYear();});
+
+      // Build selects via JS so Prettier cannot break them
+      var currentStatus = "{{ unit.status }}";
+      var currentFacing = "{{ unit.facing }}";
+
+      var statusOpts = ["Available","Rented","Not Available"];
+      var facingOpts = ["","East","West","North","South","North-East","North-West","South-East","South-West"];
+      var facingLabels = ["Select facing","East","West","North","South","North-East","North-West","South-East","South-West"];
+
+      var ss = document.getElementById('sel_status');
+      statusOpts.forEach(function(v){
+        var o = document.createElement('option');
+        o.value = v; o.textContent = v;
+        if(v === currentStatus) o.selected = true;
+        ss.appendChild(o);
+      });
+
+      var sf = document.getElementById('sel_facing');
+      facingOpts.forEach(function(v,i){
+        var o = document.createElement('option');
+        o.value = v; o.textContent = facingLabels[i];
+        if(v === currentFacing) o.selected = true;
+        sf.appendChild(o);
+      });
+
+      // Photos
+      var urls = {{ unit.gallery_images|tojson }};
+      var pg = document.getElementById('pg');
       urls.forEach(function(u,i){
-        var c=document.createElement('div');c.className='prev-item';
-        c.innerHTML='<img src="'+u+'" data-url="'+u+'"/>'+(i===0?'<span class="mb">Main</span>':'')+
+        var c = document.createElement('div'); c.className='prev-item';
+        c.innerHTML = '<img src="'+u+'" data-url="'+u+'"/>'+(i===0?'<span class="mb">Main</span>':'')+
           '<button type="button" class="rm-btn" onclick="rm(this,\''+u+'\')">×</button>';
         pg.appendChild(c);
       });
       sync();
-      var uz=document.getElementById('uz'),fi=document.getElementById('fi');
+
+      var uz=document.getElementById('uz'), fi=document.getElementById('fi');
       uz.ondragover=function(e){e.preventDefault();uz.style.borderColor='#D4A017';};
       uz.ondragleave=function(){uz.style.borderColor='rgba(255,255,255,0.25)';};
       uz.ondrop=function(e){e.preventDefault();uz.style.borderColor='rgba(255,255,255,0.25)';go(e.dataTransfer.files);};
@@ -628,8 +626,10 @@
         fetch('/upload-image',{method:'POST',body:fd,credentials:'include'})
           .then(function(r){return r.json();})
           .then(function(d){
-            if(d.url){urls.push(d.url);sync();var i=urls.length-1;c.innerHTML='<img src="'+d.url+'" data-url="'+d.url+'"/>'+(i===0?'<span class="mb">Main</span>':'')+
-              '<button type="button" class="rm-btn" onclick="rm(this,\''+d.url+'\')">×</button>';upH();}else c.remove();
+            if(d.url){urls.push(d.url);sync();var i=urls.length-1;
+              c.innerHTML='<img src="'+d.url+'" data-url="'+d.url+'"/>'+(i===0?'<span class="mb">Main</span>':'')+
+                '<button type="button" class="rm-btn" onclick="rm(this,\''+d.url+'\')">×</button>';upH();}
+            else c.remove();
           }).catch(function(){c.remove();});
       }
       function rm(btn,url){
