@@ -11,7 +11,6 @@
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <script src="/static/theme.js"></script>
     <style>
       * {
         margin: 0;
@@ -116,12 +115,12 @@
 
       /* HERO */
       .hero {
-        flex: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 100px 24px 60px;
+        padding: 120px 24px 80px;
+        min-height: 100vh;
       }
       .card {
         width: 100%;
@@ -235,6 +234,263 @@
         color: #d4a017;
       }
 
+      /* SHARED SECTION STYLES */
+      .section-wrap {
+        width: 100%;
+        padding: 80px 40px;
+      }
+      .section-wrap.dark-bg {
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .section-wrap.glass-bg {
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(12px);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .section-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #d4a017;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+      .section-title {
+        font-family: "Playfair Display", serif;
+        font-size: 32px;
+        font-weight: 800;
+        color: white;
+        text-align: center;
+        margin-bottom: 12px;
+        line-height: 1.2;
+      }
+      .section-sub {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        margin-bottom: 48px;
+        line-height: 1.7;
+      }
+
+      /* SECTION 2 — WHO IS IT FOR */
+      .built-for-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+      }
+      .bf-card {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 28px 16px;
+        text-align: center;
+        transition: all 0.22s;
+      }
+      .bf-card:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(212, 160, 23, 0.4);
+        transform: translateY(-4px);
+      }
+      .bf-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        font-size: 26px;
+      }
+      .bf-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 8px;
+        line-height: 1.3;
+      }
+      .bf-desc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.48);
+        line-height: 1.6;
+      }
+
+      /* SECTION 3 — HOW IT WORKS */
+      .steps-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0;
+        position: relative;
+        align-items: start;
+      }
+      .steps-line {
+        position: absolute;
+        top: 36px;
+        left: calc(10% + 20px);
+        right: calc(10% + 20px);
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        z-index: 0;
+      }
+      .step-card {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        padding: 0 8px;
+      }
+      .step-circle {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        font-size: 28px;
+        transition: all 0.22s;
+      }
+      .step-card:hover .step-circle {
+        border-color: #d4a017;
+        background: rgba(212, 160, 23, 0.12);
+      }
+      .step-num {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+      }
+      .step-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: white;
+        line-height: 1.4;
+      }
+
+      /* SECTION 4 — FEATURES */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .feat-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 24px 20px;
+        transition: all 0.22s;
+      }
+      .feat-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(212, 160, 23, 0.35);
+      }
+      .feat-icon {
+        font-size: 28px;
+        margin-bottom: 12px;
+      }
+      .feat-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 6px;
+      }
+      .feat-desc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.65;
+      }
+
+      /* SECTION 5 — WHY */
+      .why-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+      .why-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 24px 20px;
+        text-align: center;
+        transition: all 0.22s;
+      }
+      .why-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(212, 160, 23, 0.35);
+      }
+      .why-icon {
+        font-size: 32px;
+        margin-bottom: 12px;
+      }
+      .why-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 6px;
+      }
+      .why-desc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.65;
+      }
+
+      /* SECTION 6 — CTA */
+      .cta-wrap {
+        width: 100%;
+        padding: 80px 40px;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(12px);
+        border-top: 1px solid rgba(212, 160, 23, 0.15);
+        text-align: center;
+      }
+      .cta-inner {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .cta-title {
+        font-family: "Playfair Display", serif;
+        font-size: 34px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 12px;
+        line-height: 1.25;
+      }
+      .cta-title span {
+        color: #d4a017;
+      }
+      .cta-sub {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 32px;
+        line-height: 1.7;
+      }
+      .cta-btn {
+        display: inline-block;
+        background: #d4a017;
+        color: #1a0a00;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 16px 40px;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.18s;
+        letter-spacing: 0.3px;
+      }
+      .cta-btn:hover {
+        background: #c49010;
+        transform: translateY(-2px);
+      }
+
       /* FOOTER */
       footer {
         background: rgba(0, 0, 0, 0.55);
@@ -330,12 +586,33 @@
         color: rgba(255, 255, 255, 0.28);
       }
 
+      @media (max-width: 900px) {
+        .built-for-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .steps-row {
+          grid-template-columns: 1fr;
+          gap: 28px;
+        }
+        .steps-line {
+          display: none;
+        }
+        .features-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .why-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
       @media (max-width: 768px) {
         .footer-grid {
           grid-template-columns: 1fr 1fr;
         }
         .nav-links {
           display: none;
+        }
+        .section-wrap {
+          padding: 60px 24px;
         }
       }
       @media (max-width: 480px) {
@@ -354,10 +631,20 @@
         footer {
           padding: 40px 20px 0;
         }
+        .built-for-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .section-title {
+          font-size: 24px;
+        }
+        .cta-title {
+          font-size: 26px;
+        }
       }
     </style>
   </head>
   <body>
+    <!-- NAVBAR -->
     <nav class="navbar">
       <a href="/" class="nav-logo">
         <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
@@ -371,6 +658,7 @@
       <a href="/login" class="nav-login">Login</a>
     </nav>
 
+    <!-- SECTION 1: HERO (unchanged) -->
     <div class="hero">
       <div class="card">
         <div class="tag">Welcome</div>
@@ -401,6 +689,237 @@
       </div>
     </div>
 
+    <!-- SECTION 2: WHO IS IT FOR -->
+    <div class="section-wrap dark-bg">
+      <div class="section-inner">
+        <p class="section-label">Built For</p>
+        <h2 class="section-title">Who Is Shivya Spaces For?</h2>
+        <p class="section-sub">
+          Whether you own one flat or a full apartment complex, Shivya Spaces is
+          built around your needs.
+        </p>
+        <div class="built-for-grid">
+          <div class="bf-card">
+            <div class="bf-icon" style="background: rgba(139, 92, 246, 0.18)">
+              🌏
+            </div>
+            <div class="bf-title">NRI Property Owners</div>
+            <div class="bf-desc">
+              Manage rental properties in India from anywhere in the world
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-icon" style="background: rgba(15, 110, 86, 0.2)">
+              🏢
+            </div>
+            <div class="bf-title">Multiple Property Owners</div>
+            <div class="bf-desc">
+              Manage multiple units and complexes from one single platform
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-icon" style="background: rgba(133, 79, 11, 0.2)">
+              🏡
+            </div>
+            <div class="bf-title">Villa Owners</div>
+            <div class="bf-desc">
+              Handle inquiries and rental operations efficiently from anywhere
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-icon" style="background: rgba(153, 60, 29, 0.2)">
+              🏠
+            </div>
+            <div class="bf-title">Apartment Owners</div>
+            <div class="bf-desc">
+              Streamline tenant onboarding and rental workflows digitally
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-icon" style="background: rgba(153, 53, 86, 0.2)">
+              👨‍👩‍👧
+            </div>
+            <div class="bf-title">Families Managing Remotely</div>
+            <div class="bf-desc">
+              Maintain full visibility and control over all rental operations
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: HOW IT WORKS -->
+    <div class="section-wrap glass-bg">
+      <div class="section-inner">
+        <p class="section-label">Simple Process</p>
+        <h2 class="section-title">How Shivya Spaces Works</h2>
+        <p class="section-sub">
+          From account creation to full rental operations — get set up in
+          minutes.
+        </p>
+        <div class="steps-row">
+          <div class="steps-line"></div>
+          <div class="step-card">
+            <div class="step-circle">👤</div>
+            <div class="step-num" style="color: rgba(139, 92, 246, 0.9)">
+              Step 1
+            </div>
+            <div class="step-title">Create Owner Account</div>
+          </div>
+          <div class="step-card">
+            <div class="step-circle">🏠</div>
+            <div class="step-num" style="color: rgba(15, 110, 86, 0.9)">
+              Step 2
+            </div>
+            <div class="step-title">Add Your Property</div>
+          </div>
+          <div class="step-card">
+            <div class="step-circle">💬</div>
+            <div class="step-num" style="color: #d4a017">Step 3</div>
+            <div class="step-title">Receive Tenant Inquiries</div>
+          </div>
+          <div class="step-card">
+            <div class="step-circle">📋</div>
+            <div class="step-num" style="color: rgba(153, 53, 86, 0.9)">
+              Step 4
+            </div>
+            <div class="step-title">Manage Onboarding</div>
+          </div>
+          <div class="step-card">
+            <div class="step-circle">📑</div>
+            <div class="step-num" style="color: rgba(24, 95, 165, 0.9)">
+              Step 5
+            </div>
+            <div class="step-title">Agreements & Rental Operations</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: FEATURES (existing, kept) -->
+    <div class="section-wrap dark-bg">
+      <div class="section-inner">
+        <p class="section-label">Platform Features</p>
+        <h2 class="section-title">Everything You Need to Manage Rentals</h2>
+        <p class="section-sub">
+          A complete rental lifecycle platform built for property owners who
+          need full control remotely.
+        </p>
+        <div class="features-grid">
+          <div class="feat-card">
+            <div class="feat-icon">🏠</div>
+            <div class="feat-title">Owner Portal</div>
+            <div class="feat-desc">
+              Your dedicated dashboard to manage all properties, tenants, and
+              operations in one place.
+            </div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">🔍</div>
+            <div class="feat-title">Tenant Inquiry System</div>
+            <div class="feat-desc">
+              Tenants browse and inquire directly. You receive WhatsApp and
+              email notifications instantly.
+            </div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">📄</div>
+            <div class="feat-title">Rental Agreement Support</div>
+            <div class="feat-desc">
+              Generate and manage rental agreements digitally without leaving
+              the platform.
+            </div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">🔔</div>
+            <div class="feat-title">Rent Reminders</div>
+            <div class="feat-desc">
+              Automated rent reminders and receipts keep your rental operations
+              running smoothly.
+            </div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">💬</div>
+            <div class="feat-title">WhatsApp Integration</div>
+            <div class="feat-desc">
+              Instant WhatsApp alerts for new inquiries, tenant messages, and
+              rental updates.
+            </div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">🔒</div>
+            <div class="feat-title">Secure & Private</div>
+            <div class="feat-desc">
+              Each owner's data is fully isolated. No cross-owner visibility.
+              Built with security first.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: WHY SHIVYA SPACES (existing, kept) -->
+    <div class="section-wrap glass-bg">
+      <div class="section-inner">
+        <p class="section-label">Why Choose Us</p>
+        <h2 class="section-title">Why Shivya Spaces?</h2>
+        <p class="section-sub">
+          We built this platform specifically for NRI owners — not a generic
+          tool adapted for rentals.
+        </p>
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="why-icon">🌏</div>
+            <div class="why-title">Built for NRIs</div>
+            <div class="why-desc">
+              Designed from the ground up for property owners managing India
+              properties from abroad.
+            </div>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">⚡</div>
+            <div class="why-title">All-in-One Platform</div>
+            <div class="why-desc">
+              Listings, inquiries, onboarding, agreements, reminders — one
+              platform, no juggling.
+            </div>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">🔐</div>
+            <div class="why-title">Privacy First</div>
+            <div class="why-desc">
+              Your data stays yours. No cross-owner access. Full isolation and
+              security by design.
+            </div>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">📱</div>
+            <div class="why-title">WhatsApp Native</div>
+            <div class="why-desc">
+              Real-time notifications via WhatsApp — the way NRIs actually
+              communicate.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: CTA -->
+    <div class="cta-wrap">
+      <div class="cta-inner">
+        <h2 class="cta-title">
+          Ready to Manage Your Rental<br />Properties <span>Digitally?</span>
+        </h2>
+        <p class="cta-sub">
+          Join property owners already managing their rentals with Shivya
+          Spaces. Create your account today and take full control from anywhere
+          in the world.
+        </p>
+        <a href="/owner-signup" class="cta-btn">Create Your Owner Account →</a>
+      </div>
+    </div>
+
+    <!-- FOOTER (unchanged) -->
     <footer>
       <div class="footer-grid">
         <div>
@@ -465,10 +984,6 @@
         <p>© <span id="yr"></span> Shivya Spaces. All Rights Reserved.</p>
       </div>
     </footer>
-    <script>
-      document.getElementById("yr").textContent = new Date().getFullYear();
-    </script>
-
     <script>
       document.getElementById("yr").textContent = new Date().getFullYear();
     </script>
