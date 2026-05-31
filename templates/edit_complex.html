@@ -489,7 +489,11 @@
                 Property','Commercial Retail','Office Space'] %}
                 <option
                   value="{{ pt }}"
-                  {% if prop.property_type == pt %}selected{%
+                  {%
+                  if
+                  prop.property_type=""
+                  ="pt"
+                  %}selected{%
                   endif
                   %}
                 >
@@ -507,7 +511,11 @@
                 %}
                 <option
                   value="{{ f }}"
-                  {% if prop.facing == f %}selected{%
+                  {%
+                  if
+                  prop.facing=""
+                  ="f"
+                  %}selected{%
                   endif
                   %}
                 >
@@ -583,7 +591,11 @@
               unit.sqft }} Sq Ft{% endif %} · {{ unit.status }}
             </p>
           </div>
-          <a href="/edit-unit/{{ unit.id }}" class="btn-eu">Edit Unit</a>
+          <a
+            href="/edit-unit/{{ unit.id }}?from=/edit-complex/{{ prop.id }}"
+            class="btn-eu"
+            >Edit Unit</a
+          >
         </div>
         {% endfor %} {% else %}
         <p

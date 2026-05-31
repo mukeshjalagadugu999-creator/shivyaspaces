@@ -16,6 +16,33 @@ try:
 except ImportError:
     CLOUDINARY_AVAILABLE = False
 
+
+import os as _os
+
+def _fix_broken_templates():
+    """Fix any templates that have broken Jinja syntax from old injections."""
+    import re as _re
+    tmpl_dir = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "templates")
+    
+    for fname in ["edit_property.html", "edit_complex.html", "edit_unit.html"]:
+        path = _os.path.join(tmpl_dir, fname)
+        if not _os.path.exists(path):
+            continue
+        content = open(path, encoding="utf-8").read()
+        lines = content.splitlines()
+        # If file has suspicious bare Python-like assignments outside Jinja blocks
+        # e.g. `prop.property_type=""` on its own line
+        bad = [i+1 for i,l in enumerate(lines) 
+               if _re.match(r"\s*(prop|unit)\.[a-z_]+=", l.strip()) 
+               and "{%" not in l and "{{" not in l]
+        if bad:
+            # Remove those lines
+            clean = [l for i,l in enumerate(lines) 
+                     if (i+1) not in bad]
+            open(path, "w", encoding="utf-8").write("\n".join(clean))
+
+_fix_broken_templates()
+
 app = Flask(__name__)
 app.secret_key = "shivya_secret_key_2024"
 app.config["WTF_CSRF_TIME_LIMIT"] = None
@@ -933,6 +960,9 @@ def edit_unit(unit_id):
         conn.commit()
         conn.close()
         flash(f"Unit updated!", "success")
+        from_url = request.args.get("from", "")
+        if from_url == "/dashboard":
+            return redirect(url_for("dashboard"))
         return redirect(url_for("edit_complex", prop_id=unit["parent_id"]))
 
     conn.close()

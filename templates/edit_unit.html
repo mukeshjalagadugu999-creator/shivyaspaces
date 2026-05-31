@@ -410,7 +410,11 @@
     </div>
     <div class="content">
       <div class="back-wrap">
-        <a href="/edit-complex/{{ unit.parent_id }}" class="back-btn">Back</a>
+        <a
+          href="{{ request.args.get('from', '/edit-complex/' + unit.parent_id|string) }}"
+          class="back-btn"
+          >Back</a
+        >
       </div>
       <div class="page-hdr">
         <h1>Edit Unit</h1>
@@ -448,7 +452,11 @@
                 {% for s in ['Available','Rented','Not Available'] %}
                 <option
                   value="{{ s }}"
-                  {% if unit.status == s %}selected{%
+                  {%
+                  if
+                  unit.status=""
+                  ="s"
+                  %}selected{%
                   endif
                   %}
                 >
@@ -497,7 +505,11 @@
                 %}
                 <option
                   value="{{ f }}"
-                  {% if unit.facing == f %}selected{%
+                  {%
+                  if
+                  unit.facing=""
+                  ="f"
+                  %}selected{%
                   endif
                   %}
                 >
@@ -581,7 +593,9 @@
         </div>
         <div class="actions">
           <button type="submit" class="btn-save">Save Unit</button>
-          <a href="/edit-complex/{{ unit.parent_id }}" class="btn-cancel"
+          <a
+            href="{{ request.args.get('from', '/edit-complex/' + unit.parent_id|string) }}"
+            class="btn-cancel"
             >Cancel</a
           >
         </div>
