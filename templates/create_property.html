@@ -628,35 +628,6 @@
       <div class="flash {{ category }}">{{ message }}</div>
       {% endfor %} {% endwith %}
 
-      <!-- Step 1: Listing Type -->
-      <div class="listing-toggle">
-        <button
-          type="button"
-          class="lt-btn active"
-          id="btnRent"
-          onclick="setListingType('rent')"
-        >
-          <div class="lt-icon">🏠</div>
-          <div class="lt-title">For Rent</div>
-          <div class="lt-desc">
-            Monthly rental — tenants pay you every month
-          </div>
-        </button>
-        <button
-          type="button"
-          class="lt-btn"
-          id="btnSale"
-          onclick="setListingType('sale')"
-        >
-          <div class="lt-icon">🏷️</div>
-          <div class="lt-title">For Sale</div>
-          <div class="lt-desc">
-            One-time sale — buyer pays full price upfront
-          </div>
-        </button>
-      </div>
-      <input type="hidden" name="listing_type" id="listingType" value="rent" />
-
       <!-- TYPE TOGGLE -->
       <div class="type-toggle">
         <button
@@ -687,7 +658,7 @@
         </button>
       </div>
 
-      <form method="POST" action="/create" id="propertyForm">
+      <form method="POST" action="/create/{{ listing_type }}" id="propertyForm">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <input type="hidden" name="is_complex" id="isComplex" value="0" />
         <input type="hidden" name="gallery_images" id="galleryUrls" />
@@ -829,14 +800,10 @@
         </div>
 
         <!-- VISIBILITY -->
-        <div class="form-card" id="visCard">
+        <div class="form-card">
           <h2>Listing Visibility</h2>
           <div class="vis-grid">
-            <div
-              class="vis-btn active"
-              id="vis_public"
-              onclick="setVis('public')"
-            >
+            <div class="vis-btn" id="vis_public" onclick="setVis('public')">
               <div class="vi">🌐</div>
               <div class="vt">Public</div>
               <div class="vd">Visible in search results to everyone</div>
@@ -855,8 +822,9 @@
           <input type="hidden" name="visibility" id="visInput" value="public" />
         </div>
 
-        <!-- SALE PRICE — shown only for sale listings -->
-        <div class="form-card" id="salePriceCard" style="display: none">
+        <!-- SALE PRICE — shown only when listing_type == sale -->
+        {% if listing_type == 'sale' %}
+        <div class="form-card">
           <h2>Sale Price</h2>
           <div class="form-grid">
             <div class="form-group full" id="salePriceField">
@@ -881,6 +849,7 @@
             >
           </div>
         </div>
+        {% endif %}
 
         <!-- PHOTOS -->
         <div class="form-card">
@@ -1302,6 +1271,38 @@
           if (e.parentNode) e.parentNode.removeChild(e);
         }, 4000);
       }
+
+      // Visibility buttons
+      setVis("public"); // default
+
+      function setVis(v) {
+        ["public", "invite", "hidden"].forEach(function (k) {
+          var el = document.getElementById("vis_" + k);
+          if (el) el.classList.toggle("active", k === v);
+        });
+        document.getElementById("visInput").value = v;
+      }
+
+      function toggleCFP() {
+        var checked =
+          document.getElementById("cfpCheck") &&
+          document.getElementById("cfpCheck").checked;
+        var field = document.getElementById("salePriceField");
+        if (field) field.style.display = checked ? "none" : "";
+      }
+
+      // Hide rent-specific fields if this is a sale listing
+      (function () {
+        var lt = "{{ listing_type }}";
+        if (lt === "sale") {
+          ["grpRent", "grpDeposit", "grpMaint"].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = "none";
+          });
+          var btn = document.getElementById("submitBtn");
+          if (btn) btn.textContent = "List Property For Sale";
+        }
+      })();
     </script>
   </body>
 </html>

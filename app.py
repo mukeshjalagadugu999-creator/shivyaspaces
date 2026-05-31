@@ -643,9 +643,144 @@ def dashboard():
     return resp
 
 
-@app.route("/create", methods=["GET", "POST"])
+
+@app.route("/create/rent", methods=["GET", "POST"])
+@login_required
+def create_rent():
+    return create_property_handler("rent")
+
+@app.route("/create/sale", methods=["GET", "POST"])
+@login_required
+def create_sale():
+    return create_property_handler("sale")
+
+def create_property_handler(listing_type):
+    if request.method == "POST":
+        is_complex     = request.form.get("is_complex") == "1"
+        gallery_raw    = request.form.get("gallery_images", "")
+        gallery_images = json.dumps([g.strip() for g in gallery_raw.splitlines() if g.strip()])
+        images_list    = [g.strip() for g in gallery_raw.splitlines() if g.strip()]
+        first_image    = images_list[0] if images_list else ""
+        visibility     = request.form.get("visibility", "public")
+        sale_price     = request.form.get("sale_price", "")
+        contact_for_price = 1 if request.form.get("contact_for_price") else 0
+
+        conn = get_db()
+
+        if is_complex:
+            amenities = json.dumps([])
+            c_listing_type = listing_type
+            c_visibility   = visibility
+            conn.execute("""INSERT INTO properties
+                (owner_id, title, location, rent, status, beds, baths, sqft, image,
+                 property_type, security_deposit, facing, maintenance, floor, built,
+                 description, amenities, gallery_images, is_complex,
+                 visibility, listing_type, sale_price, contact_for_price)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)""", (
+                session["owner_id"],
+                request.form.get("title"), request.form.get("location"),
+                "", "Available", 0, 0, 0, first_image,
+                request.form.get("property_type"),
+                "", request.form.get("facing"), "", "",
+                request.form.get("built"), request.form.get("description"),
+                amenities, gallery_images,
+                c_visibility, c_listing_type, sale_price, contact_for_price
+            ))
+            complex_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+
+            unit_names        = request.form.getlist("unit_title[]")
+            unit_rents        = request.form.getlist("unit_rent[]")
+            unit_sale_prices  = request.form.getlist("unit_sale_price[]")
+            unit_cfp          = request.form.getlist("unit_contact_for_price[]")
+            unit_beds         = request.form.getlist("unit_beds[]")
+            unit_baths        = request.form.getlist("unit_baths[]")
+            unit_sqfts        = request.form.getlist("unit_sqft[]")
+            unit_statuses     = request.form.getlist("unit_status[]")
+            unit_floors       = request.form.getlist("unit_floor[]")
+            unit_galleries    = request.form.getlist("unit_gallery_images[]")
+            unit_sec_deposits = request.form.getlist("unit_security_deposit[]")
+            unit_maintenances = request.form.getlist("unit_maintenance[]")
+            unit_visibilities = request.form.getlist("unit_visibility[]")
+
+            for i, name in enumerate(unit_names):
+                if not name.strip(): continue
+                ugallery_raw  = unit_galleries[i] if i < len(unit_galleries) else ""
+                ugallery_list = [g.strip() for g in ugallery_raw.splitlines() if g.strip()]
+                ugallery_json = json.dumps(ugallery_list)
+                ufirst_image  = ugallery_list[0] if ugallery_list else first_image
+                u_sale_price  = unit_sale_prices[i] if i < len(unit_sale_prices) else ""
+                u_cfp         = 1 if (i < len(unit_cfp) and unit_cfp[i]) else 0
+                u_vis         = unit_visibilities[i] if i < len(unit_visibilities) else "public"
+                conn.execute("""INSERT INTO properties
+                    (owner_id, parent_id, title, location, rent, status, beds, baths,
+                     sqft, image, property_type, floor, security_deposit, maintenance,
+                     description, amenities, gallery_images, is_complex,
+                     listing_type, sale_price, contact_for_price, visibility)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?,?,?)""", (
+                    session["owner_id"], complex_id, name.strip(),
+                    request.form.get("location"),
+                    unit_rents[i] if i < len(unit_rents) else "",
+                    unit_statuses[i] if i < len(unit_statuses) else "Available",
+                    int(unit_beds[i]) if i < len(unit_beds) and unit_beds[i] else 0,
+                    int(unit_baths[i]) if i < len(unit_baths) and unit_baths[i] else 0,
+                    int(unit_sqfts[i]) if i < len(unit_sqfts) and unit_sqfts[i] else 0,
+                    ufirst_image, request.form.get("property_type"),
+                    unit_floors[i] if i < len(unit_floors) else "",
+                    unit_sec_deposits[i] if i < len(unit_sec_deposits) else "",
+                    unit_maintenances[i] if i < len(unit_maintenances) else "",
+                    "", json.dumps([]), ugallery_json,
+                    listing_type, u_sale_price, u_cfp, u_vis
+                ))
+            conn.commit()
+            conn.close()
+            flash(f"Complex created with {len([n for n in unit_names if n.strip()])} units!", "success")
+            return redirect(url_for("dashboard"))
+
+        else:
+            amenities_raw  = request.form.get("amenities", "")
+            amenities      = json.dumps([a.strip() for a in amenities_raw.split(",") if a.strip()])
+            conn.execute("""INSERT INTO properties
+                (owner_id, title, location, rent, status, beds, baths, sqft, image,
+                 property_type, security_deposit, facing, maintenance, floor, built,
+                 description, amenities, gallery_images, is_complex,
+                 listing_type, sale_price, contact_for_price, visibility)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?,?,?)""", (
+                session["owner_id"],
+                request.form.get("title"), request.form.get("location"),
+                request.form.get("rent") if listing_type == "rent" else "",
+                request.form.get("status"),
+                request.form.get("beds") or 0,
+                request.form.get("baths") or 0,
+                request.form.get("sqft") or 0,
+                first_image,
+                request.form.get("property_type"),
+                request.form.get("security_deposit"),
+                request.form.get("facing"),
+                request.form.get("maintenance"),
+                request.form.get("floor"),
+                request.form.get("built"),
+                request.form.get("description"),
+                amenities, gallery_images,
+                listing_type, sale_price, contact_for_price, visibility
+            ))
+            conn.commit()
+            conn.close()
+            flash(f"'{request.form.get('title')}' listed successfully!", "success")
+            return redirect(url_for("dashboard"))
+
+    return render_template("create_property.html",
+                           brand_name=session["brand_name"],
+                           listing_type=listing_type)
+
+@app.route("/create", methods=["GET"])
 @login_required
 def create_property():
+    return render_template("create_landing.html", brand_name=session["brand_name"])
+
+
+@app.route("/create_post", methods=["POST"])
+@login_required
+def create_property_post():
     if request.method == "POST":
         is_complex     = request.form.get("is_complex") == "1"
         gallery_raw    = request.form.get("gallery_images", "")
@@ -772,7 +907,9 @@ def create_property():
             flash(f"'{request.form.get('title')}' created successfully!", "success")
             return redirect(url_for("dashboard"))
 
-    return render_template("create_property.html", brand_name=session["brand_name"])
+    return render_template("create_property.html",
+                           brand_name=session["brand_name"],
+                           listing_type="rent")
 
 
 
