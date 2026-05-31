@@ -483,6 +483,116 @@
           grid-template-columns: 1fr;
         }
       }
+
+      /* Listing type toggle */
+      .listing-toggle {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+      .lt-btn {
+        padding: 18px 20px;
+        border-radius: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.06);
+        cursor: pointer;
+        transition: all 0.18s;
+        font-family: "Inter", sans-serif;
+        text-align: left;
+      }
+      .lt-btn:hover {
+        border-color: rgba(212, 160, 23, 0.4);
+      }
+      .lt-btn.active {
+        border-color: #d4a017;
+        background: rgba(212, 160, 23, 0.12);
+      }
+      .lt-btn .lt-icon {
+        font-size: 22px;
+        margin-bottom: 6px;
+      }
+      .lt-btn .lt-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 3px;
+      }
+      .lt-btn.active .lt-title {
+        color: #d4a017;
+      }
+      .lt-btn .lt-desc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
+        line-height: 1.4;
+      }
+      /* Visibility selector */
+      .vis-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin-top: 4px;
+      }
+      .vis-btn {
+        padding: 14px;
+        border-radius: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.05);
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.18s;
+        font-family: "Inter", sans-serif;
+      }
+      .vis-btn:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      .vis-btn.active {
+        border-color: #d4a017;
+        background: rgba(212, 160, 23, 0.1);
+      }
+      .vis-btn .vi {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+      .vis-btn .vt {
+        font-size: 13px;
+        font-weight: 700;
+        color: white;
+      }
+      .vis-btn.active .vt {
+        color: #d4a017;
+      }
+      .vis-btn .vd {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
+        margin-top: 3px;
+        line-height: 1.3;
+      }
+      /* CFP checkbox */
+      .cfp-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 12px;
+        padding: 12px 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .cfp-row input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: #d4a017;
+      }
+      .cfp-row label {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: 500;
+        text-transform: none;
+        letter-spacing: 0;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -517,6 +627,35 @@
       category, message in messages %}
       <div class="flash {{ category }}">{{ message }}</div>
       {% endfor %} {% endwith %}
+
+      <!-- Step 1: Listing Type -->
+      <div class="listing-toggle">
+        <button
+          type="button"
+          class="lt-btn active"
+          id="btnRent"
+          onclick="setListingType('rent')"
+        >
+          <div class="lt-icon">🏠</div>
+          <div class="lt-title">For Rent</div>
+          <div class="lt-desc">
+            Monthly rental — tenants pay you every month
+          </div>
+        </button>
+        <button
+          type="button"
+          class="lt-btn"
+          id="btnSale"
+          onclick="setListingType('sale')"
+        >
+          <div class="lt-icon">🏷️</div>
+          <div class="lt-title">For Sale</div>
+          <div class="lt-desc">
+            One-time sale — buyer pays full price upfront
+          </div>
+        </button>
+      </div>
+      <input type="hidden" name="listing_type" id="listingType" value="rent" />
 
       <!-- TYPE TOGGLE -->
       <div class="type-toggle">
@@ -686,6 +825,60 @@
               />
               <p class="hint">Separate each with a comma.</p>
             </div>
+          </div>
+        </div>
+
+        <!-- VISIBILITY -->
+        <div class="form-card" id="visCard">
+          <h2>Listing Visibility</h2>
+          <div class="vis-grid">
+            <div
+              class="vis-btn active"
+              id="vis_public"
+              onclick="setVis('public')"
+            >
+              <div class="vi">🌐</div>
+              <div class="vt">Public</div>
+              <div class="vd">Visible in search results to everyone</div>
+            </div>
+            <div class="vis-btn" id="vis_invite" onclick="setVis('invite')">
+              <div class="vi">🔗</div>
+              <div class="vt">Invite Only</div>
+              <div class="vd">Only accessible via direct link you share</div>
+            </div>
+            <div class="vis-btn" id="vis_hidden" onclick="setVis('hidden')">
+              <div class="vi">👁</div>
+              <div class="vt">Hidden</div>
+              <div class="vd">Not searchable, direct URL also hidden</div>
+            </div>
+          </div>
+          <input type="hidden" name="visibility" id="visInput" value="public" />
+        </div>
+
+        <!-- SALE PRICE — shown only for sale listings -->
+        <div class="form-card" id="salePriceCard" style="display: none">
+          <h2>Sale Price</h2>
+          <div class="form-grid">
+            <div class="form-group full" id="salePriceField">
+              <label>Sale Price</label>
+              <input
+                type="text"
+                name="sale_price"
+                id="salePriceInput"
+                placeholder="e.g. Rs. 45,00,000"
+              />
+            </div>
+          </div>
+          <div class="cfp-row">
+            <input
+              type="checkbox"
+              name="contact_for_price"
+              id="cfpCheck"
+              onchange="toggleCFP()"
+            />
+            <label for="cfpCheck"
+              >Contact owner for price (hides the price field)</label
+            >
           </div>
         </div>
 

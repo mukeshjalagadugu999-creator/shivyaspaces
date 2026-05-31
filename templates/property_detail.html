@@ -739,6 +739,47 @@
         font-weight: 700;
         margin-top: 12px;
       }
+
+      .sale-price-box {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .sale-price-tag {
+        font-size: 11px;
+        font-weight: 700;
+        color: #f87171;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+      }
+      .sale-price-val {
+        font-size: 26px;
+        font-weight: 800;
+        color: white;
+      }
+      .sale-price-cfp {
+        font-size: 15px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .for-sale-badge {
+        background: #ef4444;
+        color: white;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 999px;
+        display: inline-block;
+        margin-bottom: 8px;
+      }
     </style>
   </head>
   <body>
@@ -871,10 +912,24 @@
         <!-- ═══ SINGLE PROPERTY LAYOUT ═══ -->
         <div class="prop-header">
           <div>
+            {% if prop.listing_type == 'sale' %}<span class="for-sale-badge"
+              >For Sale</span
+            >{% endif %}
             <h1>{{ prop.title }}</h1>
             <p class="location">📍 {{ prop.location }}</p>
           </div>
+          {% if prop.listing_type == 'sale' %}
+          <div>
+            <div class="sale-price-tag">Sale Price</div>
+            {% if prop.contact_for_price %}
+            <div class="sale-price-cfp">Contact owner for price</div>
+            {% else %}
+            <div class="sale-price-val">{{ prop.sale_price }}</div>
+            {% endif %}
+          </div>
+          {% else %}
           <div class="prop-price">{{ prop.rent }}<span> / month</span></div>
+          {% endif %}
         </div>
 
         {% if prop.gallery_images %}
@@ -953,7 +1008,10 @@
           </div>
           <div class="prop-right">
             <div class="contact-box">
-              <h3>Interested?</h3>
+              <h3>
+                {% if prop.listing_type == 'sale' %}Interested in Buying?{% else
+                %}Interested?{% endif %}
+              </h3>
               <p class="sub">
                 Contact <strong>{{ owner.name }}</strong> directly about this
                 property.
@@ -961,7 +1019,7 @@
               {% if prop.status == 'Available' %} {% if whatsapp_phone %}
               <a
                 class="wa-btn"
-                href="https://wa.me/{{ whatsapp_phone }}?text={{ ('Hi, I am interested in ' + prop.title + ' (' + prop.rent + '/month) on ' + owner.brand_name + '. Could you please share more details?') | urlencode }}"
+                href="https://wa.me/{{ whatsapp_phone }}?text={{ ('Hi, I am interested in ' + prop.title + (' (For Sale)' if prop.listing_type == 'sale' else ' (' + prop.rent + '/month)') + ' on ' + owner.brand_name + '. Could you please share more details?') | urlencode }}"
                 target="_blank"
               >
                 <svg class="wa-icon" viewBox="0 0 24 24">

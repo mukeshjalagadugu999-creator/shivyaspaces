@@ -204,14 +204,38 @@ def parse_property(row):
     p["gallery_images"] = json.loads(p["gallery_images"]) if p.get("gallery_images") else []
     # Safe defaults for optional fields
     for field in ["title","location","rent","status","description","property_type",
-                  "facing","maintenance","floor","built","security_deposit","image"]:
+                  "facing","maintenance","floor","built","security_deposit","image",
+                  "visibility","listing_type","sale_price"]:
         if field not in p or p[field] is None:
             p[field] = ""
-    for field in ["beds","baths","sqft","is_complex","parent_id"]:
+    for field in ["beds","baths","sqft","is_complex","parent_id","contact_for_price"]:
         if field not in p or p[field] is None:
             p[field] = 0
+    # defaults
+    if not p["visibility"]:   p["visibility"]   = "public"
+    if not p["listing_type"]: p["listing_type"] = "rent"
     return p
 
+
+
+def migrate_db():
+    """Add new columns if they don't exist."""
+    conn = get_db()
+    existing = [r[1] for r in conn.execute("PRAGMA table_info(properties)").fetchall()]
+    migrations = [
+        ("visibility",    "TEXT DEFAULT 'public'"),
+        ("listing_type",  "TEXT DEFAULT 'rent'"),
+        ("sale_price",    "TEXT DEFAULT ''"),
+        ("contact_for_price", "INTEGER DEFAULT 0"),
+    ]
+    for col, definition in migrations:
+        if col not in existing:
+            conn.execute(f"ALTER TABLE properties ADD COLUMN {col} {definition}")
+            print(f"Migration: added column {col}")
+    conn.commit()
+    conn.close()
+
+migrate_db()
 
 def clean_phone(phone):
     """
@@ -353,6 +377,7 @@ def search_results():
         JOIN owners o ON p.owner_id = o.id
         WHERE o.is_active = 1
         AND (p.parent_id IS NULL OR p.parent_id = 0)
+        AND (p.visibility = 'public' OR p.visibility IS NULL OR p.visibility = '')
     """
     params = []
 
@@ -486,6 +511,11 @@ def property_detail(slug, prop_id):
     ).fetchone())
 
     if not prop:
+        conn.close()
+        return render_template("404.html"), 404
+
+    # Hidden properties return 404 even on direct URL
+    if prop.get("visibility") == "hidden":
         conn.close()
         return render_template("404.html"), 404
 
@@ -628,11 +658,14 @@ def create_property():
         if is_complex:
             # Complex: minimal fields, no rent/beds/baths
             amenities = json.dumps([])
+            c_visibility = request.form.get("visibility", "public")
+            c_listing_type = request.form.get("listing_type", "rent")
             conn.execute("""INSERT INTO properties
                 (owner_id, title, location, rent, status, beds, baths, sqft, image,
                  property_type, security_deposit, facing, maintenance, floor, built,
-                 description, amenities, gallery_images, is_complex)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)""", (
+                 description, amenities, gallery_images, is_complex,
+                 visibility, listing_type)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?)""", (
                 session["owner_id"],
                 request.form.get("title"),
                 request.form.get("location"),
@@ -641,7 +674,8 @@ def create_property():
                 "", request.form.get("facing"), "", "",
                 request.form.get("built"),
                 request.form.get("description"),
-                amenities, gallery_images
+                amenities, gallery_images,
+                c_visibility, c_listing_type
             ))
             complex_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
 
@@ -666,11 +700,19 @@ def create_property():
                 ugallery_json = json.dumps(ugallery_list)
                 ufirst_image = ugallery_list[0] if ugallery_list else first_image
 
+                u_listing_type      = c_listing_type
+                u_sale_prices       = request.form.getlist("unit_sale_price[]")
+                u_contact_for_price = request.form.getlist("unit_contact_for_price[]")
+                u_visibilities      = request.form.getlist("unit_visibility[]")
+                u_sale_price        = u_sale_prices[i] if i < len(u_sale_prices) else ""
+                u_cfp               = 1 if (i < len(u_contact_for_price) and u_contact_for_price[i]) else 0
+                u_vis               = u_visibilities[i] if i < len(u_visibilities) else "public"
                 conn.execute("""INSERT INTO properties
                     (owner_id, parent_id, title, location, rent, status, beds, baths,
                      sqft, image, property_type, floor, security_deposit, maintenance,
-                     description, amenities, gallery_images, is_complex)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""", (
+                     description, amenities, gallery_images, is_complex,
+                     listing_type, sale_price, contact_for_price, visibility)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?,?,?)""", (
                     session["owner_id"], complex_id,
                     name.strip(),
                     request.form.get("location"),
@@ -683,7 +725,8 @@ def create_property():
                     unit_floors[i] if i < len(unit_floors) else "",
                     unit_sec_deposits[i] if i < len(unit_sec_deposits) else "",
                     unit_maintenances[i] if i < len(unit_maintenances) else "",
-                    "", json.dumps([]), ugallery_json
+                    "", json.dumps([]), ugallery_json,
+                    u_listing_type, u_sale_price, u_cfp, u_vis
                 ))
 
             conn.commit()
@@ -695,15 +738,20 @@ def create_property():
             # Single property — all fields
             amenities_raw  = request.form.get("amenities", "")
             amenities      = json.dumps([a.strip() for a in amenities_raw.split(",") if a.strip()])
+            listing_type     = request.form.get("listing_type", "rent")
+            sale_price       = request.form.get("sale_price", "")
+            contact_for_price= 1 if request.form.get("contact_for_price") else 0
+            visibility       = request.form.get("visibility", "public")
             conn.execute("""INSERT INTO properties
                 (owner_id, title, location, rent, status, beds, baths, sqft, image,
                  property_type, security_deposit, facing, maintenance, floor, built,
-                 description, amenities, gallery_images, is_complex)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""", (
+                 description, amenities, gallery_images, is_complex,
+                 listing_type, sale_price, contact_for_price, visibility)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?,?,?)""", (
                 session["owner_id"],
                 request.form.get("title"),
                 request.form.get("location"),
-                request.form.get("rent"),
+                request.form.get("rent") if listing_type == "rent" else "",
                 request.form.get("status"),
                 request.form.get("beds") or 0,
                 request.form.get("baths") or 0,
@@ -716,7 +764,8 @@ def create_property():
                 request.form.get("floor"),
                 request.form.get("built"),
                 request.form.get("description"),
-                amenities, gallery_images
+                amenities, gallery_images,
+                listing_type, sale_price, contact_for_price, visibility
             ))
             conn.commit()
             conn.close()
@@ -806,9 +855,12 @@ def edit_complex(prop_id):
         images_list    = [g.strip() for g in gallery_raw.splitlines() if g.strip()]
         first_image    = images_list[0] if images_list else prop.get("image", "")
 
+        ec_visibility   = request.form.get("visibility", "public")
+        ec_listing_type = request.form.get("listing_type", "rent")
         conn.execute("""UPDATE properties SET
             title=?, location=?, property_type=?, facing=?, built=?,
-            description=?, image=?, gallery_images=?
+            description=?, image=?, gallery_images=?,
+            visibility=?, listing_type=?
             WHERE id=? AND owner_id=?""", (
             request.form.get("title"),
             request.form.get("location"),
@@ -817,6 +869,7 @@ def edit_complex(prop_id):
             request.form.get("built"),
             request.form.get("description"),
             first_image, gallery_images,
+            ec_visibility, ec_listing_type,
             prop_id, session["owner_id"]
         ))
         conn.commit()
@@ -864,14 +917,19 @@ def edit_property(prop_id):
         images_list    = [g.strip() for g in gallery_raw.splitlines() if g.strip()]
         first_image    = images_list[0] if images_list else prop.get("image", "")
 
+        e_listing_type      = request.form.get("listing_type", "rent")
+        e_sale_price        = request.form.get("sale_price", "")
+        e_contact_for_price = 1 if request.form.get("contact_for_price") else 0
+        e_visibility        = request.form.get("visibility", "public")
         conn.execute("""UPDATE properties SET
             title=?, location=?, rent=?, status=?, beds=?, baths=?, sqft=?, image=?,
             floor=?, built=?, property_type=?, security_deposit=?, facing=?,
-            maintenance=?, description=?, amenities=?, gallery_images=?
+            maintenance=?, description=?, amenities=?, gallery_images=?,
+            listing_type=?, sale_price=?, contact_for_price=?, visibility=?
             WHERE id=? AND owner_id=?""", (
             request.form.get("title"),
             request.form.get("location"),
-            request.form.get("rent"),
+            request.form.get("rent") if e_listing_type == "rent" else "",
             request.form.get("status"),
             request.form.get("beds") or 0,
             request.form.get("baths") or 0,
@@ -884,10 +942,9 @@ def edit_property(prop_id):
             request.form.get("facing"),
             request.form.get("maintenance"),
             request.form.get("description"),
-            amenities,
-            gallery_images,
-            prop_id,
-            session["owner_id"]
+            amenities, gallery_images,
+            e_listing_type, e_sale_price, e_contact_for_price, e_visibility,
+            prop_id, session["owner_id"]
         ))
         conn.commit()
         conn.close()
@@ -937,13 +994,18 @@ def edit_unit(unit_id):
         images_list    = [g.strip() for g in gallery_raw.splitlines() if g.strip()]
         first_image    = images_list[0] if images_list else unit.get("image", "")
 
+        eu_listing_type      = request.form.get("listing_type", "rent")
+        eu_sale_price        = request.form.get("sale_price", "")
+        eu_contact_for_price = 1 if request.form.get("contact_for_price") else 0
+        eu_visibility        = request.form.get("visibility", "public")
         conn.execute("""UPDATE properties SET
             title=?, rent=?, status=?, beds=?, baths=?, sqft=?, image=?,
             floor=?, facing=?, security_deposit=?, maintenance=?,
-            description=?, amenities=?, gallery_images=?
+            description=?, amenities=?, gallery_images=?,
+            listing_type=?, sale_price=?, contact_for_price=?, visibility=?
             WHERE id=? AND owner_id=?""", (
             request.form.get("title"),
-            request.form.get("rent"),
+            request.form.get("rent") if eu_listing_type == "rent" else "",
             request.form.get("status"),
             request.form.get("beds") or 0,
             request.form.get("baths") or 0,
@@ -955,6 +1017,7 @@ def edit_unit(unit_id):
             request.form.get("maintenance"),
             request.form.get("description"),
             amenities, gallery_images,
+            eu_listing_type, eu_sale_price, eu_contact_for_price, eu_visibility,
             unit_id, session["owner_id"]
         ))
         conn.commit()

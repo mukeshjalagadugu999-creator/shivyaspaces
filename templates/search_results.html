@@ -382,6 +382,10 @@
         background: rgba(139, 92, 246, 0.85);
         color: white;
       }
+      .badge-sale-tag {
+        background: rgba(239, 68, 68, 0.85);
+        color: white;
+      }
       .complex-summary {
         display: flex;
         gap: 6px;
@@ -524,6 +528,8 @@
             <img src="{{ item.image }}" alt="{{ item.title }}" />
             {% if item.is_complex %}
             <span class="prop-badge badge-complex">Complex</span>
+            {% elif item.listing_type == 'sale' %}
+            <span class="prop-badge badge-sale-tag">For Sale</span>
             {% else %}
             <span class="prop-badge badge-{{ item.status | replace(' ','') }}"
               >{{ item.status }}</span
@@ -558,8 +564,14 @@
             >
               {{ item.unit_labels }}
             </p>
-            {% endif %} {% else %}
+            {% endif %} {% else %} {% if item.listing_type == 'sale' %}
+            <div class="prop-price" style="color: #f87171">
+              {% if item.contact_for_price %}Contact for Price{% else %}{{
+              item.sale_price }}{% endif %}<span> (sale)</span>
+            </div>
+            {% else %}
             <div class="prop-price">{{ item.rent }}<span> / month</span></div>
+            {% endif %}
             <div class="prop-title">{{ item.title }}</div>
             <div class="prop-loc">{{ item.location }}</div>
             <div class="prop-meta">
