@@ -285,6 +285,60 @@
           padding: 10px 14px;
         }
       }
+
+      .status-group {
+        display: flex;
+        gap: 6px;
+        flex-wrap: nowrap;
+      }
+      .status-btn {
+        padding: 5px 11px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1.5px solid transparent;
+        transition: all 0.18s;
+        white-space: nowrap;
+        font-family: "Inter", sans-serif;
+        background: transparent;
+      }
+      .status-btn:hover {
+        opacity: 0.85;
+      }
+      /* In Discussion */
+      .status-btn.discuss {
+        border-color: rgba(99, 102, 241, 0.4);
+        color: rgba(165, 163, 255, 0.7);
+      }
+      .status-btn.discuss.active,
+      .status-btn.discuss:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: #6366f1;
+        color: #a5b4fc;
+      }
+      /* Expired */
+      .status-btn.expired {
+        border-color: rgba(239, 68, 68, 0.35);
+        color: rgba(248, 113, 113, 0.65);
+      }
+      .status-btn.expired.active,
+      .status-btn.expired:hover {
+        background: rgba(239, 68, 68, 0.18);
+        border-color: #ef4444;
+        color: #f87171;
+      }
+      /* Converted */
+      .status-btn.converted {
+        border-color: rgba(37, 211, 102, 0.35);
+        color: rgba(37, 211, 102, 0.65);
+      }
+      .status-btn.converted.active,
+      .status-btn.converted:hover {
+        background: rgba(37, 211, 102, 0.18);
+        border-color: #25d366;
+        color: #25d366;
+      }
     </style>
   </head>
   <body>
@@ -358,6 +412,7 @@
               <th>Name</th>
               <th>Phone Number</th>
               <th>Date &amp; Time</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -373,6 +428,28 @@
                 >
               </td>
               <td class="td-time">{{ lead.created_at }}</td>
+              <td>
+                <div class="status-group" id="sg_{{ lead.id }}">
+                  <button
+                    class="status-btn discuss {% if lead.status == 'in_discussion' %}active{% endif %}"
+                    onclick="setStatus({{ lead.id }}, 'in_discussion', this)"
+                  >
+                    🔵 In Discussion
+                  </button>
+                  <button
+                    class="status-btn expired {% if lead.status == 'expired' %}active{% endif %}"
+                    onclick="setStatus({{ lead.id }}, 'expired', this)"
+                  >
+                    🔴 Expired
+                  </button>
+                  <button
+                    class="status-btn converted {% if lead.status == 'converted' %}active{% endif %}"
+                    onclick="setStatus({{ lead.id }}, 'converted', this)"
+                  >
+                    🟢 Converted
+                  </button>
+                </div>
+              </td>
             </tr>
             {% endfor %}
           </tbody>
@@ -390,10 +467,33 @@
     <footer class="page-footer">
       <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
     </footer>
+
     <script>
       document.querySelectorAll(".yr").forEach(function (e) {
         e.textContent = new Date().getFullYear();
       });
+
+      function setStatus(leadId, status, btn) {
+        var group = document.getElementById("sg_" + leadId);
+        // Toggle off if already active
+        if (btn.classList.contains("active")) {
+          btn.classList.remove("active");
+          status = "new";
+        } else {
+          // Remove active from all in group
+          group.querySelectorAll(".status-btn").forEach(function (b) {
+            b.classList.remove("active");
+          });
+          btn.classList.add("active");
+        }
+        // Save to server
+        var fd = new FormData();
+        fd.append("lead_id", leadId);
+        fd.append("status", status);
+        fetch("/lead/status", { method: "POST", body: fd }).catch(
+          function () {},
+        );
+      }
     </script>
   </body>
 </html>

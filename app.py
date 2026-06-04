@@ -239,9 +239,15 @@ def migrate_db():
         property_id INTEGER NOT NULL,
         tenant_name TEXT NOT NULL,
         tenant_phone TEXT NOT NULL,
+        status TEXT DEFAULT 'new',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (property_id) REFERENCES properties(id)
     )""")
+    # Add status column if missing (existing installs)
+    lead_cols = [r[1] for r in conn.execute("PRAGMA table_info(leads)").fetchall()]
+    if "status" not in lead_cols:
+        conn.execute("ALTER TABLE leads ADD COLUMN status TEXT DEFAULT 'new'")
+        print("Migration: added leads.status")
 
     conn.commit()
     conn.close()
@@ -346,6 +352,26 @@ def nocache(resp):
 # -----------------------------------------------
 # 404 HANDLER
 # -----------------------------------------------
+
+
+
+@app.route("/lead/status", methods=["POST"])
+@csrf.exempt
+def update_lead_status():
+    """Update lead status."""
+    lead_id   = request.form.get("lead_id", "").strip()
+    status    = request.form.get("status", "").strip()
+    valid     = ["new", "in_discussion", "expired", "converted"]
+    if not lead_id or status not in valid:
+        return jsonify({"error": "Invalid"}), 400
+    try:
+        conn = get_db()
+        conn.execute("UPDATE leads SET status=? WHERE id=?", (status, int(lead_id)))
+        conn.commit()
+        conn.close()
+        return jsonify({"ok": True}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/lead/save", methods=["POST"])
