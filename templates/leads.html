@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Leads — {{ prop.title }}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        min-height: 100vh;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
+            center/cover fixed;
+        color: white;
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 1000;
+      }
+      .topbar-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .topbar-logo img {
+        height: 36px;
+        width: 36px;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+      .topbar-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .topbar-logo-name {
+        font-size: 14px;
+        font-weight: 800;
+        color: white;
+        letter-spacing: 0.8px;
+        line-height: 1;
+      }
+      .topbar-logo-name span {
+        color: #d4a017;
+      }
+      .topbar-logo-sub {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.42);
+      }
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .topbar-btn {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+      }
+      .topbar-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+      .topbar-btn-danger {
+        background: rgba(239, 68, 68, 0.15) !important;
+        border-color: rgba(239, 68, 68, 0.35) !important;
+        color: #f87171 !important;
+      }
+      .content {
+        flex: 1;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 88px 24px 60px;
+        width: 100%;
+      }
+      .back-wrap {
+        margin-bottom: 16px;
+        text-align: right;
+      }
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        padding: 7px 16px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+      }
+      .back-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+      .page-hdr {
+        margin-bottom: 28px;
+      }
+      .page-hdr h1 {
+        font-size: 24px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 4px;
+      }
+      .page-hdr p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .prop-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 10px 16px;
+        margin-bottom: 24px;
+      }
+      .prop-badge span {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.65);
+      }
+      .prop-badge strong {
+        color: white;
+      }
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+      .stat-card {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 18px 20px;
+      }
+      .stat-num {
+        font-size: 28px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 4px;
+      }
+      .stat-label {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .table-card {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .table-hdr {
+        padding: 18px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .table-hdr h2 {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+      }
+      .table-hdr span {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead tr {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      th {
+        padding: 12px 20px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      td {
+        padding: 14px 20px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      tbody tr:hover td {
+        background: rgba(255, 255, 255, 0.03);
+      }
+      .td-name {
+        font-weight: 600;
+        color: white;
+      }
+      .td-phone a {
+        color: #25d366;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .td-phone a:hover {
+        text-decoration: underline;
+      }
+      .td-time {
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 13px;
+      }
+      .empty-state {
+        padding: 60px 20px;
+        text-align: center;
+      }
+      .empty-state p {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .page-footer {
+        padding: 16px 40px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.45);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .page-footer p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.3);
+      }
+      @media (max-width: 600px) {
+        .topbar {
+          padding: 0 16px;
+        }
+        .content {
+          padding: 80px 16px 40px;
+        }
+        .stat-row {
+          grid-template-columns: 1fr;
+        }
+        th,
+        td {
+          padding: 10px 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <a href="/" class="topbar-logo">
+        <img src="/static/Shivya_Logo.jpeg" alt="" />
+        <div class="topbar-logo-text">
+          <span class="topbar-logo-name">SHIVYA<span>SPACES</span></span>
+          <span class="topbar-logo-sub">Trusted Rental Lifecycle Platform</span>
+        </div>
+      </a>
+      <div class="topbar-right">
+        <form method="POST" action="/logout" style="display: inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button type="submit" class="topbar-btn topbar-btn-danger">
+            Sign Out
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="content">
+      <div class="back-wrap">
+        <a href="/dashboard" class="back-btn">Back</a>
+      </div>
+      <div class="page-hdr">
+        <h1>Leads</h1>
+        <p>Tenants who expressed interest via WhatsApp</p>
+      </div>
+
+      <div class="prop-badge">
+        <span>🏠</span>
+        <span
+          ><strong>{{ prop.title }}</strong> &nbsp;·&nbsp; {{ prop.location
+          }}</span
+        >
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-num">{{ leads|length }}</div>
+          <div class="stat-label">Total Leads</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">
+            {% if leads %}{{ leads[0].created_at[:10] }}{% else %}—{% endif %}
+          </div>
+          <div class="stat-label">Latest Lead</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">
+            {% set today_count = leads | selectattr('created_at', 'defined') |
+            list | length %} {{ leads|length }}
+          </div>
+          <div class="stat-label">All Time Inquiries</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-hdr">
+          <h2>All Leads</h2>
+          <span
+            >{{ leads|length }} record{{ 's' if leads|length != 1 else ''
+            }}</span
+          >
+        </div>
+        {% if leads %}
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Phone Number</th>
+              <th>Date &amp; Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for lead in leads %}
+            <tr>
+              <td style="color: rgba(255, 255, 255, 0.3); font-size: 13px">
+                {{ loop.index }}
+              </td>
+              <td class="td-name">{{ lead.tenant_name }}</td>
+              <td class="td-phone">
+                <a href="tel:{{ lead.tenant_phone }}"
+                  >{{ lead.tenant_phone }}</a
+                >
+              </td>
+              <td class="td-time">{{ lead.created_at }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+          <p>
+            No leads yet. They will appear here when tenants contact you via
+            WhatsApp.
+          </p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <footer class="page-footer">
+      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+    </footer>
+    <script>
+      document.querySelectorAll(".yr").forEach(function (e) {
+        e.textContent = new Date().getFullYear();
+      });
+    </script>
+  </body>
+</html>

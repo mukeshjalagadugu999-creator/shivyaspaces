@@ -780,7 +780,150 @@
         display: inline-block;
         margin-bottom: 8px;
       }
+
+      /* ── Lead Modal ── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(6px);
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .modal-overlay.open {
+        display: flex;
+      }
+      .modal-box {
+        background: #1a1008;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 32px;
+        width: 100%;
+        max-width: 420px;
+        position: relative;
+      }
+      .modal-close {
+        position: absolute;
+        top: 14px;
+        right: 16px;
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 20px;
+        cursor: pointer;
+        line-height: 1;
+      }
+      .modal-close:hover {
+        color: white;
+      }
+      .modal-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 6px;
+      }
+      .modal-sub {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+      .modal-fg {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+      .modal-fg label {
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .modal-fg input[type="text"] {
+        padding: 11px 14px;
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: "Inter", sans-serif;
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        outline: none;
+        width: 100%;
+        transition: border-color 0.18s;
+      }
+      .modal-fg input[type="text"]:focus {
+        border-color: #d4a017;
+      }
+      .modal-fg input::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .modal-fg input.error {
+        border-color: #ef4444;
+      }
+      .modal-err {
+        font-size: 12px;
+        color: #f87171;
+        margin-top: 4px;
+        display: none;
+      }
+      .iti {
+        width: 100%;
+      }
+      #leadPhone {
+        width: 100%;
+        height: 46px;
+        font-size: 14px;
+        font-family: "Inter", sans-serif;
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+        background: transparent;
+        color: white;
+        transition: border-color 0.18s;
+      }
+      #leadPhone:focus {
+        outline: none;
+        border-color: #d4a017;
+      }
+      #leadPhone.error {
+        border-color: #ef4444;
+      }
+      .modal-wa-btn {
+        width: 100%;
+        padding: 14px;
+        background: #25d366;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 8px;
+        transition: background 0.18s;
+      }
+      .modal-wa-btn:hover {
+        background: #20bd5a;
+      }
+      .modal-wa-btn svg {
+        width: 20px;
+        height: 20px;
+        fill: white;
+      }
     </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
   </head>
   <body>
     <!-- NAVBAR -->
@@ -1017,18 +1160,14 @@
                 property.
               </p>
               {% if prop.status == 'Available' %} {% if whatsapp_phone %}
-              <a
-                class="wa-btn"
-                href="https://wa.me/{{ whatsapp_phone }}?text={{ ('Hi, I am interested in ' + prop.title + (' (For Sale)' if prop.listing_type == 'sale' else ' (' + prop.rent + '/month)') + ' on ' + owner.brand_name + '. Could you please share more details?') | urlencode }}"
-                target="_blank"
-              >
+              <button class="wa-btn" onclick="openLeadModal()" type="button">
                 <svg class="wa-icon" viewBox="0 0 24 24">
                   <path
                     d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
                   />
                 </svg>
                 Chat on WhatsApp
-              </a>
+              </button>
               <div class="divider">or</div>
               <a href="tel:{{ owner.phone }}" class="call-btn">📞 Call Owner</a>
               {% else %}
@@ -1080,6 +1219,122 @@
           .querySelectorAll(".thumb")
           .forEach((t) => t.classList.remove("active"));
         el.classList.add("active");
+      }
+    </script>
+
+    <!-- ── Lead Capture Modal ── -->
+    <div class="modal-overlay" id="leadModal">
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeLeadModal()">×</button>
+        <div class="modal-title">Contact Owner via WhatsApp</div>
+        <div class="modal-sub">
+          Please share your details so the owner can get back to you if needed.
+        </div>
+        <div class="modal-fg">
+          <label>Full Name <span style="color: #ef4444">*</span></label>
+          <input type="text" id="leadName" placeholder="e.g. Rahul Sharma" />
+          <p class="modal-err" id="nameErr">Please enter your full name.</p>
+        </div>
+        <div class="modal-fg">
+          <label>Mobile Number <span style="color: #ef4444">*</span></label>
+          <input type="tel" id="leadPhone" placeholder="Enter your number" />
+          <p class="modal-err" id="phoneErr">
+            Please enter a valid phone number.
+          </p>
+        </div>
+        <button class="modal-wa-btn" onclick="submitLead()">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+            />
+          </svg>
+          Contact Owner on WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Data passed from Jinja — no Jinja inside JS logic
+      var WA_PHONE = "{{ whatsapp_phone }}";
+      var WA_MSG = encodeURIComponent(
+        "Hi, I am interested in {{ prop.title }} {% if prop.listing_type == 'sale' %}(For Sale){% else %}({{ prop.rent }}/month){% endif %} on {{ owner.brand_name }}. Could you please share more details?",
+      );
+      var PROP_ID = "{{ prop.id }}";
+
+      var iti = window.intlTelInput(document.getElementById("leadPhone"), {
+        initialCountry: "in",
+        preferredCountries: ["in", "ae", "gb", "us", "au", "sg", "pk"],
+        separateDialCode: true,
+        utilsScript:
+          "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
+      });
+
+      function openLeadModal() {
+        document.getElementById("leadModal").classList.add("open");
+        document.getElementById("leadName").focus();
+      }
+      function closeLeadModal() {
+        document.getElementById("leadModal").classList.remove("open");
+      }
+      // Close on overlay click
+      document
+        .getElementById("leadModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closeLeadModal();
+        });
+
+      function submitLead() {
+        var name = document.getElementById("leadName").value.trim();
+        var phone = iti.getNumber();
+        var valid = true;
+
+        var nameErr = document.getElementById("nameErr");
+        var phoneErr = document.getElementById("phoneErr");
+        var nameInput = document.getElementById("leadName");
+        var phoneInput = document.getElementById("leadPhone");
+
+        // Validate name
+        if (!name) {
+          nameErr.style.display = "block";
+          nameInput.classList.add("error");
+          valid = false;
+        } else {
+          nameErr.style.display = "none";
+          nameInput.classList.remove("error");
+        }
+
+        // Validate phone
+        if (!iti.isValidNumber()) {
+          phoneErr.style.display = "block";
+          phoneInput.classList.add("error");
+          valid = false;
+        } else {
+          phoneErr.style.display = "none";
+          phoneInput.classList.remove("error");
+        }
+
+        if (!valid) return;
+
+        // Save lead then open WhatsApp
+        var fd = new FormData();
+        fd.append("property_id", PROP_ID);
+        fd.append("tenant_name", name);
+        fd.append("tenant_phone", phone);
+
+        fetch("/lead/save", { method: "POST", body: fd })
+          .then(function () {
+            /* saved */
+          })
+          .catch(function () {
+            /* still open WA even if save fails */
+          })
+          .finally(function () {
+            window.open(
+              "https://wa.me/" + WA_PHONE + "?text=" + WA_MSG,
+              "_blank",
+            );
+            closeLeadModal();
+          });
       }
     </script>
   </body>

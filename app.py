@@ -232,6 +232,17 @@ def migrate_db():
         if col not in existing:
             conn.execute(f"ALTER TABLE properties ADD COLUMN {col} {definition}")
             print(f"Migration: added column {col}")
+
+    # Create leads table if not exists
+    conn.execute("""CREATE TABLE IF NOT EXISTS leads (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        property_id INTEGER NOT NULL,
+        tenant_name TEXT NOT NULL,
+        tenant_phone TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (property_id) REFERENCES properties(id)
+    )""")
+
     conn.commit()
     conn.close()
 
@@ -335,6 +346,66 @@ def nocache(resp):
 # -----------------------------------------------
 # 404 HANDLER
 # -----------------------------------------------
+
+
+@app.route("/lead/save", methods=["POST"])
+@csrf.exempt
+def save_lead():
+    """Save tenant lead when they click WhatsApp contact."""
+    prop_id = request.form.get("property_id", "").strip()
+    name    = request.form.get("tenant_name", "").strip()
+    phone   = request.form.get("tenant_phone", "").strip()
+
+    if not prop_id or not name or not phone:
+        return jsonify({"error": "Missing fields"}), 400
+
+    try:
+        conn = get_db()
+        # Verify property exists
+        prop = conn.execute("SELECT id FROM properties WHERE id=?", (prop_id,)).fetchone()
+        if not prop:
+            conn.close()
+            return jsonify({"error": "Property not found"}), 404
+
+        conn.execute(
+            "INSERT INTO leads (property_id, tenant_name, tenant_phone) VALUES (?,?,?)",
+            (int(prop_id), name, phone)
+        )
+        conn.commit()
+        conn.close()
+        return jsonify({"ok": True}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/leads/<int:prop_id>")
+@login_required
+def property_leads(prop_id):
+    """Show leads for a specific property."""
+    conn = get_db()
+    prop = parse_property(conn.execute(
+        "SELECT * FROM properties WHERE id=? AND owner_id=?",
+        (prop_id, session["owner_id"])
+    ).fetchone())
+
+    if not prop:
+        flash("Property not found.", "danger")
+        conn.close()
+        return redirect(url_for("dashboard"))
+
+    leads = conn.execute(
+        "SELECT * FROM leads WHERE property_id=? ORDER BY created_at DESC",
+        (prop_id,)
+    ).fetchall()
+    conn.close()
+
+    return render_template("leads.html",
+                           prop=prop,
+                           leads=leads,
+                           brand_name=session["brand_name"],
+                           owner_name=session["owner_name"],
+                           owner_slug=session["owner_slug"])
+
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -605,6 +676,15 @@ def dashboard():
         (session["owner_id"],)
     ).fetchall()]
 
+    # Load lead counts per property
+    lead_counts = {}
+    for row in conn.execute(
+        "SELECT property_id, COUNT(*) as cnt FROM leads WHERE property_id IN "
+        "(SELECT id FROM properties WHERE owner_id=?) GROUP BY property_id",
+        (session["owner_id"],)
+    ).fetchall():
+        lead_counts[row["property_id"]] = row["cnt"]
+
     # For complexes, attach unit summary
     for p in all_props:
         if p.get("is_complex"):
@@ -634,6 +714,7 @@ def dashboard():
     resp = make_response(render_template("dashboard.html",
                            properties=properties,
                            enquiries=enquiries,
+                           lead_counts=lead_counts,
                            owner_name=session["owner_name"],
                            brand_name=session["brand_name"],
                            owner_slug=session["owner_slug"]))
