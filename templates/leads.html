@@ -435,19 +435,16 @@
               </td>
               <td class="td-time">{{ lead.created_at }}</td>
               <td>
-                <div class="radio-group">
+                <div
+                  class="radio-group"
+                  data-lead-id="{{ lead.id }}"
+                  data-status="{{ lead.status }}"
+                >
                   <label class="radio-label discuss">
                     <input
                       type="radio"
                       name="status_{{ lead.id }}"
                       value="in_discussion"
-                      {%
-                      if
-                      lead.status=""
-                      ="in_discussion"
-                      %}checked{%
-                      endif
-                      %}
                       onchange="setStatus({{ lead.id }}, 'in_discussion')"
                     />
                     <span>In Discussion</span>
@@ -457,13 +454,6 @@
                       type="radio"
                       name="status_{{ lead.id }}"
                       value="expired"
-                      {%
-                      if
-                      lead.status=""
-                      ="expired"
-                      %}checked{%
-                      endif
-                      %}
                       onchange="setStatus({{ lead.id }}, 'expired')"
                     />
                     <span>Expired</span>
@@ -473,13 +463,6 @@
                       type="radio"
                       name="status_{{ lead.id }}"
                       value="converted"
-                      {%
-                      if
-                      lead.status=""
-                      ="converted"
-                      %}checked{%
-                      endif
-                      %}
                       onchange="setStatus({{ lead.id }}, 'converted')"
                     />
                     <span>Converted</span>
@@ -507,6 +490,15 @@
     <script>
       document.querySelectorAll(".yr").forEach(function (e) {
         e.textContent = new Date().getFullYear();
+      });
+
+      // Init radio buttons from data-status attribute (Prettier-safe)
+      document.querySelectorAll(".radio-group").forEach(function (group) {
+        var status = group.getAttribute("data-status");
+        if (status && status !== "new" && status !== "") {
+          var radio = group.querySelector('input[value="' + status + '"]');
+          if (radio) radio.checked = true;
+        }
       });
 
       function setStatus(leadId, status) {
