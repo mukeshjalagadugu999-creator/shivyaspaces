@@ -345,6 +345,23 @@
       .radio-label.converted input[type="radio"]:checked ~ span {
         color: #25d366;
       }
+
+      .btn-agreement {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 7px;
+        text-decoration: none;
+        background: rgba(212, 160, 23, 0.15);
+        color: #d4a017;
+        border: 1px solid rgba(212, 160, 23, 0.35);
+        white-space: nowrap;
+        transition: all 0.18s;
+        display: inline-block;
+      }
+      .btn-agreement:hover {
+        background: rgba(212, 160, 23, 0.3);
+      }
     </style>
   </head>
   <body>
@@ -419,6 +436,7 @@
               <th>Phone Number</th>
               <th>Date &amp; Time</th>
               <th>Status</th>
+              <th>Agreement</th>
             </tr>
           </thead>
           <tbody>
@@ -468,6 +486,11 @@
                     <span>Converted</span>
                   </label>
                 </div>
+              </td>
+              <td>
+                <a href="/rental-agreement/{{ lead.id }}" class="btn-agreement"
+                  >📄 Generate</a
+                >
               </td>
             </tr>
             {% endfor %}

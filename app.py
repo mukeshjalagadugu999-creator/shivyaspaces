@@ -249,6 +249,58 @@ def migrate_db():
         conn.execute("ALTER TABLE leads ADD COLUMN status TEXT DEFAULT 'new'")
         print("Migration: added leads.status")
 
+    # Create rental_agreements table
+    conn.execute("""CREATE TABLE IF NOT EXISTS rental_agreements (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        lead_id INTEGER NOT NULL,
+        property_id INTEGER NOT NULL,
+        owner_id INTEGER NOT NULL,
+        executed_date TEXT,
+        effective_date TEXT,
+        lockin_end_date TEXT,
+        owner_age TEXT,
+        owner_address TEXT,
+        tenant_name TEXT,
+        tenant_mobile TEXT,
+        tenant_aadhaar TEXT,
+        tenant_pan TEXT,
+        tenant_father TEXT,
+        tenant_age TEXT,
+        tenant_address TEXT,
+        prop_flat TEXT,
+        prop_floor TEXT,
+        prop_facing_type TEXT,
+        prop_building TEXT,
+        prop_street TEXT,
+        prop_area TEXT,
+        prop_taluk TEXT,
+        prop_pin TEXT,
+        prop_state TEXT,
+        monthly_rent TEXT,
+        monthly_rent_revised TEXT,
+        rent_due_day TEXT,
+        security_deposit TEXT,
+        lockin_months TEXT,
+        enhancement_pct TEXT,
+        notice_period TEXT,
+        hall_foyer_light TEXT, hall_tube_light TEXT, hall_led_light TEXT,
+        hall_curtain_rod TEXT, hall_wall_bulb TEXT, hall_fan TEXT,
+        hall_tv_cabinet TEXT, hall_ups TEXT, hall_bell TEXT, hall_pop_lights TEXT,
+        kitchen_modular TEXT, kitchen_led TEXT, kitchen_led_utility TEXT,
+        pooja_structure TEXT, pooja_storage TEXT, pooja_bulb TEXT,
+        bed_fan TEXT, bed_tube TEXT, bed_curtain TEXT, bed_loft TEXT,
+        bed_sliding_lock TEXT, bed_drawer_locker TEXT, bed_dressing TEXT,
+        bed_bangles_rod TEXT, bed_hanger TEXT, bed_bulb TEXT,
+        bed_ceiling TEXT, bed_desk TEXT,
+        bath_storage TEXT, bath_geyser TEXT, bath_bulb TEXT,
+        bath_ceiling TEXT, bath_exhaust TEXT,
+        key_main_num TEXT, key_main_qty TEXT,
+        key_bedroom_num TEXT, key_bedroom_qty TEXT,
+        key_sliding_num TEXT, key_sliding_qty TEXT,
+        key_drawer_num TEXT, key_drawer_qty TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )""")
+
     conn.commit()
     conn.close()
 
@@ -353,6 +405,190 @@ def nocache(resp):
 # 404 HANDLER
 # -----------------------------------------------
 
+
+
+
+@app.route("/rental-agreement/<int:lead_id>", methods=["GET"])
+@login_required
+def rental_agreement_form(lead_id):
+    """Show pre-filled rental agreement form for a lead."""
+    conn = get_db()
+
+    lead = conn.execute("SELECT * FROM leads WHERE id=?", (lead_id,)).fetchone()
+    if not lead:
+        flash("Lead not found.", "danger")
+        conn.close()
+        return redirect(url_for("dashboard"))
+
+    prop = parse_property(conn.execute(
+        "SELECT * FROM properties WHERE id=? AND owner_id=?",
+        (lead["property_id"], session["owner_id"])
+    ).fetchone())
+
+    if not prop:
+        flash("Property not found.", "danger")
+        conn.close()
+        return redirect(url_for("dashboard"))
+
+    owner = conn.execute("SELECT * FROM owners WHERE id=?", (session["owner_id"],)).fetchone()
+
+    # Check for existing saved agreement
+    existing = conn.execute(
+        "SELECT * FROM rental_agreements WHERE lead_id=? ORDER BY id DESC LIMIT 1",
+        (lead_id,)
+    ).fetchone()
+    conn.close()
+
+    existing_data = dict(existing) if existing else {}
+
+    return render_template("rental_agreement_form.html",
+                           lead=dict(lead),
+                           prop=prop,
+                           owner=dict(owner),
+                           existing=existing_data,
+                           brand_name=session["brand_name"],
+                           owner_name=session["owner_name"])
+
+
+@app.route("/rental-agreement/<int:lead_id>/generate", methods=["POST"])
+@login_required
+def generate_rental_agreement(lead_id):
+    """Save form data and generate Word document."""
+    import subprocess, tempfile, os
+
+    conn = get_db()
+    lead = conn.execute("SELECT * FROM leads WHERE id=?", (lead_id,)).fetchone()
+    if not lead:
+        flash("Lead not found.", "danger")
+        conn.close()
+        return redirect(url_for("dashboard"))
+
+    prop = parse_property(conn.execute(
+        "SELECT * FROM properties WHERE id=? AND owner_id=?",
+        (lead["property_id"], session["owner_id"])
+    ).fetchone())
+    owner = conn.execute("SELECT * FROM owners WHERE id=?", (session["owner_id"],)).fetchone()
+
+    # Collect all form fields
+    f = request.form
+    data = {
+        "lead_id": lead_id,
+        "property_id": lead["property_id"],
+        "owner_id": session["owner_id"],
+        "executed_date":     f.get("executed_date",""),
+        "effective_date":    f.get("effective_date",""),
+        "lockin_end_date":   f.get("lockin_end_date",""),
+        "owner_age":         f.get("owner_age",""),
+        "owner_address":     f.get("owner_address",""),
+        "tenant_name":       f.get("tenant_name",""),
+        "tenant_mobile":     f.get("tenant_mobile",""),
+        "tenant_aadhaar":    f.get("tenant_aadhaar",""),
+        "tenant_pan":        f.get("tenant_pan",""),
+        "tenant_father":     f.get("tenant_father",""),
+        "tenant_age":        f.get("tenant_age",""),
+        "tenant_address":    f.get("tenant_address",""),
+        "prop_flat":         f.get("prop_flat",""),
+        "prop_floor":        f.get("prop_floor",""),
+        "prop_facing_type":  f.get("prop_facing_type",""),
+        "prop_building":     f.get("prop_building",""),
+        "prop_street":       f.get("prop_street",""),
+        "prop_area":         f.get("prop_area",""),
+        "prop_taluk":        f.get("prop_taluk",""),
+        "prop_pin":          f.get("prop_pin",""),
+        "prop_state":        f.get("prop_state",""),
+        "monthly_rent":      f.get("monthly_rent",""),
+        "monthly_rent_revised": f.get("monthly_rent_revised",""),
+        "rent_due_day":      f.get("rent_due_day",""),
+        "security_deposit":  f.get("security_deposit",""),
+        "lockin_months":     f.get("lockin_months",""),
+        "enhancement_pct":   f.get("enhancement_pct",""),
+        "notice_period":     f.get("notice_period",""),
+        # Fittings
+        "hall_foyer_light":  f.get("hall_foyer_light",""),
+        "hall_tube_light":   f.get("hall_tube_light",""),
+        "hall_led_light":    f.get("hall_led_light",""),
+        "hall_curtain_rod":  f.get("hall_curtain_rod",""),
+        "hall_wall_bulb":    f.get("hall_wall_bulb",""),
+        "hall_fan":          f.get("hall_fan",""),
+        "hall_tv_cabinet":   f.get("hall_tv_cabinet",""),
+        "hall_ups":          f.get("hall_ups",""),
+        "hall_bell":         f.get("hall_bell",""),
+        "hall_pop_lights":   f.get("hall_pop_lights",""),
+        "kitchen_modular":   f.get("kitchen_modular",""),
+        "kitchen_led":       f.get("kitchen_led",""),
+        "kitchen_led_utility": f.get("kitchen_led_utility",""),
+        "pooja_structure":   f.get("pooja_structure",""),
+        "pooja_storage":     f.get("pooja_storage",""),
+        "pooja_bulb":        f.get("pooja_bulb",""),
+        "bed_fan":           f.get("bed_fan",""),
+        "bed_tube":          f.get("bed_tube",""),
+        "bed_curtain":       f.get("bed_curtain",""),
+        "bed_loft":          f.get("bed_loft",""),
+        "bed_sliding_lock":  f.get("bed_sliding_lock",""),
+        "bed_drawer_locker": f.get("bed_drawer_locker",""),
+        "bed_dressing":      f.get("bed_dressing",""),
+        "bed_bangles_rod":   f.get("bed_bangles_rod",""),
+        "bed_hanger":        f.get("bed_hanger",""),
+        "bed_bulb":          f.get("bed_bulb",""),
+        "bed_ceiling":       f.get("bed_ceiling",""),
+        "bed_desk":          f.get("bed_desk",""),
+        "bath_storage":      f.get("bath_storage",""),
+        "bath_geyser":       f.get("bath_geyser",""),
+        "bath_bulb":         f.get("bath_bulb",""),
+        "bath_ceiling":      f.get("bath_ceiling",""),
+        "bath_exhaust":      f.get("bath_exhaust",""),
+        "key_main_num":      f.get("key_main_num",""),
+        "key_main_qty":      f.get("key_main_qty",""),
+        "key_bedroom_num":   f.get("key_bedroom_num",""),
+        "key_bedroom_qty":   f.get("key_bedroom_qty",""),
+        "key_sliding_num":   f.get("key_sliding_num",""),
+        "key_sliding_qty":   f.get("key_sliding_qty",""),
+        "key_drawer_num":    f.get("key_drawer_num",""),
+        "key_drawer_qty":    f.get("key_drawer_qty",""),
+    }
+
+    # Save to DB (upsert)
+    existing = conn.execute(
+        "SELECT id FROM rental_agreements WHERE lead_id=?", (lead_id,)
+    ).fetchone()
+
+    cols = ", ".join(data.keys())
+    placeholders = ", ".join(["?"] * len(data))
+    vals = list(data.values())
+
+    if existing:
+        set_clause = ", ".join([f"{k}=?" for k in data.keys() if k not in ("lead_id","property_id","owner_id")])
+        update_vals = [data[k] for k in data.keys() if k not in ("lead_id","property_id","owner_id")]
+        conn.execute(f"UPDATE rental_agreements SET {set_clause} WHERE lead_id=?", update_vals + [lead_id])
+    else:
+        conn.execute(f"INSERT INTO rental_agreements ({cols}) VALUES ({placeholders})", vals)
+    conn.commit()
+
+    # Generate Word doc via Node.js script
+    import json
+    doc_data = dict(data)
+    doc_data["owner_name"]   = owner["name"]
+    doc_data["owner_mobile"] = owner["phone"] or ""
+
+    script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gen_agreement.js")
+    out_path    = os.path.join(tempfile.mkdtemp(), f"rental_agreement_{lead_id}.docx")
+
+    result = subprocess.run(
+        ["node", script_path, json.dumps(doc_data), out_path],
+        capture_output=True, text=True, timeout=30
+    )
+
+    conn.close()
+
+    if result.returncode != 0:
+        flash(f"Error generating document: {result.stderr[:200]}", "danger")
+        return redirect(url_for("rental_agreement_form", lead_id=lead_id))
+
+    from flask import send_file
+    return send_file(out_path,
+                     as_attachment=True,
+                     download_name=f"Rental_Agreement_{data['tenant_name'].replace(' ','_')}.docx",
+                     mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
 
 @app.route("/lead/status", methods=["POST"])

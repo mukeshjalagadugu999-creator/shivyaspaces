@@ -1,0 +1,1106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Rental Agreement — {{ lead.tenant_name }}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        min-height: 100vh;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
+            center/cover fixed;
+        color: white;
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 1000;
+      }
+      .topbar-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .topbar-logo img {
+        height: 36px;
+        width: 36px;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+      .topbar-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .topbar-logo-name {
+        font-size: 14px;
+        font-weight: 800;
+        color: white;
+        letter-spacing: 0.8px;
+        line-height: 1;
+      }
+      .topbar-logo-name span {
+        color: #d4a017;
+      }
+      .topbar-logo-sub {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.42);
+      }
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .topbar-btn {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+      }
+      .topbar-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+      .topbar-btn-danger {
+        background: rgba(239, 68, 68, 0.15) !important;
+        border-color: rgba(239, 68, 68, 0.35) !important;
+        color: #f87171 !important;
+      }
+      .content {
+        flex: 1;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 88px 24px 60px;
+        width: 100%;
+      }
+      .back-wrap {
+        margin-bottom: 16px;
+        text-align: right;
+      }
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        padding: 7px 16px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+      }
+      .back-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+      .page-hdr {
+        margin-bottom: 28px;
+      }
+      .page-hdr h1 {
+        font-size: 24px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 4px;
+      }
+      .page-hdr p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .info-banner {
+        background: rgba(212, 160, 23, 0.1);
+        border: 1px solid rgba(212, 160, 23, 0.25);
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 24px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+      }
+      .info-banner strong {
+        color: #d4a017;
+      }
+      .flash {
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-bottom: 16px;
+        font-weight: 500;
+      }
+      .flash.success {
+        background: rgba(34, 197, 94, 0.15);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #86efac;
+      }
+      .flash.danger {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #fca5a5;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 20px;
+        padding: 28px;
+        margin-bottom: 20px;
+      }
+      .card h2 {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 14px;
+      }
+      .fg {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .fg.full {
+        grid-column: 1/-1;
+      }
+      label {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .hint {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        margin-top: 2px;
+      }
+      input[type="text"],
+      input[type="date"],
+      textarea {
+        padding: 10px 14px;
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+        font-size: 13px;
+        font-family: "Inter", sans-serif;
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        outline: none;
+        width: 100%;
+        transition: border-color 0.18s;
+      }
+      input[type="text"]:focus,
+      input[type="date"]:focus,
+      textarea:focus {
+        border-color: #d4a017;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      textarea {
+        min-height: 70px;
+        resize: vertical;
+      }
+      .section-divider {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #d4a017;
+        margin: 20px 0 14px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .fixture-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 10px;
+      }
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+        align-items: center;
+      }
+      .btn-generate {
+        background: #d4a017;
+        color: #1a0a00;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: background 0.18s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-generate:hover {
+        background: #c49010;
+      }
+      .btn-cancel {
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+      .page-footer {
+        padding: 16px 40px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.45);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .page-footer p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.3);
+      }
+      @media (max-width: 700px) {
+        .topbar {
+          padding: 0 16px;
+        }
+        .content {
+          padding: 80px 16px 40px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .grid3 {
+          grid-template-columns: 1fr 1fr;
+        }
+        .fg.full {
+          grid-column: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <a href="/" class="topbar-logo">
+        <img src="/static/Shivya_Logo.jpeg" alt="" />
+        <div class="topbar-logo-text">
+          <span class="topbar-logo-name">SHIVYA<span>SPACES</span></span>
+          <span class="topbar-logo-sub">Trusted Rental Lifecycle Platform</span>
+        </div>
+      </a>
+      <div class="topbar-right">
+        <form method="POST" action="/logout" style="display: inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button type="submit" class="topbar-btn topbar-btn-danger">
+            Sign Out
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="back-wrap">
+        <a href="/leads/{{ prop.id }}" class="back-btn">Back</a>
+      </div>
+      <div class="page-hdr">
+        <h1>Generate Rental Agreement</h1>
+        <p>
+          Fill in the details below — all fields are pre-filled where possible.
+        </p>
+      </div>
+
+      <div class="info-banner">
+        <strong>📄 Auto-fill notice:</strong> Owner details, tenant details from
+        lead, and property details are pre-filled. Review everything carefully
+        before generating.
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% for
+      category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %} {% endwith %}
+
+      <form
+        method="POST"
+        action="/rental-agreement/{{ lead.id }}/generate"
+        id="agForm"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <!-- AGREEMENT DATES -->
+        <div class="card">
+          <h2>Agreement Dates</h2>
+          <div class="grid">
+            <div class="fg">
+              <label>Executed On</label>
+              <input
+                type="text"
+                name="executed_date"
+                value="{{ existing.get('executed_date', '') }}"
+                placeholder="e.g. 03rd day of Jun, 2026"
+              />
+            </div>
+            <div class="fg">
+              <label>Effective From</label>
+              <input
+                type="text"
+                name="effective_date"
+                value="{{ existing.get('effective_date', '') }}"
+                placeholder="e.g. 6th day of Jun 2026 (06-06-2026)"
+              />
+            </div>
+            <div class="fg">
+              <label>Lock-in End Date</label>
+              <input
+                type="text"
+                name="lockin_end_date"
+                value="{{ existing.get('lockin_end_date', '') }}"
+                placeholder="e.g. 6th Dec 2026"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- OWNER DETAILS -->
+        <div class="card">
+          <h2>Owner Details</h2>
+          <div class="grid">
+            <div class="fg">
+              <label>Owner Name</label>
+              <input
+                type="text"
+                name="owner_name_display"
+                value="{{ owner.name }}"
+                readonly
+                style="opacity: 0.6; cursor: not-allowed"
+              />
+              <p class="hint">Pre-filled from your account</p>
+            </div>
+            <div class="fg">
+              <label>Owner Age</label>
+              <input
+                type="text"
+                name="owner_age"
+                value="{{ existing.get('owner_age', '') }}"
+                placeholder="e.g. 44 yrs"
+              />
+            </div>
+            <div class="fg">
+              <label>Owner Mobile</label>
+              <input
+                type="text"
+                name="owner_mobile_display"
+                value="{{ owner.phone }}"
+                readonly
+                style="opacity: 0.6; cursor: not-allowed"
+              />
+              <p class="hint">Pre-filled from your account</p>
+            </div>
+            <div class="fg full">
+              <label>Owner Full Address</label>
+              <textarea
+                name="owner_address"
+                placeholder="Villa # 187, 7th Cross, Celebrity Natures Habitat, Bidaraguppe (Village) – 562107, Bangalore (Dist.,) - Karnataka."
+              >
+{{ existing.get('owner_address', '') }}</textarea
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- TENANT DETAILS -->
+        <div class="card">
+          <h2>Tenant Details</h2>
+          <div class="grid">
+            <div class="fg">
+              <label>Tenant Name</label>
+              <input
+                type="text"
+                name="tenant_name"
+                value="{{ existing.get('tenant_name', lead.tenant_name) }}"
+              />
+            </div>
+            <div class="fg">
+              <label>Tenant Mobile</label>
+              <input
+                type="text"
+                name="tenant_mobile"
+                value="{{ existing.get('tenant_mobile', lead.tenant_phone) }}"
+              />
+            </div>
+            <div class="fg">
+              <label>Aadhaar Number</label>
+              <input
+                type="text"
+                name="tenant_aadhaar"
+                value="{{ existing.get('tenant_aadhaar', '') }}"
+                placeholder="e.g. 9850 3365 0836"
+              />
+            </div>
+            <div class="fg">
+              <label>PAN Number</label>
+              <input
+                type="text"
+                name="tenant_pan"
+                value="{{ existing.get('tenant_pan', '') }}"
+                placeholder="e.g. HEMPK9979D"
+              />
+            </div>
+            <div class="fg">
+              <label>S/O (Father's Name)</label>
+              <input
+                type="text"
+                name="tenant_father"
+                value="{{ existing.get('tenant_father', '') }}"
+                placeholder="e.g. Tirukappa"
+              />
+            </div>
+            <div class="fg">
+              <label>Tenant Age</label>
+              <input
+                type="text"
+                name="tenant_age"
+                value="{{ existing.get('tenant_age', '') }}"
+                placeholder="e.g. 28 yrs"
+              />
+            </div>
+            <div class="fg full">
+              <label>Tenant Full Address</label>
+              <textarea
+                name="tenant_address"
+                placeholder="Plot No 17A B, Akash Building, Mailarilinga Nagar, Hattikolla Kalagatgi Road, VTC: Dharwad (Dist.,), Karnataka - 580002."
+              >
+{{ existing.get('tenant_address', '') }}</textarea
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- PROPERTY DETAILS -->
+        <div class="card">
+          <h2>Property Details</h2>
+          <div class="grid">
+            <div class="fg">
+              <label>Flat No.</label>
+              <input
+                type="text"
+                name="prop_flat"
+                value="{{ existing.get('prop_flat', prop.title) }}"
+                placeholder="e.g. Flat No. 3"
+              />
+            </div>
+            <div class="fg">
+              <label>Floor No.</label>
+              <input
+                type="text"
+                name="prop_floor"
+                value="{{ existing.get('prop_floor', prop.floor) }}"
+                placeholder="e.g. 2nd Floor"
+              />
+            </div>
+            <div class="fg">
+              <label>Type / Facing</label>
+              <input
+                type="text"
+                name="prop_facing_type"
+                value="{{ existing.get('prop_facing_type', '') }}"
+                placeholder="e.g. Front Side 1BHK"
+              />
+            </div>
+            <div class="fg">
+              <label>Building / Community Name</label>
+              <input
+                type="text"
+                name="prop_building"
+                value="{{ existing.get('prop_building', '') }}"
+                placeholder="e.g. Shivya Heights"
+              />
+            </div>
+            <div class="fg full">
+              <label>Street / Road</label>
+              <input
+                type="text"
+                name="prop_street"
+                value="{{ existing.get('prop_street', '') }}"
+                placeholder="e.g. Southegowdanahalli, Boodigere Road"
+              />
+            </div>
+            <div class="fg">
+              <label>Area / Village</label>
+              <input
+                type="text"
+                name="prop_area"
+                value="{{ existing.get('prop_area', prop.location) }}"
+                placeholder="e.g. near Brigade Orchid North gate, Devanahalli"
+              />
+            </div>
+            <div class="fg">
+              <label>Taluk / City</label>
+              <input
+                type="text"
+                name="prop_taluk"
+                value="{{ existing.get('prop_taluk', '') }}"
+                placeholder="e.g. Bangalore"
+              />
+            </div>
+            <div class="fg">
+              <label>PIN Code</label>
+              <input
+                type="text"
+                name="prop_pin"
+                value="{{ existing.get('prop_pin', '') }}"
+                placeholder="e.g. 562110"
+              />
+            </div>
+            <div class="fg">
+              <label>State</label>
+              <input
+                type="text"
+                name="prop_state"
+                value="{{ existing.get('prop_state', 'Karnataka') }}"
+                placeholder="e.g. Karnataka"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- RENTAL TERMS -->
+        <div class="card">
+          <h2>Rental Terms</h2>
+          <div class="grid">
+            <div class="fg">
+              <label>Monthly Rent (Rs.)</label>
+              <input
+                type="text"
+                name="monthly_rent"
+                value="{{ existing.get('monthly_rent', prop.rent) }}"
+                placeholder="e.g. 10,000/-"
+              />
+            </div>
+            <div class="fg">
+              <label>Revised Rent after Meter (Rs.)</label>
+              <input
+                type="text"
+                name="monthly_rent_revised"
+                value="{{ existing.get('monthly_rent_revised', '') }}"
+                placeholder="e.g. 10,500/-"
+              />
+            </div>
+            <div class="fg">
+              <label>Rent Due Day</label>
+              <input
+                type="text"
+                name="rent_due_day"
+                value="{{ existing.get('rent_due_day', '5th') }}"
+                placeholder="e.g. 5th"
+              />
+            </div>
+            <div class="fg">
+              <label>Security Deposit (Rs.)</label>
+              <input
+                type="text"
+                name="security_deposit"
+                value="{{ existing.get('security_deposit', prop.security_deposit) }}"
+                placeholder="e.g. 60,000/-"
+              />
+            </div>
+            <div class="fg">
+              <label>Lock-in Period</label>
+              <input
+                type="text"
+                name="lockin_months"
+                value="{{ existing.get('lockin_months', '6') }}"
+                placeholder="e.g. 6"
+              />
+              <p class="hint">Number of months</p>
+            </div>
+            <div class="fg">
+              <label>Enhancement / Appreciation %</label>
+              <input
+                type="text"
+                name="enhancement_pct"
+                value="{{ existing.get('enhancement_pct', '8') }}"
+                placeholder="e.g. 8"
+              />
+              <p class="hint">Percentage only, no % symbol</p>
+            </div>
+            <div class="fg">
+              <label>Notice Period</label>
+              <input
+                type="text"
+                name="notice_period"
+                value="{{ existing.get('notice_period', '30 days') }}"
+                placeholder="e.g. 30 days"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- FITTINGS & FIXTURES -->
+        <div class="card">
+          <h2>Fittings &amp; Fixtures</h2>
+
+          <p class="section-divider">Hall Area</p>
+          <div class="grid3">
+            <div class="fg">
+              <label>Foyer Light</label
+              ><input
+                type="text"
+                name="hall_foyer_light"
+                value="{{ existing.get('hall_foyer_light', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Tube Light</label
+              ><input
+                type="text"
+                name="hall_tube_light"
+                value="{{ existing.get('hall_tube_light', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>LED/Zoomer Light</label
+              ><input
+                type="text"
+                name="hall_led_light"
+                value="{{ existing.get('hall_led_light', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Curtain Rod</label
+              ><input
+                type="text"
+                name="hall_curtain_rod"
+                value="{{ existing.get('hall_curtain_rod', '2') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Wall Mounted Bulb</label
+              ><input
+                type="text"
+                name="hall_wall_bulb"
+                value="{{ existing.get('hall_wall_bulb', '3') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Fan</label
+              ><input
+                type="text"
+                name="hall_fan"
+                value="{{ existing.get('hall_fan', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>TV Cabinet with Glasses</label
+              ><input
+                type="text"
+                name="hall_tv_cabinet"
+                value="{{ existing.get('hall_tv_cabinet', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>UPS Point</label
+              ><input
+                type="text"
+                name="hall_ups"
+                value="{{ existing.get('hall_ups', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Bell</label
+              ><input
+                type="text"
+                name="hall_bell"
+                value="{{ existing.get('hall_bell', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>False Ceiling/POP Lights</label
+              ><input
+                type="text"
+                name="hall_pop_lights"
+                value="{{ existing.get('hall_pop_lights', '4') }}"
+                placeholder="qty"
+              />
+            </div>
+          </div>
+
+          <p class="section-divider">Kitchen</p>
+          <div class="grid3">
+            <div class="fg">
+              <label>Modular Kitchen with Glasses</label
+              ><input
+                type="text"
+                name="kitchen_modular"
+                value="{{ existing.get('kitchen_modular', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>LED/Zoomer Light</label
+              ><input
+                type="text"
+                name="kitchen_led"
+                value="{{ existing.get('kitchen_led', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>LED/Zoomer Light in Utility</label
+              ><input
+                type="text"
+                name="kitchen_led_utility"
+                value="{{ existing.get('kitchen_led_utility', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+          </div>
+
+          <p class="section-divider">Pooja Mandir</p>
+          <div class="grid3">
+            <div class="fg">
+              <label>Pooja Mandir Structure Set-up</label
+              ><input
+                type="text"
+                name="pooja_structure"
+                value="{{ existing.get('pooja_structure', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Storage Box/Drawers</label
+              ><input
+                type="text"
+                name="pooja_storage"
+                value="{{ existing.get('pooja_storage', '2') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Pooja Bulb</label
+              ><input
+                type="text"
+                name="pooja_bulb"
+                value="{{ existing.get('pooja_bulb', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+          </div>
+
+          <p class="section-divider">Bedroom</p>
+          <div class="grid3">
+            <div class="fg">
+              <label>Fan</label
+              ><input
+                type="text"
+                name="bed_fan"
+                value="{{ existing.get('bed_fan', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Tube Light</label
+              ><input
+                type="text"
+                name="bed_tube"
+                value="{{ existing.get('bed_tube', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Curtain Rod</label
+              ><input
+                type="text"
+                name="bed_curtain"
+                value="{{ existing.get('bed_curtain', '2') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Loft</label
+              ><input
+                type="text"
+                name="bed_loft"
+                value="{{ existing.get('bed_loft', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Sliding Lock</label
+              ><input
+                type="text"
+                name="bed_sliding_lock"
+                value="{{ existing.get('bed_sliding_lock', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Drawer Locker</label
+              ><input
+                type="text"
+                name="bed_drawer_locker"
+                value="{{ existing.get('bed_drawer_locker', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Dressing Glass</label
+              ><input
+                type="text"
+                name="bed_dressing"
+                value="{{ existing.get('bed_dressing', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Bangles Rod</label
+              ><input
+                type="text"
+                name="bed_bangles_rod"
+                value="{{ existing.get('bed_bangles_rod', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Hanger Rod</label
+              ><input
+                type="text"
+                name="bed_hanger"
+                value="{{ existing.get('bed_hanger', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Bulb</label
+              ><input
+                type="text"
+                name="bed_bulb"
+                value="{{ existing.get('bed_bulb', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Ceiling Light</label
+              ><input
+                type="text"
+                name="bed_ceiling"
+                value="{{ existing.get('bed_ceiling', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Sitting Desk</label
+              ><input
+                type="text"
+                name="bed_desk"
+                value="{{ existing.get('bed_desk', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+          </div>
+
+          <p class="section-divider">Bathroom</p>
+          <div class="grid3">
+            <div class="fg">
+              <label>Storage Box (with Mirror)</label
+              ><input
+                type="text"
+                name="bath_storage"
+                value="{{ existing.get('bath_storage', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Geyser</label
+              ><input
+                type="text"
+                name="bath_geyser"
+                value="{{ existing.get('bath_geyser', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Bulb</label
+              ><input
+                type="text"
+                name="bath_bulb"
+                value="{{ existing.get('bath_bulb', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Ceiling Light</label
+              ><input
+                type="text"
+                name="bath_ceiling"
+                value="{{ existing.get('bath_ceiling', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+            <div class="fg">
+              <label>Exhaust Fan</label
+              ><input
+                type="text"
+                name="bath_exhaust"
+                value="{{ existing.get('bath_exhaust', '1') }}"
+                placeholder="qty"
+              />
+            </div>
+          </div>
+
+          <p class="section-divider">Total Keys of Flat</p>
+          <div class="grid">
+            <div class="fg">
+              <label>Main Door Key Number</label
+              ><input
+                type="text"
+                name="key_main_num"
+                value="{{ existing.get('key_main_num', '') }}"
+                placeholder="e.g. 1023477"
+              />
+            </div>
+            <div class="fg">
+              <label>Main Door Qty</label
+              ><input
+                type="text"
+                name="key_main_qty"
+                value="{{ existing.get('key_main_qty', '2') }}"
+                placeholder="e.g. 2"
+              />
+            </div>
+            <div class="fg">
+              <label>Bedroom Key Number</label
+              ><input
+                type="text"
+                name="key_bedroom_num"
+                value="{{ existing.get('key_bedroom_num', '') }}"
+                placeholder="e.g. 0568"
+              />
+            </div>
+            <div class="fg">
+              <label>Bedroom Key Qty</label
+              ><input
+                type="text"
+                name="key_bedroom_qty"
+                value="{{ existing.get('key_bedroom_qty', '1') }}"
+                placeholder="e.g. 1"
+              />
+            </div>
+            <div class="fg">
+              <label>Sliding Door Lock Number</label
+              ><input
+                type="text"
+                name="key_sliding_num"
+                value="{{ existing.get('key_sliding_num', '') }}"
+                placeholder="e.g. 3660"
+              />
+            </div>
+            <div class="fg">
+              <label>Sliding Door Lock Qty</label
+              ><input
+                type="text"
+                name="key_sliding_qty"
+                value="{{ existing.get('key_sliding_qty', '1') }}"
+                placeholder="e.g. 1"
+              />
+            </div>
+            <div class="fg">
+              <label>Drawer Lock Number</label
+              ><input
+                type="text"
+                name="key_drawer_num"
+                value="{{ existing.get('key_drawer_num', '') }}"
+                placeholder="e.g. 4085"
+              />
+            </div>
+            <div class="fg">
+              <label>Drawer Lock Qty</label
+              ><input
+                type="text"
+                name="key_drawer_qty"
+                value="{{ existing.get('key_drawer_qty', '1') }}"
+                placeholder="e.g. 1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-generate">
+            📄 Generate Rental Agreement
+          </button>
+          <a href="/leads/{{ prop.id }}" class="btn-cancel">Cancel</a>
+        </div>
+      </form>
+    </div>
+
+    <footer class="page-footer">
+      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+    </footer>
+    <script>
+      document.querySelectorAll(".yr").forEach(function (e) {
+        e.textContent = new Date().getFullYear();
+      });
+    </script>
+  </body>
+</html>
