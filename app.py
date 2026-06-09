@@ -639,15 +639,24 @@ def generate_rental_agreement(lead_id):
             run.font.bold  = bold
 
         def add_para(text_parts, align="justify"):
+            """text_parts: list of (str, bool) tuples or plain strings."""
             para = doc.add_paragraph()
             if align == "center":
                 para.alignment = WD_ALIGN_PARAGRAPH.CENTER
             elif align == "justify":
                 para.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            # Flatten: if text_parts is a list containing a single list, unwrap it
+            if len(text_parts) == 1 and isinstance(text_parts[0], list):
+                text_parts = text_parts[0]
             for part in text_parts:
-                txt, bold = (part if isinstance(part, tuple) else (part, False))
-                run = para.add_run(txt)
-                set_font(run, bold=bold)
+                if isinstance(part, tuple):
+                    txt, bold = part
+                elif isinstance(part, str):
+                    txt, bold = part, False
+                else:
+                    txt, bold = str(part), False
+                run = para.add_run(str(txt))
+                set_font(run, bold=bool(bold))
             return para
 
         def heading(text, size=12):
@@ -663,8 +672,11 @@ def generate_rental_agreement(lead_id):
             set_font(run, bold=True)
             return para
 
-        def body(*parts):
-            return add_para(list(parts))
+        def body(parts_or_text, align="justify"):
+            """Accept either a list of (str,bool) tuples or a plain string."""
+            if isinstance(parts_or_text, str):
+                return add_para([(parts_or_text, False)], align)
+            return add_para([parts_or_text] if not isinstance(parts_or_text, list) else parts_or_text, align)
 
         def sp():
             p = doc.add_paragraph()
