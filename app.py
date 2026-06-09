@@ -454,7 +454,7 @@ def rental_agreement_form(lead_id):
 @login_required
 def generate_rental_agreement(lead_id):
     """Save form data and generate Word document."""
-    import subprocess, tempfile, os
+    import os
 
     conn = get_db()
     lead = conn.execute("SELECT * FROM leads WHERE id=?", (lead_id,)).fetchone()
@@ -564,31 +564,397 @@ def generate_rental_agreement(lead_id):
         conn.execute(f"INSERT INTO rental_agreements ({cols}) VALUES ({placeholders})", vals)
     conn.commit()
 
-    # Generate Word doc via Node.js script
-    import json
+    conn.close()
+
+    # Validate required fields
+    required_fields = {
+        "executed_date": "Executed Date",
+        "effective_date": "Effective Date",
+        "lockin_end_date": "Lock-in End Date",
+        "owner_age": "Owner Age",
+        "owner_address": "Owner Address",
+        "tenant_name": "Tenant Name",
+        "tenant_mobile": "Tenant Mobile",
+        "tenant_aadhaar": "Aadhaar Number",
+        "tenant_pan": "PAN Number",
+        "tenant_father": "Father's Name",
+        "tenant_age": "Tenant Age",
+        "tenant_address": "Tenant Address",
+        "prop_flat": "Flat Number",
+        "prop_floor": "Floor",
+        "prop_building": "Building Name",
+        "prop_street": "Street",
+        "prop_pin": "PIN Code",
+        "monthly_rent": "Monthly Rent",
+        "security_deposit": "Security Deposit",
+    }
+    missing = [label for key, label in required_fields.items() if not data.get(key, "").strip()]
+    if missing:
+        flash(f"Please fill in all required fields: {', '.join(missing)}", "danger")
+        return redirect(url_for("rental_agreement_form", lead_id=lead_id))
+
+    # Build data dict with owner details
     doc_data = dict(data)
     doc_data["owner_name"]   = owner["name"]
     doc_data["owner_mobile"] = owner["phone"] or ""
 
-    script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gen_agreement.js")
-    out_path    = os.path.join(tempfile.mkdtemp(), f"rental_agreement_{lead_id}.docx")
+    # Generate Word doc using python-docx
+    try:
+        from docx import Document as DocxDocument
+        from docx.shared import Pt, Inches, RGBColor
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        import io
 
-    result = subprocess.run(
-        ["node", script_path, json.dumps(doc_data), out_path],
-        capture_output=True, text=True, timeout=30
-    )
+        d = doc_data
 
-    conn.close()
+        def get(key, default=""):
+            return d.get(key) or default
 
-    if result.returncode != 0:
-        flash(f"Error generating document: {result.stderr[:200]}", "danger")
+        lock_months = get("lockin_months", "6")
+        lock_word   = {"6":"Six","11":"Eleven"}.get(lock_months, lock_months)
+        enh_pct     = get("enhancement_pct", "8")
+        enh_word    = {"8":"Eight","10":"Ten","5":"Five"}.get(enh_pct, enh_pct)
+        rent_day    = get("rent_due_day", "5th")
+        notice      = get("notice_period", "30 days")
+        prop_full   = (
+            f"{get('prop_flat')}, {get('prop_floor')}, "
+            + (f"{get('prop_facing_type')}, " if get('prop_facing_type') else "")
+            + f"{get('prop_building')}, Site #37, Ambica Arcade Phase-1, "
+            + f"{get('prop_street')}, near Brigade Orchid North gate, Devanahalli, "
+            + f"Bangalore-{get('prop_pin')}, {get('prop_state')}"
+        )
+
+        doc = DocxDocument()
+
+        # Page margins
+        for section in doc.sections:
+            section.top_margin    = Inches(1.0)
+            section.bottom_margin = Inches(1.0)
+            section.left_margin   = Inches(1.0)
+            section.right_margin  = Inches(0.75)
+
+        def set_font(run, bold=False, size=11):
+            run.font.name  = "Times New Roman"
+            run.font.size  = Pt(size)
+            run.font.bold  = bold
+
+        def add_para(text_parts, align="justify"):
+            para = doc.add_paragraph()
+            if align == "center":
+                para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            elif align == "justify":
+                para.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            for part in text_parts:
+                txt, bold = (part if isinstance(part, tuple) else (part, False))
+                run = para.add_run(txt)
+                set_font(run, bold=bold)
+            return para
+
+        def heading(text, size=12):
+            para = doc.add_paragraph()
+            para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            run = para.add_run(text)
+            set_font(run, bold=True, size=size)
+            return para
+
+        def clause(number, title):
+            para = doc.add_paragraph()
+            run = para.add_run(f"{number}. {title}:")
+            set_font(run, bold=True)
+            return para
+
+        def body(*parts):
+            return add_para(list(parts))
+
+        def sp():
+            p = doc.add_paragraph()
+            p.paragraph_format.space_before = Pt(2)
+            p.paragraph_format.space_after  = Pt(2)
+
+        # ── TITLE ──
+        heading("RENTAL AGREEMENT", 14)
+        sp()
+
+        body([
+            "This ", False,
+            ("RENTAL AGREEMENT", True),
+            (", is made and executed on this ", False),
+            (get("executed_date"), True),
+            (' ("Agreement") at Bangalore and effective from ', False),
+            (get("effective_date"), True),
+            (" by and", False),
+        ])
+        sp()
+        add_para([("BETWEEN", True)], "center")
+        sp()
+
+        # Owner
+        body([
+            (f"Mr. {get('owner_name')}", True),
+            (f", Age: {get('owner_age')}, Residing at: {get('owner_address')}. Mobile: ", False),
+            (get("owner_mobile"), True),
+            (".", False),
+        ])
+        sp()
+        body([
+            ('HEREINAFTER called the ', False),
+            ('"LESSOR / OWNER / Landlord"', True),
+            (' which expression shall unless repugnant to the meaning for content thereof, mean and include his executors, legal representatives, administrators, successors in title and assigns of the ', False),
+            ('ONE PART.', True),
+        ])
+        sp()
+        body([("AND", True)], )
+        sp()
+
+        # Tenant
+        body([
+            (f"Mr. {get('tenant_name')}", True),
+            (f" (Aadhar No: {get('tenant_aadhaar')}) and PAN No: ({get('tenant_pan')}), S/O: {get('tenant_father')}, {get('tenant_address')}. Mobile: ", False),
+            (get("tenant_mobile"), True),
+        ])
+        sp()
+        body([
+            ('HEREINAFTER called the ', False),
+            ('"LESSEE / TENANT"', True),
+            (' which expression shall unless repugnant to the meaning for content thereof, mean and include his executors, legal representatives, administrators, successors in title and assigns of the ', False),
+            ('OTHER/SECOND PART.', True),
+        ])
+        sp()
+
+        # WHEREAS
+        body([
+            ('WHEREAS the Lessor is the absolute owner of property bearing: ', False),
+            (prop_full, True),
+            (', Karnataka. More fully described in the Schedule given hereunder and hereinafter referred to as the Schedule Property.', False),
+        ])
+        sp()
+        body([("AND WHEREAS the Lessee is in need of accommodation for his residential purpose and the Lessee has approached the Lessor for the grant of the lease of the Schedule Property, and the Lessor has agreed for the same.", False)])
+        sp()
+        body([("Which is more fully described in the schedule herein under and hereinafter referred to as the schedule property/flat and whereas accordingly this agreement witness that the Lessee hereby agreed to occupy the schedule property/flat on the terms and conditions hereinafter mentioned.", False)])
+        sp()
+        body([("NOW THEREFORE IT IS HEREBY AGREED TO, DECLARED AND RECORDED BY AND BETWEEN THE PARTIES HERETO THIS RENTAL AGREEMENT AND WITNESS AS FOLLOWS", True)])
+        sp()
+
+        # CLAUSE 1
+        clause(1, "Duration")
+        body([("That the Lessor hereby allow the Lessee herein a revocable leave and license, to occupy the licensed premises, described in the scheduled property hereunder written without creating any tenancy rights or any other grants/rights, titles and interest in favour of Lessee.", False)])
+        sp()
+        body([
+            ("The duration of the lease will be initially for a period of maximum 11 months commencing from ", False),
+            (get("effective_date"), True),
+            (f" and is subject to renewal for a further period of 11 months with an increase in rent of {enh_pct}.0% on mutually agreeable and renewable according to the mutual understanding of both the parties by executing a fresh Rental Agreement, fulfilling statutory requirement and the expenses shall be met by the LESSEE terms & conditions.", False),
+        ])
+        sp()
+
+        # CLAUSE 2
+        clause(2, "Rent")
+        body([
+            ("The monthly advance rent (pay & stay) payable by the Lessee to the Lessor for the schedule property shall be ", False),
+            (f"Rs. {get('monthly_rent')} ", True),
+            ("as a rent per month, excluding of electricity, internet, cable T.V fee and gas charges. Incase if the owner's association/ Community/builder takes a decision in the future considering the market increase and labor demand on the maintenance charges then LESSOR will inform the same to LESSE on the same who (LESSEE) needs to pay the maintenance charges per month accordingly.", False),
+        ])
+        sp()
+        body([(f"The advance rent shall be payable by Lessee before {rent_day} of every English calendar month to be credited directly to the LESSOR's following account. No exceptions/exemptions are allowed considering any other circumstances like natural climates, COVID-19 or any other Govt. imposed rules until agreed with Lessor/Owner.", False)])
+        sp()
+        body([("If the Lessee delays payment of the advance Rent beyond the timeline specified for any month, the Lessor shall be entitled to receive an interest at 18% per annum for the period of delay days.", False)])
+        sp()
+        body([
+            ("The electricity arrangement (more explained in Temporary Common Electricity Supply & Cost Sharing section) is temporary until a permanent dedicated direct meter connection is installed/commenced. Upon activation of the direct meter connection, the monthly rent will be auto revised to ", False),
+            (f"₹{get('monthly_rent_revised')} ", True),
+            ("and the tenant shall pay the electricity charges directly to BESCOM based on actual consumption.", False),
+        ])
+        sp()
+
+        # CLAUSE 3
+        clause(3, "Lock-in Period")
+        body([
+            (f"The Parties agree that neither Party shall be entitled to terminate this Agreement for a period of {lock_months} ({lock_word}) months starting with effect from the Commencement Date (i.e., from ", False),
+            (get("effective_date"), True),
+            (" till ", False),
+            (get("lockin_end_date"), True),
+            (') ("Lock-in Period"). In the event, the Lessee terminates the Agreement before the expiry of the Lock-in Period, the Lessor shall be entitled to deduct the Security Deposit in addition to the rent payable for the Notice Period as follows:', False),
+        ])
+        sp()
+        body([("(a) If the termination date falls within one month from the lock in expiry date, an amount equivalent to one month's rent shall be deducted from the Security Deposit", False)])
+        body([("(b) If the termination date exceeds one month from the rental expiry date, an amount equivalent to two months' rent shall be deducted from the Security Deposit.", False)])
+        sp()
+
+        # CLAUSE 4
+        clause(4, "Enhancement")
+        body([(f"The rent payable to the LESSOR by the LESSEE as aforesaid in Clause No.1 shall be enhanced by {enh_pct}% ({enh_word} Percent) of the last amount paid at the end of 11 months, subject to the renewal of the rental agreement by mutual consent of both the parties.", False)])
+        sp()
+
+        # CLAUSE 5
+        clause(5, "Interest Free Security Deposit")
+        body([
+            ("An interest free security deposit of ", False),
+            (f"Rs. {get('security_deposit')} ", True),
+            ("by way of account transfer from Lessee to Lessor account online. The same will be refundable by the lessor to the lessee at the time of vacating the scheduled property (termination of tenancy agreement). The possession of the property is deemed complete only upon handover of all keys. The deposit shall be refunded within 7 days of vacating the premises & hand over the keys after adjustment all dues.", False),
+        ])
+        sp()
+        body([("To the LESSOR as security deposit, which the LESSOR hereby acknowledges the said amount and the same shall be held by the LESSOR as Security Deposit during the continuance of the tenancy and/or any extension thereof and shall be repaid to the LESSEE free of interest at the end of the period of the lease, at the time of LESSEE vacating and delivering the said premises in the same condition, in which it was let out, or on termination of this agreement and after deducting the dues payable (like rent, maintenance, electricity, internet, damages and other arrears), if any, by the LESSEE to the LESSOR, painting/deep cleaning of the house and cost of rectification of any damages done.", False)])
+        sp()
+
+        # CLAUSES 6-27 — static text with variable substitution
+        for num, title, text in [
+            (6, "Temporary Common Electricity Supply & Cost Sharing Temporary Electricity Arrangement",
+             "The Lessee is aware that, as on the date of execution of this Agreement, the building is supplied with a temporary sanctioned common electrical load of 1 KW, which is shared by all occupants of the building. Separate permanent electricity meter connections for individual flats have been applied for with BESCOM and are awaited.||PARA||Towards the common electricity expenses, the Lessee agrees to pay a fixed monthly contribution of Rs. 1,000/- (Rupees One Thousand only) along with the monthly rent/license fee, until individual permanent meters are installed.||PARA||Upon installation/commission of dedicated permanent electricity meter(s) for the Schedule Property (individual flats) by BESCOM, this temporary electricity arrangement shall automatically stand terminated, and electricity charges shall thereafter be paid directly by the Lessee as per the individual consumption usage, meter readings and bills."),
+            (7, "Gas / Electricity / Internet / Cable T.V",
+             "The Lessee shall maintain the schedule property in a state of good housekeeping and condition. The LESSEE shall bear and pay the charges for the Electricity bill, Internet bill & Gas bill for the premised shall be borne by the Lessee based on the usage/fixed by the Owner welfare association / Builder (if association not yet formed) / respective authorities/suppliers on every month along with Rentals."),
+            (8, "Property Tax",
+             "The property tax and all other taxes, rates, cesses, assessments, duties and other outgoing payable related to municipal Corporation/ Grama Panchayat or any other authority of the government shall be borne by the LESSOR."),
+            (9, "Internal Maintenance",
+             "The Lessee shall maintain the schedule property in a state of good order and condition and shall not cause any damage to disfigurement to the schedule property or to any wall paintings, wardrobes, kitchen wood works, bath room, fittings and fixtures (as listed at the end of this contract) therein always. Any damage caused by the Lessee shall be made good by the Lessee or an equivalent amount will be deducted from the security deposit at the time of vacating the scheduled property.||PARA||Repairs And Maintenance: It is specifically agreed between the parties to this deed that the cost of repairs and maintenance of the furniture, fixtures, electrical fittings like bulbs, tube lights, fans, fan regulators, etc. and water fittings like taps, shower, faucets, cistern, etc. shall be borne by the Lessee alone. However, problems related to civil and construction work, concealed electrical wiring and concealed plumbing, seepage and leakage of walls, ceiling or any part of the Schedule Property, shall be handled and set right by the Lessors at their own cost. However, the Lessors shall ensure that electrical fittings like tube lights, bulbs, fans and fan regulators, call bell etc. and sanitary fixtures like taps, cisterns, showers, geysers etc. are in perfectly working condition, at the time of handing over the schedule property to the Lessee, failing which, the Lessee is at liberty to get the same repaired or replaced and recover this cost from the Lessors. At the time of vacating the Schedule Property and handing it back to the Lessors, the Lessee shall ensure that all electrical and sanitary fittings are in the same working condition, The Lessees will ensure that the Schedule Property is handed over back to the Lessors in neat and tidy condition and all trash like bottles, cardboard and corrugated boxes, old newspapers, batteries adhesive packing tapes, used bulbs, tube lights, buckets, plastic mugs, toilet brushes, scrubbers, detergents and any type of junk is completely cleared before vacating the Schedule property. Excessive nailing in the Schedule Property and disfiguring of any part of the Schedule Property IN ANY MANNER, thus rendering it non-tenantable, is strictly inadmissible, failing which, the Lessee shall bear the entire cost of repairing to restore THIS damage caused, to its perfect condition. The Lessee shall not cause damage to the Schedule Property during his occupation of the Schedule Property. After ensuring that there are no damages or arrears OR after adjusting the cost of the damages and/or arrears, the balance or full amount (AS THE CASE MAY BE) will be refunded by the Lessor to the Lessee immediately the Lessee vacates the Schedule Property."),
+            (10, "Additions & Alterations",
+             "The Lessee shall not be entitled to make any additions or alteration internal and/or external to the said Scheduled premises and to the furniture, fixtures and electrical fittings installed/provided by the LESSOR at the Scheduled Premises which involves structural changes or not. The Lessee shall however be entitled to fix telephones, televisions, etc in the provision already given in the scheduled property. The Lessee shall be entitled to remove the same at the time of vacating the schedule property and shall be made good to the full satisfaction of the Lessor. The LESSEE shall ensure that the damages to walls and fixtures, if any, are duly repaired before handing over the possession."),
+            (11, "Nature of Usage / Purpose permitted",
+             "The Lessee shall use the schedule property only for Residential Purpose and that too with a family. The Lessee shall not keep or store in or upon any part of the schedule premises any goods of combustible or explosive nature, except those for cooking purposes and shall not store any offensive items, which may cause damage to the house premises and/or shall not carry any business activities either legal or illegal or un-lawful and illegitimate activities. Any kind of disturbance, misbehavior, unethical practice may call for immediate termination of agreement and evacuation from the property with a penalty of three months rental deducted from the advance security amount."),
+            (12, "No Tenancy",
+             "The LESSEE will not have any right to transfer, assign, and sub-let or grant any license or sub-license in respect of the scheduled property and premises or any part thereof and also shall not mortgage or raise any loan against the said premises. The LESSEE shall use the Scheduled Premises in a reasonable manner without causing any disturbance to the neighbors and agree to abide by the rules and regulations of Ambika Arcade Owners Association. That, the Lessee shall not claim any tenancy rights."),
+            (13, "Inspection",
+             "The Lessee shall permit the Lessor or his/her designated representatives, during the reasonable hours in the day time and upon making prior (at least 2 days in advance) appointment with Lessee to visit / inspect the schedule property and Lessor will permit (without any excuses what so ever) the Lessor to carry out such works within the schedule property, which are required for the general upkeep of the whole."),
+            (15, "Vacant Possession",
+             "The Lessor has delivered vacant possession of the Schedule Property to the Lessee this day pursuant to this deed. The Lessee shall deliver back vacant possession of the Schedule Property to the Lessor after the expiry of the period of lease fixed under this deed. The Lessee shall ensure that while vacating the schedule property all electrical fittings, plumber fittings, kitchen fittings, furniture fittings, all other fittings of the apartment as per delivered conditions and in case any damage etc found shall be replaced as per the original conditions."),
+            (19, "Representation",
+             "PROVIDED ALWAYS THAT whenever such an interpretation would be requisite to give fullest scope and effect legally possible, for any covenant or contract herein contained the expression 'LESSOR' shall mean and include his heirs, legal representatives, successors and assigns and the expression 'LESSEE' shall mean & include his heirs & legal representatives only."),
+            (20, "Jurisdiction",
+             "This Lease Deed is subject to the exclusive courts of Bangalore jurisdiction only."),
+            (21, "Liability",
+             "That if the Schedule Property or any part thereof be destroyed or damaged by fire (not caused by any wilful act or negligence) OR earthquake, tempest, flood, lightning, violence of any army or mob or enemies of the country or by any other irresistible force so as to render the Schedule property unfit for the purpose for which the same are let, either party shall have the option to forthwith terminate this Lease notwithstanding notice period provided in the Lease Deed. Upon this all the refundable securities shall be refunded immediately subject to any deductions / adjustments under this lease deed. The Lessor shall not be responsible or liable for any theft, loss, damage or destruction of any property of the Lessee or of any other person lying in the Schedule Property nor for any bodily injury or harm to/death of any person in the Schedule property from any cause whatsoever."),
+            (22, "Possession",
+             "That, the immediately at on the expiration or termination or cancellation of this agreement the Lessee shall vacate the said scheduled property and its premises without delay with all his goods and belongings. In the event of the Lessee failing and / or neglecting to remove him/herself and/or his/her articles/goods from the said & premises on expiry or sooner termination of this Agreement, the Lessor shall be entitled to recover damages at the rate of double the daily amount of compensation/rent per day and or alternatively the Lessor shall be entitled to remove the Lessee and his belongings from the Licensed premises, without recourse to the Court of Law and upon which the LESSOR shall return the remaining Security Deposit free of interest less any deduction shall be refunded one week after vacating the premises to the LESSEE."),
+            (23, "Fixtures",
+             "That the Lessee has seen before occupying the said scheduled property that all the sanitary and electric fittings and fixtures (details are clearly mentioned below) are in very good working condition and are satisfied that nothing is broken or missing and the Lessee on vacating the demised scheduled property premises shall restore them, in the same condition, subject to normal wear and tear."),
+            (24, "MOVE-IN and MOVE-OUT Charges",
+             "All costs & association charges relating to shifting in and shifting out of the community/complex shall always be borne by the LESSEE."),
+            (25, "Peaceful Stay",
+             "The Lessor hereby assures the Lessee that on performance of the terms and conditions contained in this deed by the Lessee, the Lessee shall quietly enjoy the Schedule Property, without any hindrance either by the Lessor or from anybody else claiming through or under the Lessor. The tenant shall not cause any disturbance and live peacefully without harming the interest of neighbors and by fulfilling the above terms and conditions regularly without default."),
+            (26, "Water Charges",
+             "Currently, no water charges are applicable. However, the association is in discussions regarding the introduction of water charges very soon. If any such charges are implemented in future, the same will be communicated separately and shall be payable by lessee on a monthly basis along with Rent, electricity amount."),
+            (27, "Cleaning Responsibility",
+             "Cleaning of the staircase area from the 1st floor up to the next (2nd) floor mid steps will be the responsibility of the respective tenant. If tenants are not agreeable to this arrangement, a cleaner will be arranged for common area maintenance (parking, staircase, common areas etc.), and the cleaning charges will be shared equally among all tenants."),
+        ]:
+            clause(num, title)
+            for para_text in text.split("||PARA||"):
+                body([(para_text.strip(), False)])
+                sp()
+
+        # Clause 14 — dynamic
+        clause(14, "Termination / Expiry / Revocation of the Lease")
+        body([
+            (f"The agreement shall be liable to be terminated by either Lessee or the Lessor by giving minimum of {notice} of written (by mail/WhatsApp/call) notice. Since the Lessor have freshly painted the Schedule Property before handing it over to the Lessee, an amount equivalent to ONE MONTH rent (", False),
+            (f"Rs.{get('monthly_rent_revised')}/-", True),
+            (") prevailing at the time of the Lessee vacating the Schedule Property shall be deducted as repainting charges by the Lessor from the interest free refundable deposit of the Lessee or Lessee can also repaint the house on vacating time then there is No deduction for painting. Any damages, Electricity bills, Gas bills, water bills, Unpaid Rents and any other due charges, amount will be deducted from the LESSEE's security deposit at the time of vacating the schedule premises. If in case, Lessee not able to vacate the said premises in the given vacant date then lessor shall be entitled to receive an interest at 18% per annum on the rent for the period of extension/delay.", False),
+        ])
+        sp()
+
+        # Clause 16 — dynamic
+        clause(16, "Breach Of Contract")
+        body([(f"In the event of the Lessee committing breach of any of the terms and conditions contained in this deed, the Lessor is at liberty to terminate the lease and seek vacant possession of the Schedule Property from the Lessee even before the expiry of the period of lease fixed under this deed by immediately giving {notice} notice. If the Lessee fails to pay the monthly rent to the Lessor, for more than two consecutive months, the Lessor reserves the right to terminate this contract and seek vacant possession of the Schedule Property from the Lessee, even before expiry of the period of lease fixed under this deed by immediately giving {notice} notice.", False)])
+        sp()
+
+        # Clause 17 — dynamic
+        clause(17, "Termination Notice")
+        body([(f"It is agreed that the contract entered into under this deed, can be terminated by either of the parties at any time, by giving {notice} notice in writing.", False)])
+        sp()
+        body([("The Rental Agreement shall be terminated under all or any of the following circumstances, namely.", False)])
+        body([("   i.  By efflux of time;", False)])
+        body([("   ii. In the event of breach by either party of the terms, conditions and covenants hereof;", False)])
+        body([(f"   iii. By giving {notice} prior notice from either party.", False)])
+        sp()
+
+        # Clause 18 — dynamic
+        clause(18, "Renewal Of Lease Deed")
+        body([(f"After expiry of the period of lease, if the Lessor and the Lessee agree to renew this contract, the hike in the monthly rent payable by the Lessee to the Lessor shall be {enh_pct}% ({enh_word} percent) of the monthly rent (fixed during the first term) for these mutual discussions.", False)])
+        sp()
+
+        # SCHEDULE
+        doc.add_page_break()
+        heading("SCHEDULE")
+        sp()
+        body([
+            ("The Residential Premises bearing ", False),
+            (prop_full, True),
+            (", Karnataka., comprising of one living room, one kitchen with Utility area, one bedroom, one bathroom and one pooja Cabinet.", False),
+        ])
+        sp()
+        body([("IN WITNESS WHEREOF, both the Lessor and the Lessee have affixed their respective hands and signature to this agreement on this day, month and year first above written.", False)])
+        sp()
+        body([("WITNESSES:", True)])
+        sp()
+        body([(f"1) {get('owner_name')}", False)])
+        body([(f"   Mob# {get('owner_mobile')}", False)])
+        body([("   ", False), ("LESSOR", True)])
+        sp()
+        body([(f"2) {get('tenant_name')}.", False)])
+        body([(f"   Aadhar ID # {get('tenant_aadhaar')}", False)])
+        body([(f"   Mob # {get('tenant_mobile')}", False)])
+        body([("   ", False), ("LESSEE", True)])
+
+        # FITTINGS & FIXTURES
+        doc.add_page_break()
+        heading("SCHEDULE PREMISES")
+        heading("FITTINGS & FIXTURE IN SCHEDULED PREMISES")
+        sp()
+
+        def fixture_row(left, right=""):
+            p = doc.add_paragraph()
+            run = p.add_run(f"{left:<52}{right}")
+            run.font.name = "Courier New"
+            run.font.size = Pt(10)
+
+        fixture_row("Hall Area:", "Kitchen:")
+        fixture_row(f"Foyer Light: {get('hall_foyer_light')}", f"Modular kitchen with Glasses: {get('kitchen_modular')}")
+        fixture_row(f"Tube Light: {get('hall_tube_light')}", f"LED/Zoomer Light: {get('kitchen_led')}")
+        fixture_row(f"LED/Zoomer Light: {get('hall_led_light')}", f"LED/Zoomer Light in Utility: {get('kitchen_led_utility')}")
+        fixture_row(f"Curtain Rod: {get('hall_curtain_rod')}")
+        fixture_row(f"Wall Mounted Bulb: {get('hall_wall_bulb')}")
+        fixture_row(f"Fan: {get('hall_fan')}")
+        fixture_row(f"TV Cabinet with Glasses: {get('hall_tv_cabinet')}")
+        fixture_row(f"UPS Point: {get('hall_ups')}")
+        fixture_row(f"Bell: {get('hall_bell')}")
+        fixture_row(f"False Ceiling/POP Lights: {get('hall_pop_lights')}")
+        sp()
+        body([("Pooja Mandir:", True)])
+        fixture_row(f"Pooja Mandir structure set-up: {get('pooja_structure')}")
+        fixture_row(f"Storage Box/Drawers: {get('pooja_storage')}")
+        fixture_row(f"Pooja Bulb: {get('pooja_bulb')}")
+        sp()
+        body([("Bedroom:", True)])
+        fixture_row(f"Fan: {get('bed_fan')}", f"Tube light: {get('bed_tube')}")
+        fixture_row(f"Curtain rod: {get('bed_curtain')}", f"Loft: {get('bed_loft')}")
+        fixture_row(f"Sliding Lock: {get('bed_sliding_lock')}", f"Drawer Locker: {get('bed_drawer_locker')}")
+        fixture_row(f"Dressing Glass: {get('bed_dressing')}", f"Bangles Rod: {get('bed_bangles_rod')}")
+        fixture_row(f"Hanger Rod: {get('bed_hanger')}", f"Bulb: {get('bed_bulb')}")
+        fixture_row(f"Ceiling Light: {get('bed_ceiling')}", f"Sitting Desk: {get('bed_desk')}")
+        sp()
+        body([("Bathroom:", True)])
+        fixture_row(f"Storage Box (with 1 Mirror): {get('bath_storage')}", f"Geyser: {get('bath_geyser')}")
+        fixture_row(f"Bulb: {get('bath_bulb')}", f"Ceiling Light: {get('bath_ceiling')}")
+        fixture_row(f"Exhaust Fan: {get('bath_exhaust')}")
+        sp()
+        body([("Total Keys of Flat:", True)])
+        fixture_row(f"Main Door: {get('key_main_num')} ({get('key_main_qty')})", f"Bedroom: {get('key_bedroom_num')} ({get('key_bedroom_qty')})")
+        fixture_row(f"Sliding Door Lock: {get('key_sliding_num')} ({get('key_sliding_qty')})", f"Drawer Lock: {get('key_drawer_num')} ({get('key_drawer_qty')})")
+
+        # Save to buffer
+        buf = io.BytesIO()
+        doc.save(buf)
+        buf.seek(0)
+
+        tenant_name_safe = get("tenant_name", "Tenant").replace(" ", "_")
+        from flask import send_file
+        return send_file(
+            buf,
+            as_attachment=True,
+            download_name=f"Rental_Agreement_{tenant_name_safe}.docx",
+            mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+
+    except Exception as e:
+        import traceback
+        flash(f"Error generating document: {str(e)}", "danger")
         return redirect(url_for("rental_agreement_form", lead_id=lead_id))
-
-    from flask import send_file
-    return send_file(out_path,
-                     as_attachment=True,
-                     download_name=f"Rental_Agreement_{data['tenant_name'].replace(' ','_')}.docx",
-                     mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
 
 @app.route("/lead/status", methods=["POST"])

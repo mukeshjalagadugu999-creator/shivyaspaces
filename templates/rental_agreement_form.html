@@ -328,6 +328,15 @@
           grid-column: 1;
         }
       }
+
+      .req {
+        color: #ef4444;
+      }
+      .flash.warning {
+        background: rgba(212, 160, 23, 0.15);
+        border: 1px solid rgba(212, 160, 23, 0.35);
+        color: #fcd34d;
+      }
     </style>
   </head>
   <body>
@@ -383,7 +392,7 @@
           <h2>Agreement Dates</h2>
           <div class="grid">
             <div class="fg">
-              <label>Executed On</label>
+              <label>Executed On <span class="req">*</span></label>
               <input
                 type="text"
                 name="executed_date"
@@ -392,7 +401,7 @@
               />
             </div>
             <div class="fg">
-              <label>Effective From</label>
+              <label>Effective From <span class="req">*</span></label>
               <input
                 type="text"
                 name="effective_date"
@@ -401,7 +410,7 @@
               />
             </div>
             <div class="fg">
-              <label>Lock-in End Date</label>
+              <label>Lock-in End Date <span class="req">*</span></label>
               <input
                 type="text"
                 name="lockin_end_date"
@@ -428,7 +437,7 @@
               <p class="hint">Pre-filled from your account</p>
             </div>
             <div class="fg">
-              <label>Owner Age</label>
+              <label>Owner Age <span class="req">*</span></label>
               <input
                 type="text"
                 name="owner_age"
@@ -448,7 +457,7 @@
               <p class="hint">Pre-filled from your account</p>
             </div>
             <div class="fg full">
-              <label>Owner Full Address</label>
+              <label>Owner Full Address <span class="req">*</span></label>
               <textarea
                 name="owner_address"
                 placeholder="Villa # 187, 7th Cross, Celebrity Natures Habitat, Bidaraguppe (Village) – 562107, Bangalore (Dist.,) - Karnataka."
@@ -464,7 +473,7 @@
           <h2>Tenant Details</h2>
           <div class="grid">
             <div class="fg">
-              <label>Tenant Name</label>
+              <label>Tenant Name <span class="req">*</span></label>
               <input
                 type="text"
                 name="tenant_name"
@@ -472,7 +481,7 @@
               />
             </div>
             <div class="fg">
-              <label>Tenant Mobile</label>
+              <label>Tenant Mobile <span class="req">*</span></label>
               <input
                 type="text"
                 name="tenant_mobile"
@@ -480,7 +489,7 @@
               />
             </div>
             <div class="fg">
-              <label>Aadhaar Number</label>
+              <label>Aadhaar Number <span class="req">*</span></label>
               <input
                 type="text"
                 name="tenant_aadhaar"
@@ -489,7 +498,7 @@
               />
             </div>
             <div class="fg">
-              <label>PAN Number</label>
+              <label>PAN Number <span class="req">*</span></label>
               <input
                 type="text"
                 name="tenant_pan"
@@ -498,7 +507,7 @@
               />
             </div>
             <div class="fg">
-              <label>S/O (Father's Name)</label>
+              <label>S/O (Father's Name) <span class="req">*</span></label>
               <input
                 type="text"
                 name="tenant_father"
@@ -507,7 +516,7 @@
               />
             </div>
             <div class="fg">
-              <label>Tenant Age</label>
+              <label>Tenant Age <span class="req">*</span></label>
               <input
                 type="text"
                 name="tenant_age"
@@ -516,7 +525,7 @@
               />
             </div>
             <div class="fg full">
-              <label>Tenant Full Address</label>
+              <label>Tenant Full Address <span class="req">*</span></label>
               <textarea
                 name="tenant_address"
                 placeholder="Plot No 17A B, Akash Building, Mailarilinga Nagar, Hattikolla Kalagatgi Road, VTC: Dharwad (Dist.,), Karnataka - 580002."
@@ -532,7 +541,7 @@
           <h2>Property Details</h2>
           <div class="grid">
             <div class="fg">
-              <label>Flat No.</label>
+              <label>Flat No. <span class="req">*</span></label>
               <input
                 type="text"
                 name="prop_flat"
@@ -541,7 +550,7 @@
               />
             </div>
             <div class="fg">
-              <label>Floor No.</label>
+              <label>Floor No. <span class="req">*</span></label>
               <input
                 type="text"
                 name="prop_floor"
@@ -559,7 +568,9 @@
               />
             </div>
             <div class="fg">
-              <label>Building / Community Name</label>
+              <label
+                >Building / Community Name <span class="req">*</span></label
+              >
               <input
                 type="text"
                 name="prop_building"
@@ -568,7 +579,7 @@
               />
             </div>
             <div class="fg full">
-              <label>Street / Road</label>
+              <label>Street / Road <span class="req">*</span></label>
               <input
                 type="text"
                 name="prop_street"
@@ -595,7 +606,7 @@
               />
             </div>
             <div class="fg">
-              <label>PIN Code</label>
+              <label>PIN Code <span class="req">*</span></label>
               <input
                 type="text"
                 name="prop_pin"
@@ -620,7 +631,7 @@
           <h2>Rental Terms</h2>
           <div class="grid">
             <div class="fg">
-              <label>Monthly Rent (Rs.)</label>
+              <label>Monthly Rent (Rs.) <span class="req">*</span></label>
               <input
                 type="text"
                 name="monthly_rent"
@@ -647,7 +658,7 @@
               />
             </div>
             <div class="fg">
-              <label>Security Deposit (Rs.)</label>
+              <label>Security Deposit (Rs.) <span class="req">*</span></label>
               <input
                 type="text"
                 name="security_deposit"
