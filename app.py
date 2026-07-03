@@ -2324,44 +2324,41 @@ def owner_signup():
             flash("Name, email and phone are required.", "danger")
             return render_template("owner_signup.html")
 
-        # Send email to admin
-        try:
-            cfg = get_mail_config()
-            app.config["MAIL_USERNAME"]       = cfg["username"]
-            app.config["MAIL_PASSWORD"]       = cfg["password"]
-            app.config["MAIL_DEFAULT_SENDER"] = (cfg["sender_name"], cfg["username"])
-            mail.init_app(app)
+        # Send email to admin — in background thread so timeout doesn't crash the request
+        def send_signup_email():
+            try:
+                import smtplib, ssl
+                from email.mime.multipart import MIMEMultipart
+                from email.mime.text import MIMEText
+                cfg = get_mail_config()
+                html_body = (
+                    '<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;">'
+                    '<h2 style="color:#7c3aed;">New Owner Signup Request</h2>'
+                    '<table style="width:100%;border-collapse:collapse;">'
+                    f'<tr><td style="padding:8px 0;color:#6b7280;">Full Name</td><td style="font-weight:700;">{name}</td></tr>'
+                    f'<tr><td style="padding:8px 0;color:#6b7280;">Email</td><td style="font-weight:700;">{email}</td></tr>'
+                    f'<tr><td style="padding:8px 0;color:#6b7280;">Phone</td><td style="font-weight:700;">{phone}</td></tr>'
+                    f'<tr><td style="padding:8px 0;color:#6b7280;">Profession</td><td style="font-weight:700;">{profession or "Not specified"}</td></tr>'
+                    f'<tr><td style="padding:8px 0;color:#6b7280;">City</td><td style="font-weight:700;">{city or "Not specified"}</td></tr>'
+                    f'<tr><td style="padding:8px 0;color:#6b7280;">Properties</td><td style="font-weight:700;">{properties or "Not specified"}</td></tr>'
+                    f'<tr><td style="padding:8px 0;color:#6b7280;">Message</td><td style="font-weight:700;">{message or "None"}</td></tr>'
+                    '</table></div>'
+                )
+                msg = MIMEMultipart("alternative")
+                msg["Subject"] = f"New Owner Signup — {name}"
+                msg["From"]    = cfg["username"]
+                msg["To"]      = cfg["username"]
+                msg.attach(MIMEText(html_body, "html"))
+                ctx = ssl.create_default_context()
+                with smtplib.SMTP_SSL("smtp.hostinger.com", 465, context=ctx, timeout=15) as server:
+                    server.login(cfg["username"], cfg["password"])
+                    server.sendmail(cfg["username"], cfg["username"], msg.as_string())
+                print("Signup email sent OK")
+            except Exception as e:
+                print(f"Signup email failed (non-fatal): {e}")
 
-            admin_email = cfg["username"]
-            msg = Message(
-                subject=f"New Owner Signup — {name}",
-                recipients=[admin_email]
-            )
-            msg.html = (
-                '<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;'
-                'background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;">'
-                '<div style="background:#7c3aed;padding:24px 32px;">'
-                '<h1 style="color:white;font-size:18px;font-weight:800;margin:0;">New Owner Signup Request</h1>'
-                '</div>'
-                '<div style="padding:28px;">'
-                f'<p style="font-size:14px;color:#6b7280;margin-bottom:20px;">A new owner has signed up on ShivyaSpaces and is waiting for an account.</p>'
-                '<table style="width:100%;border-collapse:collapse;">'
-                f'<tr style="border-bottom:1px solid #e5e7eb;"><td style="font-size:13px;color:#6b7280;padding:10px 0;width:38%;">Full Name</td><td style="font-size:13px;font-weight:700;color:#111827;padding:10px 0;">{name}</td></tr>'
-                f'<tr style="border-bottom:1px solid #e5e7eb;"><td style="font-size:13px;color:#6b7280;padding:10px 0;">Email</td><td style="font-size:13px;font-weight:700;color:#111827;padding:10px 0;">{email}</td></tr>'
-                f'<tr style="border-bottom:1px solid #e5e7eb;"><td style="font-size:13px;color:#6b7280;padding:10px 0;">Phone</td><td style="font-size:13px;font-weight:700;color:#111827;padding:10px 0;">{phone}</td></tr>'
-                f'<tr style="border-bottom:1px solid #e5e7eb;"><td style="font-size:13px;color:#6b7280;padding:10px 0;">Profession</td><td style="font-size:13px;font-weight:700;color:#111827;padding:10px 0;">{profession or "Not specified"}</td></tr>'
-                f'<tr style="border-bottom:1px solid #e5e7eb;"><td style="font-size:13px;color:#6b7280;padding:10px 0;">City</td><td style="font-size:13px;font-weight:700;color:#111827;padding:10px 0;">{city or "Not specified"}</td></tr>'
-                f'<tr style="border-bottom:1px solid #e5e7eb;"><td style="font-size:13px;color:#6b7280;padding:10px 0;">No. of Properties</td><td style="font-size:13px;font-weight:700;color:#111827;padding:10px 0;">{properties or "Not specified"}</td></tr>'
-                f'<tr><td style="font-size:13px;color:#6b7280;padding:10px 0;">Message</td><td style="font-size:13px;font-weight:700;color:#111827;padding:10px 0;">{message or "None"}</td></tr>'
-                '</table>'
-                f'<div style="margin-top:24px;padding:16px;background:#f3f0ff;border-radius:10px;">'
-                f'<p style="font-size:13px;color:#6d28d9;font-weight:600;margin:0;">Go to your admin dashboard to create an account for this owner and send them their credentials.</p>'
-                '</div>'
-                '</div></div>'
-            )
-            mail.send(msg)
-        except Exception as e:
-            print(f"Admin email failed: {e}")
+        import threading
+        threading.Thread(target=send_signup_email, daemon=True).start()
 
         # Send WhatsApp to admin
         admin_whatsapp = get_setting("admin_whatsapp", "")
