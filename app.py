@@ -113,10 +113,16 @@ MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 # -----------------------------------------------
 
 # Use persistent volume path on Railway, fallback to local for dev
-DB_PATH = os.environ.get("DB_PATH", os.path.join(
-    os.environ.get("RAILWAY_VOLUME_MOUNT_PATH", ""),
-    "properties.db"
-) if os.environ.get("RAILWAY_VOLUME_MOUNT_PATH") else "properties.db")
+_db_path_raw = os.environ.get("DB_PATH", "")
+if not _db_path_raw:
+    _vol = os.environ.get("RAILWAY_VOLUME_MOUNT_PATH", "")
+    _db_path_raw = os.path.join(_vol, "properties.db") if _vol else "properties.db"
+DB_PATH = _db_path_raw
+
+# Ensure the directory exists before anything tries to connect
+_db_dir = os.path.dirname(DB_PATH)
+if _db_dir:
+    os.makedirs(_db_dir, exist_ok=True)
 
 def get_db():
     conn = sqlite3.connect(DB_PATH, timeout=10)
@@ -226,10 +232,6 @@ def parse_property(row):
 
 def migrate_db():
     """Add new columns if they don't exist."""
-    # Ensure volume directory exists
-    db_dir = os.path.dirname(DB_PATH)
-    if db_dir:
-        os.makedirs(db_dir, exist_ok=True)
     conn = get_db()
     existing = [r[1] for r in conn.execute("PRAGMA table_info(properties)").fetchall()]
     migrations = [
