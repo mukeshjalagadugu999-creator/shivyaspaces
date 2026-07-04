@@ -181,7 +181,7 @@ def _smtp_send(to_email, subject, html_body):
             _resend.api_key = resend_key
             cfg = get_mail_config()
             result = _resend.Emails.send({
-                "from": "ShivyaSpaces <onboarding@resend.dev>",
+                "from": "ShivyaSpaces <hello@shivyaspaces.com>",
                 "to":   [to_email],
                 "subject": subject,
                 "html": html_body,
