@@ -158,10 +158,12 @@ def save_setting(key, value):
 
 def get_mail_config():
     """Get current mail config from DB, fallback to hardcoded defaults."""
+    username = get_setting("mail_username", "")
+    password = get_setting("mail_password", "")
     return {
-        "username": get_setting("mail_username", app.config["MAIL_USERNAME"]),
-        "password": get_setting("mail_password", app.config["MAIL_PASSWORD"]),
-        "sender_name": get_setting("mail_sender_name", "ShivyaSpaces"),
+        "username":    username    if username    else app.config["MAIL_USERNAME"],
+        "password":    password    if password    else app.config["MAIL_PASSWORD"],
+        "sender_name": get_setting("mail_sender_name", "ShivyaSpaces") or "ShivyaSpaces",
     }
 
 
@@ -190,16 +192,16 @@ def _smtp_send(to_email, subject, html_body):
         # Try port 587 (STARTTLS) first, fallback to 465 (SSL)
         sent = False
         last_err = ""
-        for port, use_ssl in [(587, False), (465, True)]:
+        for port, use_ssl in [(465, True), (587, False)]:
             try:
                 if use_ssl:
                     ctx = ssl.create_default_context()
                     with smtplib.SMTP_SSL("smtp.hostinger.com", port,
-                                          context=ctx, timeout=20) as server:
+                                          context=ctx, timeout=10) as server:
                         server.login(sender, password)
                         server.sendmail(sender, to_email, msg.as_string())
                 else:
-                    with smtplib.SMTP("smtp.hostinger.com", port, timeout=20) as server:
+                    with smtplib.SMTP("smtp.hostinger.com", port, timeout=10) as server:
                         server.ehlo()
                         server.starttls()
                         server.ehlo()
