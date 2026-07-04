@@ -170,38 +170,32 @@ def get_mail_config():
 
 
 def send_welcome_email(owner_name, owner_email, username, password, slug):
-    """Send welcome email using mail config from database."""
+    """Send welcome email using direct SMTP to avoid Gunicorn timeout."""
     try:
+        import smtplib, ssl
+        from email.mime.multipart import MIMEMultipart
+        from email.mime.text import MIMEText
         cfg = get_mail_config()
-        # Update mail config live from DB
-        app.config["MAIL_USERNAME"]       = cfg["username"]
-        app.config["MAIL_PASSWORD"]       = cfg["password"]
-        app.config["MAIL_DEFAULT_SENDER"] = (cfg["sender_name"], cfg["username"])
-        mail.init_app(app)
-
-        msg = Message(
-            subject="Your ShivyaSpaces Account is Ready",
-            recipients=[owner_email]
-        )
-        msg.html = f"""
-        <div style="font-family:Inter,Arial,sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;color:#111827;">
-            <h2 style="font-size:22px;font-weight:800;margin-bottom:4px;">Welcome to ShivyaSpaces</h2>
-            <p style="color:#6b7280;font-size:14px;margin-bottom:28px;">Your account has been created. Here are your login credentials.</p>
-            <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:24px;">
-                <p style="font-size:12px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;">Your Credentials</p>
-                <table style="width:100%;border-collapse:collapse;">
-                    <tr><td style="font-size:13px;color:#6b7280;padding:8px 0;width:40%;">Login URL</td><td style="font-size:13px;font-weight:600;color:#111827;">/login</td></tr>
-                    <tr><td style="font-size:13px;color:#6b7280;padding:8px 0;">Email</td><td style="font-size:13px;font-weight:600;color:#111827;">{owner_email}</td></tr>
-                    <tr><td style="font-size:13px;color:#6b7280;padding:8px 0;">Password</td><td style="font-size:13px;font-weight:600;color:#111827;">{password}</td></tr>
-                    <tr><td style="font-size:13px;color:#6b7280;padding:8px 0;">Your Page</td><td style="font-size:13px;font-weight:600;color:#111827;">/{slug}</td></tr>
-                </table>
-            </div>
-            <p style="font-size:13px;color:#6b7280;line-height:1.7;">Log in to your dashboard to start adding your properties. Your public page will be live as soon as you add your first listing.</p>
-            <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
-            <p style="font-size:12px;color:#9ca3af;">This email was sent by {cfg["sender_name"]}. Please keep your credentials safe.</p>
-        </div>
-        """
-        mail.send(msg)
+        html = f"""
+        <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111827;">
+            <h2>Welcome to ShivyaSpaces</h2>
+            <p>Your account has been created. Here are your login credentials.</p>
+            <table style="width:100%;border-collapse:collapse;">
+                <tr><td style="padding:8px 0;color:#6b7280;">Login URL</td><td style="font-weight:700;">/login</td></tr>
+                <tr><td style="padding:8px 0;color:#6b7280;">Email</td><td style="font-weight:700;">{owner_email}</td></tr>
+                <tr><td style="padding:8px 0;color:#6b7280;">Password</td><td style="font-weight:700;">{password}</td></tr>
+                <tr><td style="padding:8px 0;color:#6b7280;">Your Page</td><td style="font-weight:700;">/{slug}</td></tr>
+            </table>
+        </div>"""
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = "Your ShivyaSpaces Account is Ready"
+        msg["From"]    = cfg["username"]
+        msg["To"]      = owner_email
+        msg.attach(MIMEText(html, "html"))
+        ctx = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.hostinger.com", 465, context=ctx, timeout=15) as server:
+            server.login(cfg["username"], cfg["password"])
+            server.sendmail(cfg["username"], owner_email, msg.as_string())
         return True
     except Exception as e:
         print(f"Email send failed: {e}")
@@ -2170,12 +2164,12 @@ def admin_create_owner():
         conn.close()
         flash(f"Owner '{name}' created successfully!", "success")
 
-        # Send welcome email with credentials
-        email_sent = send_welcome_email(name, email, username, password, slug)
-        if email_sent:
-            flash(f"Welcome email sent to {email}.", "info")
-        else:
-            flash("Account created but welcome email could not be sent. Share credentials manually.", "warning")
+        # Send welcome email in background thread to avoid timeout
+        import threading
+        def _send():
+            send_welcome_email(name, email, username, password, slug)
+        threading.Thread(target=_send, daemon=True).start()
+        flash("Account created! Welcome email is being sent.", "info")
 
         return redirect(url_for("admin_dashboard"))
 
