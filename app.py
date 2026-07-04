@@ -208,8 +208,15 @@ def _smtp_send(to_email, subject, html_body):
 def send_email_async(to_email, subject, html_body):
     """Fire-and-forget email in background thread."""
     import threading
+    # Strip any accidental trailing punctuation from email
+    to_email = to_email.strip().rstrip(".,;:")
+    print(f"[EMAIL ASYNC] Queuing email to: '{to_email}' subject: '{subject}'")
     def _send():
-        _smtp_send(to_email, subject, html_body)
+        ok, err = _smtp_send(to_email, subject, html_body)
+        if ok:
+            print(f"[EMAIL ASYNC] SUCCESS → {to_email}")
+        else:
+            print(f"[EMAIL ASYNC] FAILED → {to_email} | Error: {err}")
     t = threading.Thread(target=_send, daemon=True)
     t.start()
     return t
@@ -2224,11 +2231,11 @@ def admin_create_owner():
             (name, username, email, generate_password_hash(password), phone, slug, brand_name))
         conn.commit()
         conn.close()
-        flash(f"Owner '{name}' created successfully!", "success")
 
-        # Send welcome email async
+        # Send welcome email async — log clearly in Railway
+        print(f"[EMAIL] Sending welcome email to: '{email}'")
         send_welcome_email(name, email, username, password, slug)
-        flash(f"Owner '{name}' created! Welcome email is being sent to {email}.", "success")
+        flash(f"Owner '{name}' created successfully! Welcome email sent to {email}", "success")
 
         return redirect(url_for("admin_dashboard"))
 
