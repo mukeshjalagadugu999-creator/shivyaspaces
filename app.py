@@ -165,37 +165,103 @@ def get_mail_config():
     }
 
 
-def send_welcome_email(owner_name, owner_email, username, password, slug):
-    """Send welcome email using direct SMTP to avoid Gunicorn timeout."""
+def _smtp_send(to_email, subject, html_body):
+    """
+    Core SMTP sender — uses Hostinger SSL directly.
+    Returns (True, "") on success or (False, error_message) on failure.
+    Always runs in a background thread — never call from main request thread.
+    """
+    import smtplib, ssl
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
     try:
-        import smtplib, ssl
-        from email.mime.multipart import MIMEMultipart
-        from email.mime.text import MIMEText
         cfg = get_mail_config()
-        html = f"""
-        <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111827;">
-            <h2>Welcome to ShivyaSpaces</h2>
-            <p>Your account has been created. Here are your login credentials.</p>
-            <table style="width:100%;border-collapse:collapse;">
-                <tr><td style="padding:8px 0;color:#6b7280;">Login URL</td><td style="font-weight:700;">/login</td></tr>
-                <tr><td style="padding:8px 0;color:#6b7280;">Email</td><td style="font-weight:700;">{owner_email}</td></tr>
-                <tr><td style="padding:8px 0;color:#6b7280;">Password</td><td style="font-weight:700;">{password}</td></tr>
-                <tr><td style="padding:8px 0;color:#6b7280;">Your Page</td><td style="font-weight:700;">/{slug}</td></tr>
-            </table>
-        </div>"""
+        sender = cfg["username"]
+        password = cfg["password"]
+        if not sender or not password:
+            return False, "SMTP credentials not configured"
+
         msg = MIMEMultipart("alternative")
-        msg["Subject"] = "Your ShivyaSpaces Account is Ready"
-        msg["From"]    = cfg["username"]
-        msg["To"]      = owner_email
-        msg.attach(MIMEText(html, "html"))
+        msg["Subject"] = subject
+        msg["From"]    = f"ShivyaSpaces <{sender}>"
+        msg["To"]      = to_email
+        msg.attach(MIMEText(html_body, "html"))
+
         ctx = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.hostinger.com", 465, context=ctx, timeout=15) as server:
-            server.login(cfg["username"], cfg["password"])
-            server.sendmail(cfg["username"], owner_email, msg.as_string())
-        return True
+        with smtplib.SMTP_SSL("smtp.hostinger.com", 465,
+                               context=ctx, timeout=20) as server:
+            server.login(sender, password)
+            server.sendmail(sender, to_email, msg.as_string())
+        print(f"Email sent OK → {to_email} | {subject}")
+        return True, ""
+    except smtplib.SMTPAuthenticationError as e:
+        msg = f"SMTP auth failed — check email/password in admin settings: {e}"
+        print(msg); return False, msg
+    except smtplib.SMTPRecipientsRefused as e:
+        msg = f"Recipient refused: {to_email} — {e}"
+        print(msg); return False, msg
     except Exception as e:
-        print(f"Email send failed: {e}")
-        return False
+        msg = f"Email failed: {e}"
+        print(msg); return False, msg
+
+
+def send_email_async(to_email, subject, html_body):
+    """Fire-and-forget email in background thread."""
+    import threading
+    def _send():
+        _smtp_send(to_email, subject, html_body)
+    t = threading.Thread(target=_send, daemon=True)
+    t.start()
+    return t
+
+
+def send_welcome_email(owner_name, owner_email, username, password, slug):
+    """Send welcome email to newly created owner."""
+    subject = "Your ShivyaSpaces Account is Ready"
+    html = f"""
+    <div style="font-family:Arial,sans-serif;max-width:540px;margin:0 auto;
+                padding:32px 24px;color:#111827;background:#fff;">
+      <div style="background:#1a1008;padding:20px 24px;border-radius:12px;margin-bottom:24px;">
+        <h1 style="color:#D4A017;font-size:20px;margin:0;">ShivyaSpaces</h1>
+        <p style="color:rgba(255,255,255,0.6);font-size:12px;margin:4px 0 0;">
+          Trusted Rental Lifecycle Platform</p>
+      </div>
+      <h2 style="font-size:20px;font-weight:800;margin-bottom:6px;">
+        Welcome, {owner_name}! 🎉</h2>
+      <p style="color:#6b7280;font-size:14px;margin-bottom:24px;">
+        Your ShivyaSpaces owner account has been created.
+        Here are your login credentials — please keep them safe.</p>
+      <table style="width:100%;border-collapse:collapse;
+                    background:#f9fafb;border-radius:10px;overflow:hidden;
+                    border:1px solid #e5e7eb;margin-bottom:24px;">
+        <tr style="border-bottom:1px solid #e5e7eb;">
+          <td style="padding:12px 16px;color:#6b7280;font-size:13px;width:40%;">Login Page</td>
+          <td style="padding:12px 16px;font-weight:700;font-size:13px;">
+            <a href="{SITE_URL}/login">{SITE_URL}/login</a></td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb;">
+          <td style="padding:12px 16px;color:#6b7280;font-size:13px;">Email</td>
+          <td style="padding:12px 16px;font-weight:700;font-size:13px;">{owner_email}</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb;">
+          <td style="padding:12px 16px;color:#6b7280;font-size:13px;">Password</td>
+          <td style="padding:12px 16px;font-weight:700;font-size:13px;">{password}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 16px;color:#6b7280;font-size:13px;">Your Public Page</td>
+          <td style="padding:12px 16px;font-weight:700;font-size:13px;">
+            <a href="{SITE_URL}/{slug}">{SITE_URL}/{slug}</a></td>
+        </tr>
+      </table>
+      <p style="font-size:13px;color:#6b7280;line-height:1.7;">
+        Log in to your dashboard to start adding your properties.
+        Your public listing page goes live as soon as you add your first property.</p>
+      <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;"/>
+      <p style="font-size:12px;color:#9ca3af;">
+        This email was sent by ShivyaSpaces. Do not reply to this email.</p>
+    </div>"""
+    send_email_async(owner_email, subject, html)
+    return True
 
 
 def parse_property(row):
@@ -2160,12 +2226,9 @@ def admin_create_owner():
         conn.close()
         flash(f"Owner '{name}' created successfully!", "success")
 
-        # Send welcome email in background thread to avoid timeout
-        import threading
-        def _send():
-            send_welcome_email(name, email, username, password, slug)
-        threading.Thread(target=_send, daemon=True).start()
-        flash("Account created! Welcome email is being sent.", "info")
+        # Send welcome email async
+        send_welcome_email(name, email, username, password, slug)
+        flash(f"Owner '{name}' created! Welcome email is being sent to {email}.", "success")
 
         return redirect(url_for("admin_dashboard"))
 
@@ -2407,41 +2470,42 @@ def owner_signup():
             flash("Name, email and phone are required.", "danger")
             return render_template("owner_signup.html")
 
-        # Send email to admin — in background thread so timeout doesn't crash the request
-        def send_signup_email():
-            try:
-                import smtplib, ssl
-                from email.mime.multipart import MIMEMultipart
-                from email.mime.text import MIMEText
-                cfg = get_mail_config()
-                html_body = (
-                    '<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;">'
-                    '<h2 style="color:#7c3aed;">New Owner Signup Request</h2>'
-                    '<table style="width:100%;border-collapse:collapse;">'
-                    f'<tr><td style="padding:8px 0;color:#6b7280;">Full Name</td><td style="font-weight:700;">{name}</td></tr>'
-                    f'<tr><td style="padding:8px 0;color:#6b7280;">Email</td><td style="font-weight:700;">{email}</td></tr>'
-                    f'<tr><td style="padding:8px 0;color:#6b7280;">Phone</td><td style="font-weight:700;">{phone}</td></tr>'
-                    f'<tr><td style="padding:8px 0;color:#6b7280;">Profession</td><td style="font-weight:700;">{profession or "Not specified"}</td></tr>'
-                    f'<tr><td style="padding:8px 0;color:#6b7280;">City</td><td style="font-weight:700;">{city or "Not specified"}</td></tr>'
-                    f'<tr><td style="padding:8px 0;color:#6b7280;">Properties</td><td style="font-weight:700;">{properties or "Not specified"}</td></tr>'
-                    f'<tr><td style="padding:8px 0;color:#6b7280;">Message</td><td style="font-weight:700;">{message or "None"}</td></tr>'
-                    '</table></div>'
-                )
-                msg = MIMEMultipart("alternative")
-                msg["Subject"] = f"New Owner Signup — {name}"
-                msg["From"]    = cfg["username"]
-                msg["To"]      = cfg["username"]
-                msg.attach(MIMEText(html_body, "html"))
-                ctx = ssl.create_default_context()
-                with smtplib.SMTP_SSL("smtp.hostinger.com", 465, context=ctx, timeout=15) as server:
-                    server.login(cfg["username"], cfg["password"])
-                    server.sendmail(cfg["username"], cfg["username"], msg.as_string())
-                print("Signup email sent OK")
-            except Exception as e:
-                print(f"Signup email failed (non-fatal): {e}")
-
-        import threading
-        threading.Thread(target=send_signup_email, daemon=True).start()
+        # Notify admin of new signup
+        cfg = get_mail_config()
+        signup_html = f"""
+        <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:24px;">
+          <h2 style="color:#7c3aed;">New Owner Signup Request</h2>
+          <p>A new owner has submitted a signup request on ShivyaSpaces.</p>
+          <table style="width:100%;border-collapse:collapse;background:#f9fafb;
+                        border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:10px 14px;color:#6b7280;width:38%;">Full Name</td>
+              <td style="padding:10px 14px;font-weight:700;">{name}</td></tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:10px 14px;color:#6b7280;">Email</td>
+              <td style="padding:10px 14px;font-weight:700;">{email}</td></tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:10px 14px;color:#6b7280;">Phone</td>
+              <td style="padding:10px 14px;font-weight:700;">{phone}</td></tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:10px 14px;color:#6b7280;">Profession</td>
+              <td style="padding:10px 14px;font-weight:700;">{profession or 'Not specified'}</td></tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:10px 14px;color:#6b7280;">City</td>
+              <td style="padding:10px 14px;font-weight:700;">{city or 'Not specified'}</td></tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:10px 14px;color:#6b7280;">Properties</td>
+              <td style="padding:10px 14px;font-weight:700;">{properties or 'Not specified'}</td></tr>
+            <tr>
+              <td style="padding:10px 14px;color:#6b7280;">Message</td>
+              <td style="padding:10px 14px;font-weight:700;">{message or 'None'}</td></tr>
+          </table>
+          <div style="margin-top:20px;padding:14px;background:#f3f0ff;border-radius:8px;">
+            <p style="color:#6d28d9;font-weight:600;margin:0;">
+              Log into your admin dashboard to create an account for this owner.</p>
+          </div>
+        </div>"""
+        send_email_async(cfg["username"], f"New Owner Signup — {name}", signup_html)
 
         # Send WhatsApp to admin
         admin_whatsapp = get_setting("admin_whatsapp", "")
