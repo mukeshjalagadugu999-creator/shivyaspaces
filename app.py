@@ -187,18 +187,39 @@ def _smtp_send(to_email, subject, html_body):
         msg["To"]      = to_email
         msg.attach(MIMEText(html_body, "html"))
 
-        ctx = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.hostinger.com", 465,
-                               context=ctx, timeout=20) as server:
-            server.login(sender, password)
-            server.sendmail(sender, to_email, msg.as_string())
-        print(f"Email sent OK → {to_email} | {subject}")
-        return True, ""
+        # Try port 587 (STARTTLS) first, fallback to 465 (SSL)
+        sent = False
+        last_err = ""
+        for port, use_ssl in [(587, False), (465, True)]:
+            try:
+                if use_ssl:
+                    ctx = ssl.create_default_context()
+                    with smtplib.SMTP_SSL("smtp.hostinger.com", port,
+                                          context=ctx, timeout=20) as server:
+                        server.login(sender, password)
+                        server.sendmail(sender, to_email, msg.as_string())
+                else:
+                    with smtplib.SMTP("smtp.hostinger.com", port, timeout=20) as server:
+                        server.ehlo()
+                        server.starttls()
+                        server.ehlo()
+                        server.login(sender, password)
+                        server.sendmail(sender, to_email, msg.as_string())
+                print(f"Email sent OK (port {port}) → {to_email} | {subject}")
+                sent = True
+                break
+            except Exception as e:
+                last_err = str(e)
+                print(f"Port {port} failed: {e}")
+                continue
+
+        if sent:
+            return True, ""
+        err_msg = f"All SMTP ports failed: {last_err}"
+        print(err_msg)
+        return False, err_msg
     except smtplib.SMTPAuthenticationError as e:
-        msg = f"SMTP auth failed — check email/password in admin settings: {e}"
-        print(msg); return False, msg
-    except smtplib.SMTPRecipientsRefused as e:
-        msg = f"Recipient refused: {to_email} — {e}"
+        msg = f"SMTP auth failed: {e}"
         print(msg); return False, msg
     except Exception as e:
         msg = f"Email failed: {e}"
