@@ -231,14 +231,95 @@ def parse_property(row):
 
 
 def migrate_db():
-    """Add new columns if they don't exist."""
+    """Create all tables and add missing columns if needed."""
     conn = get_db()
+
+    # ── Create core tables first (safe on existing DBs) ──────────────────
+    conn.execute("""CREATE TABLE IF NOT EXISTS admins (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    )""")
+
+    conn.execute("""CREATE TABLE IF NOT EXISTS owners (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        username TEXT UNIQUE,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        phone TEXT,
+        slug TEXT UNIQUE NOT NULL,
+        brand_name TEXT,
+        is_active INTEGER DEFAULT 1,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )""")
+
+    conn.execute("""CREATE TABLE IF NOT EXISTS properties (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        owner_id INTEGER NOT NULL,
+        parent_id INTEGER,
+        title TEXT NOT NULL,
+        location TEXT,
+        rent TEXT,
+        status TEXT DEFAULT 'Available',
+        beds INTEGER DEFAULT 0,
+        baths INTEGER DEFAULT 0,
+        sqft INTEGER DEFAULT 0,
+        image TEXT,
+        property_type TEXT,
+        security_deposit TEXT,
+        facing TEXT,
+        maintenance TEXT,
+        floor TEXT,
+        built TEXT,
+        description TEXT,
+        amenities TEXT DEFAULT '[]',
+        gallery_images TEXT DEFAULT '[]',
+        is_complex INTEGER DEFAULT 0,
+        visibility TEXT DEFAULT 'public',
+        listing_type TEXT DEFAULT 'rent',
+        sale_price TEXT DEFAULT '',
+        contact_for_price INTEGER DEFAULT 0,
+        FOREIGN KEY (owner_id) REFERENCES owners(id)
+    )""")
+
+    conn.execute("""CREATE TABLE IF NOT EXISTS enquiries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        property_id INTEGER NOT NULL,
+        name TEXT,
+        email TEXT,
+        phone TEXT,
+        message TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (property_id) REFERENCES properties(id)
+    )""")
+
+    conn.execute("""CREATE TABLE IF NOT EXISTS settings (
+        key TEXT PRIMARY KEY,
+        value TEXT
+    )""")
+
+    # ── Seed default admin if not exists ─────────────────────────────────
+    from werkzeug.security import generate_password_hash
+    if not conn.execute("SELECT id FROM admins WHERE id=1").fetchone():
+        conn.execute("""INSERT INTO admins (name, email, password)
+            VALUES (?, ?, ?)""", (
+            "Admin",
+            "admin@platform.com",
+            generate_password_hash("ShivyaAdmin2024")
+        ))
+        print("Seeded default admin")
+
+    # ── Add missing columns to existing properties table ─────────────────
     existing = [r[1] for r in conn.execute("PRAGMA table_info(properties)").fetchall()]
     migrations = [
-        ("visibility",    "TEXT DEFAULT 'public'"),
-        ("listing_type",  "TEXT DEFAULT 'rent'"),
-        ("sale_price",    "TEXT DEFAULT ''"),
+        ("visibility",        "TEXT DEFAULT 'public'"),
+        ("listing_type",      "TEXT DEFAULT 'rent'"),
+        ("sale_price",        "TEXT DEFAULT ''"),
         ("contact_for_price", "INTEGER DEFAULT 0"),
+        ("parent_id",         "INTEGER"),
+        ("is_complex",        "INTEGER DEFAULT 0"),
     ]
     for col, definition in migrations:
         if col not in existing:
