@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      ShivyaSpaces — Trusted Rental Lifecycle Platform for NRI Property Owners
+    </title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="/static/theme.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+      }
+
+      /* NAVBAR */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 68px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        z-index: 99;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .nav-logo img {
+        height: 38px;
+        width: 38px;
+        object-fit: contain;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+        flex-shrink: 0;
+      }
+      .nav-logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .nav-logo-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.5px;
+        line-height: 1;
+      }
+      .nav-logo-name span {
+        color: #d4a017;
+      }
+      .nav-logo-tagline {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.45);
+        letter-spacing: 0.2px;
+        line-height: 1;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      .nav-links a {
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        padding: 7px 11px;
+        border-radius: 6px;
+        transition: color 0.18s;
+      }
+      .nav-links a:hover {
+        color: white;
+      }
+      .nav-login {
+        font-size: 13px;
+        font-weight: 600;
+        color: #1a0a00 !important;
+        text-decoration: none;
+        padding: 8px 18px;
+        border-radius: 6px;
+        background: #d4a017;
+        margin-left: 8px;
+        transition: opacity 0.18s;
+      }
+      .nav-login:hover {
+        opacity: 0.88;
+      }
+
+      /* HERO */
+      .hero {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 24px 60px;
+      }
+      .card {
+        width: 100%;
+        max-width: 540px;
+        text-align: center;
+      }
+      .tag {
+        display: inline-block;
+        background: rgba(212, 160, 23, 0.15);
+        border: 1px solid rgba(212, 160, 23, 0.35);
+        color: #d4a017;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 999px;
+        margin-bottom: 20px;
+      }
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 38px;
+        font-weight: 800;
+        color: white;
+        line-height: 1.15;
+        letter-spacing: -0.5px;
+        margin-bottom: 10px;
+      }
+      h1 span {
+        color: #d4a017;
+      }
+      .sub {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.6;
+        margin-bottom: 18px;
+      }
+      .nri-block {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 16px 22px;
+        margin-bottom: 32px;
+        text-align: left;
+        backdrop-filter: blur(8px);
+      }
+      .nri-block h3 {
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 6px;
+      }
+      .nri-block p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
+        line-height: 1.7;
+      }
+      .question {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.35);
+        margin-bottom: 14px;
+      }
+      .choices {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .choice {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1.5px solid rgba(255, 255, 255, 0.14);
+        border-radius: 18px;
+        padding: 26px 18px;
+        text-decoration: none;
+        color: white;
+        transition: all 0.22s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        backdrop-filter: blur(10px);
+      }
+      .choice:hover {
+        transform: translateY(-4px);
+        border-color: rgba(212, 160, 23, 0.55);
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .choice-title {
+        font-family: "Playfair Display", serif;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .choice-desc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.48);
+        line-height: 1.5;
+        text-align: center;
+      }
+      .choice-arrow {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.28);
+        font-weight: 600;
+        transition:
+          transform 0.18s,
+          color 0.18s;
+      }
+      .choice:hover .choice-arrow {
+        transform: translateX(4px);
+        color: #d4a017;
+      }
+
+      /* FOOTER */
+      footer {
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(16px);
+        padding: 52px 40px 0;
+        margin-top: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1.2fr;
+        gap: 40px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid rgba(212, 160, 23, 0.18);
+      }
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .footer-logo img {
+        height: 34px;
+        width: 34px;
+        object-fit: contain;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+      }
+      .footer-logo-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.5px;
+      }
+      .footer-logo-name span {
+        color: #d4a017;
+      }
+      .footer-desc {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.48);
+        line-height: 1.75;
+      }
+      .footer-col-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #d4a017;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+      }
+      .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .footer-links a {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.58);
+        text-decoration: none;
+        transition: color 0.18s;
+      }
+      .footer-links a:hover {
+        color: #d4a017;
+      }
+      .footer-contact {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .footer-contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .footer-contact-item span {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.58);
+      }
+      .footer-contact-item a {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.58);
+        text-decoration: none;
+      }
+      .footer-contact-item a:hover {
+        color: #d4a017;
+      }
+      .footer-bottom {
+        padding: 20px 0;
+        text-align: center;
+      }
+      .footer-bottom p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.28);
+      }
+
+      @media (max-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+      }
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 28px;
+        }
+        .choices {
+          grid-template-columns: 1fr;
+        }
+        .navbar {
+          padding: 0 20px;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+        }
+        footer {
+          padding: 40px 20px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="nav-logo">
+        <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+        <div class="nav-logo-text">
+          <span class="nav-logo-name">SHIVYA<span>SPACES</span></span>
+          <span class="nav-logo-tagline"
+            >Trusted Rental Lifecycle Platform</span
+          >
+        </div>
+      </a>
+      <a href="/login" class="nav-login">Login</a>
+    </nav>
+
+    <div class="hero">
+      <div class="card">
+        <div class="tag">Welcome</div>
+        <h1>Your Properties.<br /><span>Managed Remotely.</span></h1>
+        <p class="sub">
+          Trusted Rental Lifecycle Platform for NRI Property Owners
+        </p>
+        <div class="nri-block">
+          <h3>🌏 Built for NRIs managing properties in India remotely</h3>
+          <p>
+            Manage listings, tenant inquiries, onboarding, agreements, rent
+            reminders, receipts, and property lifecycle in one place.
+          </p>
+        </div>
+        <p class="question">I am a...</p>
+        <div class="choices">
+          <a href="/search" class="choice">
+            <div class="choice-title">Tenant</div>
+            <div class="choice-desc">Looking for a property to rent</div>
+            <span class="choice-arrow">→</span>
+          </a>
+          <a href="/login" class="choice">
+            <div class="choice-title">Owner</div>
+            <div class="choice-desc">I manage properties on this platform</div>
+            <span class="choice-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">
+            <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
+            <span class="footer-logo-name">SHIVYA<span>SPACES</span></span>
+          </div>
+          <p class="footer-desc">
+            Shivya Spaces is a trusted rental lifecycle platform helping NRI
+            property owners manage listings, tenants, agreements, and rental
+            operations digitally from anywhere in the world.
+          </p>
+        </div>
+        <div>
+          <p class="footer-col-title">Platform</p>
+          <div class="footer-links">
+            <a href="/login">For Owners</a>
+            <a href="/results">Browse Properties</a>
+            <a href="/owner-signup">Owner Signup</a>
+            <a href="/search">Tenant Login</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-title">Company</p>
+          <div class="footer-links">
+            <a href="/about">About Us</a>
+            <a href="mailto:support@shivyaspaces.com">Contact</a>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/termsandconditions">Terms &amp; Conditions</a>
+            <a href="/data-privacy">Data Privacy &amp; Security</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-title">Contact</p>
+          <div class="footer-contact">
+            <div class="footer-contact-item">
+              <span>📍</span><span>Bangalore, India</span>
+            </div>
+            <div class="footer-contact-item">
+              <span>✉️</span
+              ><a href="mailto:support@shivyaspaces.com"
+                >support@shivyaspaces.com</a
+              >
+            </div>
+            <div class="footer-contact-item">
+              <span style="color: #25d366">💬</span
+              ><a href="#">WhatsApp Support</a>
+            </div>
+            <div class="footer-contact-item">
+              <span style="color: #0a66c2">🔗</span
+              ><a
+                href="https://www.linkedin.com/company/shivyaspaces"
+                target="_blank"
+                rel="noopener"
+                >LinkedIn</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span id="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+      </div>
+    </footer>
+    <script>
+      document.getElementById("yr").textContent = new Date().getFullYear();
+    </script>
+
+    <script>
+      document.getElementById("yr").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
