@@ -112,8 +112,14 @@ MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 # HELPERS
 # -----------------------------------------------
 
+# Use persistent volume path on Railway, fallback to local for dev
+DB_PATH = os.environ.get("DB_PATH", os.path.join(
+    os.environ.get("RAILWAY_VOLUME_MOUNT_PATH", ""),
+    "properties.db"
+) if os.environ.get("RAILWAY_VOLUME_MOUNT_PATH") else "properties.db")
+
 def get_db():
-    conn = sqlite3.connect("properties.db", timeout=10)
+    conn = sqlite3.connect(DB_PATH, timeout=10)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA foreign_keys=ON")
@@ -123,7 +129,7 @@ def get_db():
 def get_setting(key, default=""):
     """Read a setting from the database."""
     try:
-        conn = sqlite3.connect("properties.db", timeout=10)
+        conn = sqlite3.connect(DB_PATH, timeout=10)
         conn.row_factory = sqlite3.Row
         conn.execute("""CREATE TABLE IF NOT EXISTS settings
             (key TEXT PRIMARY KEY, value TEXT)""")
@@ -137,7 +143,7 @@ def get_setting(key, default=""):
 def save_setting(key, value):
     """Save a setting to the database."""
     try:
-        conn = sqlite3.connect("properties.db", timeout=10)
+        conn = sqlite3.connect(DB_PATH, timeout=10)
         conn.execute("""CREATE TABLE IF NOT EXISTS settings
             (key TEXT PRIMARY KEY, value TEXT)""")
         conn.execute("INSERT OR REPLACE INTO settings (key, value) VALUES (?,?)", (key, value))
@@ -220,6 +226,10 @@ def parse_property(row):
 
 def migrate_db():
     """Add new columns if they don't exist."""
+    # Ensure volume directory exists
+    db_dir = os.path.dirname(DB_PATH)
+    if db_dir:
+        os.makedirs(db_dir, exist_ok=True)
     conn = get_db()
     existing = [r[1] for r in conn.execute("PRAGMA table_info(properties)").fetchall()]
     migrations = [
