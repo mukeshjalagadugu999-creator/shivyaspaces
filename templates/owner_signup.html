@@ -2,13 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="/static/Shivya_Logo.jpeg" />
+    <link rel="icon" type="image/png" href="/static/Shivya_Logo_Round.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Owner Signup — ShivyaSpaces</title>
+    <title>Owner Sign Up — ShivyaSpaces</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <script src="/static/theme.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css"
@@ -20,195 +21,495 @@
         padding: 0;
         box-sizing: border-box;
       }
-      html,
-      body {
-        min-height: 100vh;
+      :root {
+        --bg: #f8fafc;
+        --bg2: #ffffff;
+        --bg3: #f1f5f9;
+        --border: #e5e7eb;
+        --text: #111827;
+        --text2: #4b5563;
+        --text3: #9ca3af;
+        --accent: #7c3aed;
+        --accent-hover: #6d28d9;
+        --input-bg: #ffffff;
+        --input-border: #e5e7eb;
+        --green-bg: #dcfce7;
+        --green-fg: #166534;
+        --red-bg: #fee2e2;
+        --red-fg: #991b1b;
+        --info-bg: #f3f0ff;
+        --info-border: #e9d5ff;
+        --info-fg: #6d28d9;
+      }
+      [data-theme="dark"] {
+        --bg: #0d1117;
+        --bg2: #161b22;
+        --bg3: #21262d;
+        --border: #30363d;
+        --text: #e6edf3;
+        --text2: #8b949e;
+        --text3: #484f58;
+        --accent: #a78bfa;
+        --accent-hover: #8b5cf6;
+        --input-bg: #0d1117;
+        --input-border: #30363d;
+        --green-bg: #0d2b1a;
+        --green-fg: #3fb950;
+        --red-bg: #2d1215;
+        --red-fg: #f85149;
+        --info-bg: #1a0d33;
+        --info-border: #4c1d95;
+        --info-fg: #c4b5fd;
       }
       body {
         font-family: "Inter", sans-serif;
-        background:
-          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.78)),
-          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600")
-            center/cover fixed;
-        color: white;
-        display: flex;
-        flex-direction: column;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        transition:
+          background 0.25s,
+          color 0.25s;
       }
       .topbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 0 40px;
         height: 64px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 40px;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        z-index: 1000;
+        position: sticky;
+        top: 0;
+        z-index: 99;
       }
       .topbar-logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
         text-decoration: none;
       }
-      .topbar-logo img {
-        height: 36px;
-        width: 36px;
-        border-radius: 50%;
-        border: 1.5px solid #d4a017;
-        object-fit: contain;
-        flex-shrink: 0;
+      .topbar-logo span {
+        color: var(--accent);
       }
-      .topbar-logo-text {
-        display: flex;
-        flex-direction: column;
-        gap: 1px;
-      }
-      .topbar-logo-name {
-        font-size: 14px;
-        font-weight: 800;
-        color: white;
-        letter-spacing: 0.8px;
-        line-height: 1;
-      }
-      .topbar-logo-name span {
-        color: #d4a017;
-      }
-      .topbar-logo-sub {
-        font-size: 9px;
-        color: rgba(255, 255, 255, 0.42);
-      }
-      .content {
-        flex: 1;
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 88px 24px 60px;
-        width: 100%;
-      }
-      .back-wrap {
-        margin-bottom: 16px;
-      }
-      .back-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
+      .back-link {
         font-size: 13px;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.75);
+        font-weight: 500;
+        color: var(--text2);
         text-decoration: none;
-        padding: 7px 16px;
+        padding: 7px 14px;
         border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border);
         transition: all 0.18s;
       }
-      .back-btn:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
+      .back-link:hover {
+        background: var(--bg3);
       }
-      .page-hdr {
+      .content {
+        max-width: 640px;
+        margin: 40px auto;
+        padding: 0 24px 60px;
+      }
+      .page-header {
         margin-bottom: 28px;
       }
-      .page-hdr h1 {
-        font-size: 26px;
+      .page-header h1 {
+        font-size: 28px;
         font-weight: 800;
-        color: white;
         margin-bottom: 6px;
       }
-      .page-hdr p {
+      .page-header p {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.5);
+        color: var(--text3);
         line-height: 1.6;
       }
       .flash {
         padding: 12px 16px;
         border-radius: 10px;
         font-size: 13px;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
         font-weight: 500;
       }
       .flash.success {
-        background: rgba(34, 197, 94, 0.15);
-        border: 1px solid rgba(34, 197, 94, 0.3);
-        color: #86efac;
+        background: var(--green-bg);
+        color: var(--green-fg);
       }
       .flash.danger {
-        background: rgba(239, 68, 68, 0.15);
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        color: #fca5a5;
+        background: var(--red-bg);
+        color: var(--red-fg);
       }
-      .card {
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.14);
+      .info-box {
+        background: var(--info-bg);
+        border: 1px solid var(--info-border);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+        font-size: 13px;
+        color: var(--info-fg);
+        line-height: 1.7;
+      }
+      .form-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
         border-radius: 20px;
         padding: 28px;
         margin-bottom: 20px;
+        transition:
+          background 0.25s,
+          border-color 0.25s;
       }
-      .fg {
+      .form-card h2 {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .form-group {
         display: flex;
         flex-direction: column;
         gap: 6px;
-        margin-bottom: 16px;
       }
-      .fg:last-child {
-        margin-bottom: 0;
+      .form-group.full {
+        grid-column: 1/-1;
       }
       label {
         font-size: 11px;
         font-weight: 600;
-        color: rgba(255, 255, 255, 0.5);
+        color: var(--text3);
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
-      .req {
+      .required {
         color: #ef4444;
       }
-      input[type="text"],
-      input[type="email"],
+      input,
       select,
       textarea {
         padding: 11px 14px;
-        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border: 1.5px solid var(--input-border);
         border-radius: 10px;
         font-size: 14px;
         font-family: "Inter", sans-serif;
-        color: white;
-        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        background: var(--input-bg);
         outline: none;
         width: 100%;
-        transition: border-color 0.18s;
+        transition:
+          border-color 0.18s,
+          background 0.25s,
+          color 0.25s;
       }
-      input[type="text"]:focus,
-      input[type="email"]:focus,
+      input:focus,
       select:focus,
       textarea:focus {
-        border-color: #d4a017;
-      }
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(255, 255, 255, 0.35);
+        border-color: var(--accent);
       }
       select {
         appearance: none;
         cursor: pointer;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23D4A017' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: right 14px center;
         padding-right: 36px;
-        background-color: rgba(255, 255, 255, 0.08);
+      }
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .btn-submit {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: background 0.18s;
+        width: 100%;
+      }
+      .btn-submit:hover {
+        background: var(--accent-hover);
+      }
+
+      /* Success state */
+      .success-box {
+        text-align: center;
+        padding: 48px 24px;
+      }
+      .success-icon {
+        font-size: 56px;
+        margin-bottom: 20px;
+      }
+      .success-box h2 {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 10px;
+      }
+      .success-box p {
+        font-size: 14px;
+        color: var(--text3);
+        line-height: 1.7;
+        margin-bottom: 28px;
+      }
+      .wa-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #25d366;
+        color: white;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .back-home {
+        display: inline-block;
+        background: var(--bg3);
+        color: var(--text2);
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid var(--border);
+        margin-left: 8px;
+      }
+
+      @media (max-width: 600px) {
+        .topbar {
+          padding: 0 16px;
+        }
+        .content {
+          padding: 0 16px 40px;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .form-group.full {
+          grid-column: 1;
+        }
+      }
+      /* === UNIVERSAL BACKGROUND === */
+      body {
+        min-height: 100vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+      }
+      body {
+        min-height: 100vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+        color: white;
+      }
+
+      /* ===== DARK PAGE OVERRIDES ===== */
+      body {
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+        color: white !important;
+      }
+      .navbar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 68px !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 0 40px !important;
+        background: rgba(0, 0, 0, 0.55) !important;
+        backdrop-filter: blur(16px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        z-index: 999 !important;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .nav-logo img {
+        height: 38px;
+        width: 38px;
+        object-fit: contain;
+        border-radius: 50%;
+        border: 1.5px solid #d4a017;
+      }
+      .nav-logo-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: white !important;
+        letter-spacing: 0.5px;
+        line-height: 1;
+      }
+      .nav-accent {
+        color: #d4a017 !important;
+      }
+      .nav-logo-tagline {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-btn {
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.75) !important;
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        transition: all 0.18s;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        white-space: nowrap;
+      }
+      /* Glass cards */
+      .card,
+      .form-card,
+      .tile,
+      .filter-card,
+      .glass-card {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        backdrop-filter: blur(10px) !important;
+        color: white !important;
+      }
+      /* Inputs inside dark pages */
+      input,
+      select,
+      textarea {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.4) !important;
       }
       select option {
         background: #1a1008;
         color: white;
       }
-      textarea {
-        min-height: 90px;
-        resize: vertical;
+      label {
+        color: rgba(255, 255, 255, 0.7) !important;
       }
+      /* Ensure content starts below navbar */
+      .page-body,
+      .page,
+      .content,
+      .results-content,
+      .results-wrapper {
+        padding-top: 88px !important;
+      }
+      .results-bar {
+        top: 68px !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+      .results-bar-inner h1,
+      .results-meta h1 {
+        color: white !important;
+      }
+      .results-meta p {
+        color: rgba(255, 255, 255, 0.5) !important;
+      }
+      /* Group select */
+      .group-select {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+      }
+      .control-label {
+        color: rgba(255, 255, 255, 0.5) !important;
+      }
+      .refine-btn {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+      }
+      /* Property cards */
+      .grid .tile {
+        background: rgba(255, 255, 255, 0.07) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: blur(8px) !important;
+      }
+      .tile:hover {
+        background: rgba(255, 255, 255, 0.12) !important;
+        border-color: rgba(212, 160, 23, 0.5) !important;
+      }
+      .tile-info {
+        background: rgba(0, 0, 0, 0.3) !important;
+      }
+      .card-price {
+        color: white !important;
+      }
+      .tile-info h2 {
+        color: white !important;
+      }
+      .location {
+        color: rgba(255, 255, 255, 0.6) !important;
+      }
+      .meta div {
+        background: rgba(255, 255, 255, 0.12) !important;
+        color: rgba(255, 255, 255, 0.7) !important;
+        border: none !important;
+      }
+      /* Section titles */
+      h1,
+      h2,
+      h3 {
+        color: white !important;
+      }
+      p {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      /* Footer */
+      .page-footer {
+        padding: 18px 40px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.45);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .page-footer p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      /* intl-tel-input: ensure dropdown is a floating popup */
       .iti {
         width: 100%;
       }
@@ -227,215 +528,207 @@
         outline: none;
         border-color: #d4a017;
       }
-      .btn-submit {
-        background: #d4a017;
-        color: #1a0a00;
-        border: none;
-        padding: 14px 32px;
-        border-radius: 12px;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        width: 100%;
-        transition: background 0.18s;
+
+      /* Force iti dropdown to be visible */
+      .iti__country-list {
+        background: #ffffff !important;
+        color: #111827 !important;
+        border: 1px solid #d1d5db !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+        z-index: 99999 !important;
+        position: absolute !important;
       }
-      .btn-submit:hover {
-        background: #c49010;
+      .iti__country {
+        color: #111827 !important;
       }
-      .success-box {
-        background: rgba(34, 197, 94, 0.12);
-        border: 1px solid rgba(34, 197, 94, 0.3);
-        border-radius: 16px;
-        padding: 28px;
-        text-align: center;
-        margin-bottom: 20px;
+      .iti__country-name {
+        color: #111827 !important;
       }
-      .success-box h2 {
-        font-size: 20px;
-        font-weight: 800;
-        color: #86efac;
-        margin-bottom: 8px;
+      .iti__dial-code {
+        color: #6b7280 !important;
       }
-      .success-box p {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
-        line-height: 1.7;
+      .iti__country.iti__highlight {
+        background: #f3f4f6 !important;
       }
-      .wa-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 16px;
-        background: #25d366;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 10px;
-        font-size: 14px;
-        font-weight: 700;
-        text-decoration: none;
-      }
-      .wa-btn:hover {
-        background: #20bd5a;
-      }
-      .page-footer {
-        padding: 16px 40px;
-        text-align: center;
-        background: rgba(0, 0, 0, 0.45);
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-      }
-      .page-footer p {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.3);
-      }
-      @media (max-width: 600px) {
-        .topbar {
-          padding: 0 16px;
-        }
-        .content {
-          padding: 80px 16px 40px;
-        }
+      .iti__search-input {
+        color: #111827 !important;
+        background: #ffffff !important;
       }
     </style>
   </head>
   <body>
-    <div class="topbar">
-      <a href="/" class="topbar-logo">
+    <nav class="navbar">
+      <a href="/" class="nav-logo">
         <img src="/static/Shivya_Logo.jpeg" alt="ShivyaSpaces" />
-        <div class="topbar-logo-text">
-          <span class="topbar-logo-name">SHIVYA<span>SPACES</span></span>
-          <span class="topbar-logo-sub">Trusted Rental Lifecycle Platform</span>
+        <div class="nav-logo-text">
+          <span class="nav-logo-name"
+            >SHIVYA<span class="nav-accent">SPACES</span></span
+          >
+          <span class="nav-logo-tagline"
+            >Trusted Rental Lifecycle Platform</span
+          >
         </div>
       </a>
-    </div>
+    </nav>
 
     <div class="content">
-      <div class="back-wrap">
-        <a href="/" class="back-btn">← Back to Home</a>
+      {% if submitted %}
+      <!-- SUCCESS STATE -->
+      <div class="form-card">
+        <div class="success-box">
+          <div class="success-icon">🎉</div>
+          <h2>Request Submitted!</h2>
+          <p>
+            Thank you for your interest in listing on ShivyaSpaces.<br />
+            We've received your details and will contact you within 24 hours<br />
+            to set up your account.
+          </p>
+          {% if whatsapp_sent %}
+          <a href="{{ whatsapp_url }}" target="_blank" class="wa-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+              />
+            </svg>
+            Also send via WhatsApp
+          </a>
+          {% endif %}
+          <a href="/" class="back-home">Back to Home</a>
+        </div>
+      </div>
+
+      {% else %}
+      <!-- FORM STATE -->
+      <div class="page-header">
+        <h1>List Your Property</h1>
+        <p>
+          Fill in your details below and we'll get back to you within 24 hours
+          to set up your owner account.
+        </p>
       </div>
 
       {% with messages = get_flashed_messages(with_categories=true) %} {% for
       category, message in messages %}
       <div class="flash {{ category }}">{{ message }}</div>
-      {% endfor %} {% endwith %} {% if submitted %}
-      <div class="success-box">
-        <h2>✅ Request Submitted!</h2>
-        <p>
-          Thank you for your interest in ShivyaSpaces. Our team will review your
-          request and get back to you within 24 hours with your account
-          credentials.
-        </p>
-        {% if whatsapp_sent %}
-        <a href="{{ whatsapp_url }}" target="_blank" class="wa-btn">
-          💬 Send via WhatsApp too
-        </a>
-        {% endif %}
-      </div>
-      <a href="/" class="back-btn" style="display: inline-flex"
-        >← Back to Home</a
-      >
-      {% else %}
-      <div class="page-hdr">
-        <h1>Owner Signup</h1>
-        <p>
-          Request an owner account to start listing and managing your properties
-          on ShivyaSpaces.
-        </p>
+      {% endfor %} {% endwith %}
+
+      <div class="info-box">
+        Once you submit this form, our team will review your details and create
+        your account. You'll receive your login credentials via email.
       </div>
 
-      <form method="POST" action="/owner-signup" id="signupForm">
-        <div class="card">
-          <div class="fg">
-            <label>Full Name <span class="req">*</span></label>
-            <input
-              type="text"
-              name="name"
-              placeholder="e.g. Rajesh Sharma"
-              required
-            />
-          </div>
-          <div class="fg">
-            <label>Email Address <span class="req">*</span></label>
-            <input
-              type="email"
-              name="email"
-              placeholder="e.g. rajesh@email.com"
-              required
-            />
-          </div>
-          <div class="fg">
-            <label>Phone Number <span class="req">*</span></label>
-            <input type="tel" id="phoneInput" placeholder="Enter your number" />
-            <input type="hidden" name="phone" id="phoneHidden" />
-          </div>
-          <div class="fg">
-            <label>Profession</label>
-            <input
-              type="text"
-              name="profession"
-              placeholder="e.g. Software Engineer, Business Owner"
-            />
-          </div>
-          <div class="fg">
-            <label>City</label>
-            <input
-              type="text"
-              name="city"
-              placeholder="e.g. Dubai, London, Bangalore"
-            />
-          </div>
-          <div class="fg">
-            <label>Number of Properties</label>
-            <select name="properties">
-              <option value="">Select</option>
-              <option value="1">1 property</option>
-              <option value="2-5">2–5 properties</option>
-              <option value="6-10">6–10 properties</option>
-              <option value="10+">More than 10</option>
-            </select>
-          </div>
-          <div class="fg">
-            <label>Message (optional)</label>
-            <textarea
-              name="message"
-              placeholder="Tell us about your properties or any questions you have..."
-            ></textarea>
+      <form method="POST" action="/owner-signup">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="form-card">
+          <h2>Personal Details</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name <span class="required">*</span></label>
+              <input
+                type="text"
+                name="name"
+                placeholder="e.g. Rahul Sharma"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Phone Number <span class="required">*</span></label>
+              <input type="tel" id="phoneInput" placeholder="Enter number" />
+              <input type="hidden" name="phone" id="phoneHidden" />
+              <span
+                style="
+                  font-size: 12px;
+                  color: var(--red-fg);
+                  margin-top: 4px;
+                  display: none;
+                "
+                id="phoneError"
+                >Please enter a valid phone number.</span
+              >
+            </div>
+            <div class="form-group full">
+              <label>Email Address <span class="required">*</span></label>
+              <input
+                type="email"
+                name="email"
+                placeholder="e.g. rahul@email.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Profession</label>
+              <select name="profession">
+                <option value="">Select profession</option>
+                <option value="Property Owner">Property Owner</option>
+                <option value="Real Estate Agent">Real Estate Agent</option>
+                <option value="Property Manager">Property Manager</option>
+                <option value="Developer / Builder">Developer / Builder</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" name="city" placeholder="e.g. Bangalore" />
+            </div>
           </div>
         </div>
-        <button type="submit" class="btn-submit">Submit Request →</button>
+
+        <div class="form-card">
+          <h2>Property Details</h2>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>How many properties do you want to list?</label>
+              <select name="properties">
+                <option value="">Select</option>
+                <option value="1">1 property</option>
+                <option value="2-5">2–5 properties</option>
+                <option value="6-10">6–10 properties</option>
+                <option value="10+">More than 10</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Anything else you'd like us to know?</label>
+              <textarea
+                name="message"
+                placeholder="Tell us about your properties, any special requirements, etc."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Sign Up Request</button>
       </form>
       {% endif %}
     </div>
-
-    <footer class="page-footer">
-      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
-    </footer>
-
     <script>
-      document.querySelectorAll(".yr").forEach(function (e) {
-        e.textContent = new Date().getFullYear();
-      });
-
       var iti = window.intlTelInput(document.getElementById("phoneInput"), {
         initialCountry: "in",
-        preferredCountries: ["in", "ae", "gb", "us", "au", "sg", "pk"],
+        preferredCountries: ["in", "ae", "gb", "us", "au", "sg", "ca"],
         separateDialCode: true,
         utilsScript:
           "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
       });
 
-      var form = document.getElementById("signupForm");
-      if (form) {
-        form.addEventListener("submit", function (e) {
-          var phone = iti.getNumber();
-          if (!iti.isValidNumber()) {
-            e.preventDefault();
-            alert("Please enter a valid phone number.");
-            return;
-          }
-          document.getElementById("phoneHidden").value = phone;
-        });
-      }
+      document.querySelector("form").addEventListener("submit", function (e) {
+        var err = document.getElementById("phoneError");
+        if (!iti.isValidNumber()) {
+          e.preventDefault();
+          err.style.display = "block";
+          return;
+        }
+        err.style.display = "none";
+        document.getElementById("phoneHidden").value = iti
+          .getNumber()
+          .replace("+", "");
+      });
+    </script>
+    <footer class="page-footer">
+      <p>© <span class="yr"></span> Shivya Spaces. All Rights Reserved.</p>
+    </footer>
+    <script>
+      document
+        .querySelectorAll(".yr")
+        .forEach((e) => (e.textContent = new Date().getFullYear()));
     </script>
   </body>
 </html>
