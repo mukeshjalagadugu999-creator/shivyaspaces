@@ -169,29 +169,44 @@ def get_mail_config():
 
 def _smtp_send(to_email, subject, html_body):
     """
-    Core SMTP sender — uses Hostinger SSL directly.
+    Core email sender — tries Resend API first, then SMTP fallback.
     Returns (True, "") on success or (False, error_message) on failure.
-    Always runs in a background thread — never call from main request thread.
+    Always runs in a background thread.
     """
+    # ── 1. Resend API (works on Railway) ──────────────────────────────────
+    resend_key = os.environ.get("RESEND_API_KEY", "").strip()
+    if resend_key:
+        try:
+            import resend as _resend
+            _resend.api_key = resend_key
+            cfg = get_mail_config()
+            result = _resend.Emails.send({
+                "from": "ShivyaSpaces <onboarding@resend.dev>",
+                "to":   [to_email],
+                "subject": subject,
+                "html": html_body,
+            })
+            rid = result.id if hasattr(result, "id") else str(result)
+            print(f"[RESEND] OK → {to_email} | id={rid}")
+            return True, ""
+        except Exception as e:
+            print(f"[RESEND] Failed: {e} — trying SMTP")
+
+    # ── 2. SMTP fallback ──────────────────────────────────────────────────
     import smtplib, ssl
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
     try:
         cfg = get_mail_config()
-        sender = cfg["username"]
+        sender   = cfg["username"]
         password = cfg["password"]
         if not sender or not password:
-            return False, "SMTP credentials not configured"
-
+            return False, "No email credentials"
         msg = MIMEMultipart("alternative")
         msg["Subject"] = subject
         msg["From"]    = f"ShivyaSpaces <{sender}>"
         msg["To"]      = to_email
         msg.attach(MIMEText(html_body, "html"))
-
-        # Try port 587 (STARTTLS) first, fallback to 465 (SSL)
-        sent = False
-        last_err = ""
         for port, use_ssl in [(465, True), (587, False)]:
             try:
                 if use_ssl:
@@ -202,31 +217,17 @@ def _smtp_send(to_email, subject, html_body):
                         server.sendmail(sender, to_email, msg.as_string())
                 else:
                     with smtplib.SMTP("smtp.hostinger.com", port, timeout=10) as server:
-                        server.ehlo()
-                        server.starttls()
-                        server.ehlo()
+                        server.ehlo(); server.starttls(); server.ehlo()
                         server.login(sender, password)
                         server.sendmail(sender, to_email, msg.as_string())
-                print(f"Email sent OK (port {port}) → {to_email} | {subject}")
-                sent = True
-                break
+                print(f"[SMTP] OK (port {port}) → {to_email}")
+                return True, ""
             except Exception as e:
-                last_err = str(e)
-                print(f"Port {port} failed: {e}")
-                continue
-
-        if sent:
-            return True, ""
-        err_msg = f"All SMTP ports failed: {last_err}"
-        print(err_msg)
-        return False, err_msg
-    except smtplib.SMTPAuthenticationError as e:
-        msg = f"SMTP auth failed: {e}"
-        print(msg); return False, msg
+                print(f"[SMTP] Port {port} failed: {e}")
+        return False, "All email methods failed"
     except Exception as e:
-        msg = f"Email failed: {e}"
-        print(msg); return False, msg
-
+        print(f"[EMAIL] Error: {e}")
+        return False, str(e)
 
 def send_email_async(to_email, subject, html_body):
     """Fire-and-forget email in background thread."""
