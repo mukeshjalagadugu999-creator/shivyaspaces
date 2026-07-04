@@ -88,22 +88,18 @@ if CLOUDINARY_AVAILABLE:
         secure     = True
     )
 
-# ── Upload folder for local image storage (fallback) ──
-# Use /tmp for Railway (persistent static dir may not be writable)
-_static_uploads = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads")
-_tmp_uploads = "/tmp/shivyaspaces_uploads"
-try:
-    os.makedirs(_static_uploads, exist_ok=True)
-    # Test write
-    _test = os.path.join(_static_uploads, ".test")
-    open(_test, "w").close()
-    os.remove(_test)
-    UPLOAD_FOLDER = _static_uploads
+# ── Upload folder — use Railway volume if available ──
+_vol_path = os.environ.get("RAILWAY_VOLUME_MOUNT_PATH", "")
+if _vol_path:
+    # Store uploads on persistent volume
+    UPLOAD_FOLDER   = os.path.join(_vol_path, "uploads")
+    UPLOAD_URL_BASE = "/vol-uploads"
+else:
+    # Local development
+    UPLOAD_FOLDER   = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads")
     UPLOAD_URL_BASE = "/static/uploads"
-except Exception:
-    os.makedirs(_tmp_uploads, exist_ok=True)
-    UPLOAD_FOLDER = _tmp_uploads
-    UPLOAD_URL_BASE = "/tmp-uploads"
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "gif", "bmp", "tiff", "tif", "heic", "heif", "avif", "svg"}
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 
@@ -2496,6 +2492,16 @@ def data_privacy():
 
 
 
+
+
+@app.route("/vol-uploads/<filename>")
+def serve_vol_upload(filename):
+    """Serve uploaded images from Railway volume."""
+    import re as _re
+    from flask import send_from_directory, abort
+    if not _re.match(r'^[a-zA-Z0-9_.-]+\.(jpg|jpeg|png|webp|gif|bmp|avif)$', filename, _re.IGNORECASE):
+        abort(404)
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 @app.route("/tmp-uploads/<filename>")
 def serve_tmp_upload(filename):
